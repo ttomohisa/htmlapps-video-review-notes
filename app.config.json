@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "Video Review Notes",
+  "nameJa": "動画レビュー付箋",
+  "slug": "video-review-notes",
+  "version": "1.0.0",
+  "description": "Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.",
+  "descriptionJa": "動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-video-review-notes"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}

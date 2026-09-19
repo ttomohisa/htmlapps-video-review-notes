@@ -1,0 +1,2395 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f5f5f2">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'none'; worker-src 'self' blob:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Video Review Notes</title>
+  <link rel="icon" href="__APP_ICON_DATA_URI__">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f5f2;
+      --header-height: 66px;
+      --accent: #16624f;
+      --accent-hover: #0f503f;
+      --accent-soft: #e9f3f0;
+      --text: #171a18;
+      --muted: #65706b;
+      --line: #d9dedb;
+      --line-strong: #bfc8c3;
+      --surface: #ffffff;
+      --surface-muted: #f5f6f4;
+      --surface-hover: #f1f4f2;
+      --page: #f5f5f2;
+      --danger: #a43d35;
+      --danger-soft: #fff1ef;
+      --warning: #8a5d15;
+      --warning-soft: #fff7e8;
+      --focus: #16624f;
+      --shadow-sm: 0 1px 2px rgba(17, 31, 25, .05), 0 10px 28px rgba(17, 31, 25, .035);
+      --shadow-md: 0 18px 50px rgba(17, 31, 25, .18);
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: var(--page); }
+    body { margin: 0; color: var(--text); background: var(--page); font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; }
+    button, input, select { font: inherit; }
+    button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 24%, transparent);
+      outline-offset: 2px;
+    }
+    .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
+    [hidden] { display: none !important; }
+    .app-header {
+      position: sticky;
+      z-index: 30;
+      top: 0;
+      min-height: var(--header-height);
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(16px) saturate(1.2);
+    }
+    .header-inner {
+      width: min(1180px, 100%);
+      min-height: var(--header-height);
+      margin: 0 auto;
+      padding: 10px clamp(14px, 2.8vw, 30px);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand-mark {
+      display: block;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      border-radius: 11px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .brand-mark img { width: 100%; height: 100%; display: block; }
+    .brand-copy { min-width: 0; }
+    .brand-name {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+      letter-spacing: .01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 7px;
+      padding: 1px 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--surface-muted);
+      font-size: 10px;
+      font-weight: 650;
+      vertical-align: 2px;
+    }
+    .brand-meta {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+    .language-button {
+      min-width: 0;
+      padding: 5px 1px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .02em;
+      cursor: pointer;
+      transition: color .16s ease, opacity .16s ease;
+    }
+    .language-button:hover { color: var(--text); }
+    .language-button:active { opacity: .65; }
+    .icon-button {
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      cursor: pointer;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+    .icon-button:hover { border-color: var(--line-strong); background: var(--surface-hover); }
+    .icon-button:active { transform: translateY(1px); }
+    .icon-button svg { width: 18px; height: 18px; display: block; }
+    .header-icon-button {
+      width: auto;
+      height: auto;
+      padding: 5px 1px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--muted);
+      transition: color .16s ease, opacity .16s ease;
+    }
+    .header-icon-button:hover { border-color: transparent; background: transparent; color: var(--text); }
+    .header-icon-button:active { transform: none; opacity: .65; }
+    .header-icon-button svg { width: 20px; height: 20px; }
+    .main { width: min(1180px, 100%); margin: 0 auto; padding: 24px clamp(14px, 2.8vw, 30px) 58px; }
+    .page-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 0 2px 18px; }
+    .page-intro h1 { margin: 0; font-size: clamp(22px, 3.4vw, 30px); line-height: 1.28; letter-spacing: -.03em; }
+    .page-intro p { max-width: 760px; margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .local-badge { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; margin-top: 4px; padding: 7px 10px; border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line)); border-radius: 999px; color: var(--accent); background: var(--accent-soft); font-size: 12px; font-weight: 750; white-space: nowrap; }
+    .local-badge svg { width: 15px; height: 15px; }
+    .workspace { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .drop-zone { min-height: 390px; display: grid; place-items: center; padding: 38px 24px; text-align: center; transition: background .16s ease, border-color .16s ease; }
+    .drop-zone.is-dragging { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); }
+    .drop-inner { width: min(560px, 100%); }
+    .drop-icon { width: 68px; height: 68px; margin: 0 auto 18px; display: grid; place-items: center; border-radius: 18px; color: var(--accent); background: var(--accent-soft); }
+    .drop-icon svg { width: 34px; height: 34px; }
+    .drop-zone h2 { margin: 0; font-size: 21px; letter-spacing: -.02em; }
+    .drop-zone p { margin: 8px auto 0; max-width: 440px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .drop-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .button { min-height: 42px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--text); font-weight: 760; cursor: pointer; transition: border-color .16s ease, background .16s ease, transform .16s ease; }
+    .button:hover { border-color: var(--line-strong); background: var(--surface-hover); }
+    .button:active { transform: translateY(1px); }
+    .button.primary { border-color: var(--accent); color: #fff; background: var(--accent); }
+    .button.primary:hover { border-color: var(--accent-hover); background: var(--accent-hover); }
+    .button.danger { color: var(--danger); }
+    .privacy-note { display: inline-flex; align-items: flex-start; justify-content: center; gap: 7px; margin-top: 20px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .privacy-note svg { flex: 0 0 auto; width: 14px; height: 14px; margin-top: 1px; color: var(--accent); }
+    .saved-project-card { margin: 22px auto 0; max-width: 560px; padding: 14px; border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line)); border-radius: 12px; background: var(--accent-soft); text-align: left; }
+    .saved-project-card[hidden] { display: none; }
+    .saved-project-title { display: block; color: var(--accent); font-size: 12px; font-weight: 820; }
+    .saved-project-meta { display: block; margin-top: 4px; color: var(--text); font-size: 12px; font-weight: 760; overflow-wrap: anywhere; }
+    .saved-project-detail { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .saved-project-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; }
+    .saved-project-actions .button { min-height: 36px; padding: 7px 10px; font-size: 11px; }
+    .project-import-row { display: flex; justify-content: center; margin-top: 10px; }
+    .project-import-row .text-button { font-size: 11px; }
+    .error-box { margin: 18px auto 0; padding: 13px 14px; max-width: 520px; border: 1px solid color-mix(in srgb, var(--danger) 28%, var(--line)); border-radius: 11px; background: var(--danger-soft); text-align: left; }
+    .error-title { margin: 0; color: var(--danger); font-size: 13px; font-weight: 800; }
+    .error-message { margin: 4px 0 0; color: #6c4743; font-size: 12px; line-height: 1.6; }
+    .player-shell { display: grid; grid-template-columns: minmax(0, 1fr) 330px; min-height: 0; }
+    .player-column { min-width: 0; padding: 18px; }
+    .player-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .file-heading { min-width: 0; }
+    .file-name { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 800; }
+    .player-state { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .top-actions { display: flex; flex: 0 0 auto; gap: 7px; }
+    .small-button { min-height: 36px; padding: 7px 10px; font-size: 12px; }
+    .project-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: -2px 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-muted); }
+    .project-status { min-width: 0; color: var(--muted); font-size: 10px; line-height: 1.45; overflow-wrap: anywhere; }
+    .project-status.is-error { color: var(--danger); font-weight: 720; }
+    .project-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; flex: 0 0 auto; }
+    .project-action { min-height: 31px; padding: 4px 7px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 9px; font-weight: 760; cursor: pointer; }
+    .project-action:hover { border-color: var(--line-strong); color: var(--text); background: var(--surface-hover); }
+    .project-action.danger { color: var(--danger); }
+    .export-panel { margin-top: 16px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); }
+    .export-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+    .export-title { margin: 0; font-size: 14px; letter-spacing: -.01em; }
+    .export-description { margin: 3px 0 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .export-status { flex: 0 0 auto; max-width: 220px; color: var(--muted); font-size: 10px; line-height: 1.45; text-align: right; }
+    .export-status.is-success { color: var(--accent); font-weight: 720; }
+    .export-filename { display: grid; gap: 5px; margin-bottom: 11px; }
+    .export-label { color: var(--muted); font-size: 10px; font-weight: 760; }
+    .export-filename-control { display: flex; align-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: #fbfbf9; }
+    .export-filename-control:focus-within { border-color: var(--focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 18%, transparent); }
+    .export-filename-control input { min-width: 0; flex: 1 1 auto; height: 38px; padding: 7px 10px; border: 0; outline: 0; background: transparent; color: var(--text); }
+    .export-filename-hint { flex: 0 0 auto; padding: 0 10px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+    .export-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    .export-actions .button { min-height: 38px; padding: 7px 10px; font-size: 11px; }
+    .export-actions .button:disabled { opacity: .48; cursor: default; transform: none; }
+    .export-primary { min-width: 170px; }
+    .video-frame { position: relative; aspect-ratio: 16 / 9; min-height: 210px; display: grid; place-items: center; overflow: hidden; border-radius: 13px; background: #0d0f0e; cursor: pointer; user-select: none; }
+    .video-frame video { width: 100%; height: 100%; display: block; object-fit: contain; background: #0d0f0e; }
+    .loading-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(13,15,14,.62); color: #fff; text-align: center; pointer-events: none; }
+    .loading-panel { display: grid; justify-items: center; gap: 10px; font-size: 12px; font-weight: 700; }
+    .spinner { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .75s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .time-row { display: flex; align-items: center; gap: 12px; margin-top: 13px; }
+    .time-code { flex: 0 0 auto; min-width: 176px; font-variant-numeric: tabular-nums; color: var(--text); font-size: 12px; font-weight: 760; letter-spacing: .01em; }
+    .seek-wrap { min-width: 0; flex: 1 1 auto; display: grid; }
+    .review-timeline { margin-top: 9px; padding: 9px 10px 10px; border: 1px solid var(--line); border-radius: 11px; background: #fbfbf9; }
+    .timeline-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .timeline-title { color: var(--muted); font-size: 10px; font-weight: 780; letter-spacing: .01em; }
+    .timeline-visible-count { color: var(--muted); font-size: 9px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .timeline-track { position: relative; height: 54px; margin-top: 5px; overflow: hidden; border-radius: 8px; background: var(--surface-muted); }
+    .timeline-scale { position: absolute; inset: 0 10px; }
+    .timeline-rail { position: absolute; left: 0; right: 0; top: 27px; height: 2px; border-radius: 999px; background: var(--line-strong); }
+    .timeline-playhead { position: absolute; z-index: 1; top: 4px; bottom: 4px; left: 0; width: 2px; transform: translateX(-1px); border-radius: 999px; background: var(--accent); pointer-events: none; }
+    .timeline-playhead::before { content: ''; position: absolute; top: -1px; left: 50%; width: 7px; height: 7px; transform: translateX(-50%); border-radius: 50%; background: var(--accent); }
+    .timeline-markers { position: absolute; inset: 0; z-index: 2; }
+    .timeline-marker { position: absolute; top: calc(7px + (var(--lane, 0) * 15px)); left: var(--position, 0%); width: 13px; height: 13px; padding: 0; transform: translateX(-50%); border: 2px solid var(--surface); border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, var(--line)); cursor: pointer; }
+    .timeline-marker:hover { transform: translateX(-50%) scale(1.12); }
+    .timeline-marker.is-resolved { border-color: var(--accent); background: var(--surface); opacity: .7; }
+    .timeline-marker.is-active { width: 17px; height: 17px; margin-top: -2px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+    .timeline-marker:focus-visible, .timeline-range:focus-visible { outline: 3px solid color-mix(in srgb, var(--focus) 55%, transparent); outline-offset: 2px; }
+    .timeline-range { position: absolute; top: calc(8px + (var(--lane, 0) * 15px)); left: var(--start, 0%); width: max(9px, var(--width, 0%)); height: 11px; padding: 0; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent); cursor: pointer; }
+    .timeline-range:hover { filter: brightness(.94); }
+    .timeline-range.is-resolved { background: var(--surface); opacity: .72; }
+    .timeline-range.is-active { height: 15px; margin-top: -2px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    input[type="range"]:disabled { cursor: default; opacity: .4; }
+    .transport { margin-top: 11px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .transport-group { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .transport .icon-button { width: 40px; height: 40px; padding: 0; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); cursor: pointer; }
+    .transport .icon-button:hover { border-color: var(--line-strong); background: var(--surface-hover); }
+    .transport .icon-button:disabled { opacity: .38; cursor: default; }
+    .transport .icon-button svg { width: 19px; height: 19px; }
+    .play-button { width: 44px; height: 44px; border-color: var(--accent); background: var(--accent); color: #fff; }
+    .play-button:hover { border-color: var(--accent-hover); background: var(--accent-hover); }
+    .play-button .pause-icon { display: none; }
+    .play-button.is-playing .play-icon { display: none; }
+    .play-button.is-playing .pause-icon { display: block; }
+    .jump-button { position: relative; }
+    .jump-value { position: absolute; font-size: 8px; font-weight: 900; line-height: 1; }
+    .volume-group { display: flex; align-items: center; gap: 7px; min-width: 150px; }
+    .volume-range { width: 90px !important; }
+    .speed-select { min-height: 38px; padding: 6px 28px 6px 9px; border: 1px solid var(--line); border-radius: 9px; color: var(--text); background: var(--surface); font-size: 12px; font-weight: 700; }
+    .review-editor { margin-top: 16px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: #fbfbf9; }
+    .review-editor-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 11px; }
+    .review-editor-title { margin: 0; font-size: 14px; letter-spacing: -.01em; }
+    .review-editor-guide { margin: 3px 0 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .review-step { margin-top: 10px; padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); }
+    .review-editor-head + .review-step { margin-top: 0; }
+    .review-step-head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 9px; }
+    .review-step-number { flex: 0 0 auto; width: 22px; height: 22px; display: inline-grid; place-items: center; border-radius: 999px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 850; }
+    .review-step-copy { min-width: 0; display: grid; gap: 1px; }
+    .review-step-title { font-size: 11px; font-weight: 820; }
+    .review-step-help { color: var(--muted); font-size: 9px; line-height: 1.5; }
+    .review-step-optional { margin-left: 5px; color: var(--muted); font-size: 9px; font-weight: 700; }
+    .review-position-control { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 9px; border-radius: 9px; background: var(--surface-muted); }
+    .review-position-label { color: var(--muted); font-size: 9px; font-weight: 760; }
+    .review-time-wrap { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .review-time { font-variant-numeric: tabular-nums; color: var(--accent); font-size: 12px; font-weight: 850; white-space: nowrap; }
+    .text-button { min-height: 30px; padding: 4px 7px; border: 0; border-radius: 7px; background: transparent; color: var(--accent); font-size: 11px; font-weight: 760; cursor: pointer; }
+    .text-button:hover { background: var(--accent-soft); }
+    .text-button:disabled, .review-type-button:disabled { opacity: .45; cursor: default; }
+    .review-mode-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .review-mode-label { color: var(--muted); font-size: 10px; font-weight: 760; }
+    .review-mode-switch { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-muted); }
+    .review-mode-button { min-height: 30px; padding: 4px 9px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); font-size: 10px; font-weight: 780; cursor: pointer; }
+    .review-mode-button[aria-pressed="true"] { background: var(--surface); color: var(--accent); box-shadow: var(--shadow-sm); }
+    .range-editor { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 8px; margin-bottom: 10px; }
+    .range-editor[hidden] { display: none; }
+    .range-point { min-width: 0; padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .range-point-label { display: block; color: var(--muted); font-size: 9px; font-weight: 760; }
+    .range-point-time { display: block; margin-top: 2px; color: var(--text); font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .range-point .text-button { margin-top: 4px; padding-inline: 0; }
+    .range-arrow { align-self: center; color: var(--muted); font-size: 13px; font-weight: 800; }
+    .range-validation { min-height: 18px; margin: -2px 0 8px; color: var(--danger); font-size: 10px; }
+    .review-types { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .review-type-button { min-height: 34px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 11px; font-weight: 760; cursor: pointer; }
+    .review-type-button:hover { border-color: var(--line-strong); color: var(--text); }
+    .review-type-button[aria-pressed="true"] { border-color: color-mix(in srgb, var(--accent) 48%, var(--line)); background: var(--accent-soft); color: var(--accent); }
+    .review-comment-label { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 720; }
+    .required-badge { display: inline-flex; align-items: center; min-height: 18px; padding: 1px 5px; border-radius: 999px; background: var(--danger-soft); color: var(--danger); font-size: 9px; font-weight: 820; }
+    .review-comment { width: 100%; min-height: 84px; resize: vertical; padding: 10px 11px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); line-height: 1.6; }
+    .review-comment:hover { border-color: var(--line-strong); }
+    .review-comment:required:invalid:not(:focus) { border-color: color-mix(in srgb, var(--warning) 38%, var(--line)); }
+    .review-comment-hint, .review-save-hint { margin: 5px 0 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+    .review-save-hint.is-ready { color: var(--accent); font-weight: 760; }
+    .review-save-hint.is-warning { color: var(--warning); }
+    .annotation-editor { margin-top: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); }
+    .annotation-editor-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border-bottom: 1px solid var(--line); background: var(--surface-muted); }
+    .annotation-editor-title { margin: 0; color: var(--text); font-size: 11px; font-weight: 800; }
+    .annotation-editor-meta { color: var(--muted); font-size: 9px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .annotation-stage { position: relative; min-height: 150px; display: grid; place-items: center; overflow: hidden; background: #171a18; touch-action: none; }
+    .annotation-stage.is-empty { background: var(--surface-muted); }
+    .annotation-canvas { display: block; width: 100%; max-height: 380px; object-fit: contain; cursor: crosshair; touch-action: none; }
+    .annotation-empty { max-width: 360px; padding: 26px 18px; color: var(--muted); text-align: center; font-size: 11px; line-height: 1.6; }
+    .annotation-color-row { display: flex; align-items: center; gap: 8px; padding: 8px 9px; border-top: 1px solid var(--line); }
+    .annotation-color-label { color: var(--muted); font-size: 10px; font-weight: 760; }
+    .annotation-colors { display: flex; flex-wrap: wrap; gap: 6px; }
+    .annotation-color { position: relative; width: 28px; height: 28px; padding: 0; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); cursor: pointer; }
+    .annotation-color::before { content: ""; position: absolute; inset: 4px; border-radius: 5px; background: var(--swatch); box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
+    .annotation-color[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent); }
+    .annotation-color:disabled { opacity: .42; cursor: default; }
+    .annotation-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 9px; border-top: 1px solid var(--line); }
+    .annotation-tool { min-height: 33px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 10px; font-weight: 760; cursor: pointer; }
+    .annotation-tool:hover { border-color: var(--line-strong); color: var(--text); }
+    .annotation-tool[aria-pressed="true"] { border-color: color-mix(in srgb, var(--accent) 44%, var(--line)); background: var(--accent-soft); color: var(--accent); }
+    .annotation-tool:disabled { opacity: .42; cursor: default; }
+    .annotation-tool svg { width: 15px; height: 15px; display: block; }
+    .annotation-toolbar-spacer { flex: 1 1 auto; }
+    .review-card-thumb { position: relative; margin-top: 8px; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #171a18; }
+    .review-card-thumb img { display: block; width: 100%; max-height: 148px; object-fit: contain; }
+    .review-card-thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+    .review-card-thumb .annotation-stroke { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1.2px rgba(255,255,255,.95)); }
+    .review-card-annotation-count { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: var(--muted); font-size: 9px; font-weight: 720; }
+    .review-editor-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; margin-top: 10px; }
+    .review-editor-actions .review-save-hint { flex: 1 1 180px; margin: 0 auto 0 0; }
+    .review-editor-actions .button { min-height: 38px; font-size: 12px; }
+    .review-panel { min-width: 0; border-left: 1px solid var(--line); background: #fafbf9; display: flex; flex-direction: column; max-height: min(780px, calc(100vh - 150px)); }
+    .review-panel-head { flex: 0 0 auto; padding: 16px 16px 12px; border-bottom: 1px solid var(--line); }
+    .review-panel-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .review-panel h2 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
+    .review-total { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .review-counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 10px; }
+    .review-count { padding: 8px 9px; border-radius: 9px; background: var(--surface-muted); }
+    .review-count strong { display: block; font-size: 15px; line-height: 1.15; }
+    .review-count span { color: var(--muted); font-size: 10px; }
+    .review-filters { display: grid; gap: 8px; margin-top: 11px; }
+    .review-filter-row { display: grid; gap: 5px; }
+    .review-filter-label { color: var(--muted); font-size: 9px; font-weight: 780; }
+    .review-filter-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .review-filter-chip { min-height: 29px; padding: 4px 7px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 9px; font-weight: 760; cursor: pointer; }
+    .review-filter-chip:hover { border-color: var(--line-strong); color: var(--text); }
+    .review-filter-chip[aria-pressed="true"] { border-color: color-mix(in srgb, var(--accent) 42%, var(--line)); background: var(--accent-soft); color: var(--accent); }
+    .review-list { min-height: 180px; flex: 1 1 auto; overflow: auto; padding: 10px; overscroll-behavior: contain; }
+    .review-empty { padding: 30px 14px; text-align: center; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .review-card { position: relative; padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); cursor: pointer; box-shadow: 0 1px 2px rgba(25,28,24,.035); }
+    .review-card + .review-card { margin-top: 8px; }
+    .review-card:hover { border-color: var(--line-strong); }
+    .review-card.is-active { border-color: color-mix(in srgb, var(--accent) 56%, var(--line)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 11%, transparent); }
+    .review-card.is-resolved { opacity: .66; }
+    .review-card-top { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .review-type { display: inline-flex; align-items: center; min-height: 22px; padding: 3px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 10px; font-weight: 800; }
+    .review-card-time { margin-left: auto; color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .review-card-comment { margin: 8px 0 0; color: var(--text); font-size: 12px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .review-card-status { margin-top: 7px; color: var(--muted); font-size: 10px; font-weight: 720; }
+    .review-card-actions { display: flex; flex-wrap: wrap; gap: 3px; margin: 9px -4px -3px; padding-top: 7px; border-top: 1px solid color-mix(in srgb, var(--line) 72%, transparent); }
+    .review-action { min-height: 31px; padding: 4px 7px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); font-size: 10px; font-weight: 760; cursor: pointer; }
+    .review-action:hover { background: var(--surface-hover); color: var(--text); }
+    .review-action.danger { color: var(--danger); }
+    .video-info-details { flex: 0 0 auto; border-top: 1px solid var(--line); }
+    .video-info-details summary { cursor: pointer; padding: 11px 16px; color: var(--muted); font-size: 11px; font-weight: 760; }
+    .meta-list { margin: 0; display: grid; gap: 0; padding: 0 16px 13px; }
+    .meta-row { min-width: 0; display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); }
+    .meta-row:first-child { border-top: 0; }
+    .meta-row dt { color: var(--muted); font-size: 10px; }
+    .meta-row dd { min-width: 0; margin: 0; overflow-wrap: anywhere; text-align: right; font-size: 10px; font-weight: 720; }
+    .below-grid { margin-top: 14px; }
+    .info-card { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-sm); }
+    .info-card h2 { margin: 0; font-size: 15px; }
+    .info-card p { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .shortcut-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-top: 12px; }
+    .shortcut { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 9px; background: var(--surface-muted); font-size: 11px; }
+    kbd { min-width: 34px; padding: 3px 7px; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 6px; background: #fff; text-align: center; font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .build-section { margin-top: 14px; }
+    details.build-details { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; box-shadow: var(--shadow-sm); }
+    details.build-details summary { cursor: pointer; padding: 14px 16px; font-weight: 720; }
+    .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 16px 16px; }
+    .build-item { min-width: 0; padding: 11px; border-radius: 10px; background: var(--surface-muted); }
+    .build-item span { display: block; color: var(--muted); font-size: 10px; }
+    .build-item strong { display: block; overflow-wrap: anywhere; font-size: 12px; }
+    footer { width: min(1180px,100%); margin: 0 auto; padding: 0 clamp(14px,2.8vw,30px) 34px; color: var(--muted); font-size: 11px; }
+    .status-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+    .app-toast { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 60; display: flex; align-items: center; gap: 12px; max-width: min(420px, calc(100vw - 36px)); padding: 10px 12px 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--text); box-shadow: var(--shadow-md); opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; }
+    .app-toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .app-toast[data-tone="success"] { border-color: color-mix(in srgb, var(--accent) 34%, var(--line)); }
+    .app-toast[data-tone="warning"] { border-color: #c58a24; }
+    .app-toast-message { min-width: 0; flex: 1 1 auto; font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+    .app-toast-action { flex: 0 0 auto; min-height: 34px; padding: 5px 8px; border: 0; border-radius: 8px; background: transparent; color: var(--accent); font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .app-toast-action:hover { background: var(--surface-hover); }
+    .app-toast-action[hidden] { display: none; }
+    .app-confirm-dialog { width: min(420px, calc(100% - 24px)); max-width: 100%; padding: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); color: var(--text); box-shadow: var(--shadow-md); }
+    .app-confirm-dialog::backdrop { background: rgba(15,17,14,.48); backdrop-filter: blur(3px); }
+    .app-confirm-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 13px; border-bottom: 1px solid var(--line); }
+    .app-confirm-title { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+    .app-confirm-close { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--text); cursor: pointer; }
+    .app-confirm-close:hover { background: var(--surface-hover); }
+    .app-confirm-close svg { width: 19px; height: 19px; }
+    .app-confirm-body { padding: 18px; }
+    .app-confirm-message { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+    .app-confirm-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .app-confirm-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--text); font: inherit; font-size: 12px; font-weight: 760; cursor: pointer; }
+    .app-confirm-button:hover { border-color: var(--line-strong); background: var(--surface-hover); }
+    .app-confirm-button.primary { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .app-confirm-button.danger { border-color: var(--danger); background: var(--danger); color: #fff; }
+    dialog { width: min(640px, calc(100% - 28px)); max-height: min(760px, calc(100dvh - 28px)); padding: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--text); box-shadow: var(--shadow-md); }
+    dialog::backdrop { background: rgba(15,17,14,.52); backdrop-filter: blur(4px); }
+    #helpDialog[open] { display: flex; flex-direction: column; max-height: calc(100dvh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .dialog-header { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .dialog-header h2 { margin: 0; font-size: 17px; }
+    .dialog-close { width: 38px; height: 38px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); cursor: pointer; }
+    .dialog-close svg { width: 18px; height: 18px; }
+    .dialog-body { min-height: 0; flex: 1 1 auto; padding: 20px 20px calc(28px + env(safe-area-inset-bottom)); overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+    .dialog-body h3 { margin: 25px 0 8px; padding-top: 19px; border-top: 1px solid color-mix(in srgb, var(--line) 78%, transparent); font-size: 14px; }
+    .dialog-body h3:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+    .dialog-body p, .dialog-body li { color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .dialog-body p { margin: 8px 0 0; }
+    .dialog-body ul, .dialog-body ol { margin: 8px 0 0; padding-left: 22px; }
+    .dialog-body li + li { margin-top: 7px; }
+    @media (max-width: 880px) {
+      .player-shell { grid-template-columns: 1fr; }
+      .review-panel { border-top: 1px solid var(--line); border-left: 0; max-height: none; }
+      .review-list { max-height: 430px; }
+    }
+    @media (max-width: 620px) {
+      .main { padding-top: 18px; padding-bottom: 38px; }
+      .page-intro { display: block; }
+      .local-badge { margin-top: 11px; }
+      .drop-zone { min-height: 330px; padding: 30px 18px; }
+      .player-column { padding: 12px; }
+      .player-topbar { align-items: flex-start; }
+      .top-actions { gap: 4px; }
+      .small-button { min-height: 34px; padding-inline: 8px; }
+      .video-frame { min-height: 0; border-radius: 10px; }
+      .time-row { display: grid; grid-template-columns: 1fr; gap: 7px; }
+      .time-code { min-width: 0; }
+      .review-timeline { margin-top: 8px; padding-inline: 8px; }
+      .timeline-track { height: 54px; }
+      .transport { align-items: stretch; flex-direction: column; }
+      .transport-group { justify-content: center; }
+      .transport-group.secondary { display: grid; grid-template-columns: auto minmax(90px, 1fr) auto auto; width: 100%; }
+      .volume-group { min-width: 0; }
+      .volume-range { width: 100% !important; min-width: 0; }
+      .speed-select { width: 72px; }
+      .review-editor { padding: 12px; }
+      .review-editor-head { flex-direction: column; align-items: stretch; }
+      .review-step { padding: 10px; }
+      .review-position-control { align-items: flex-start; }
+      .review-position-control .text-button { width: 100%; justify-content: flex-start; padding-inline: 0; }
+      .annotation-stage { min-height: 128px; }
+      .annotation-canvas { max-height: 300px; }
+      .annotation-toolbar { gap: 5px; }
+      .annotation-tool { flex: 1 1 auto; justify-content: center; min-width: 0; }
+      .annotation-toolbar-spacer { display: none; }
+      .review-time-wrap { justify-content: flex-start; }
+      .review-mode-row { align-items: flex-start; flex-direction: column; }
+      .range-editor { grid-template-columns: 1fr; }
+      .range-arrow { display: none; }
+      .review-panel-head { padding: 14px 14px 11px; }
+      .review-list { padding: 9px; max-height: 390px; }
+      .review-card-top { flex-wrap: wrap; }
+      .review-card-time { flex: 1 0 100%; margin-left: 0; text-align: left; }
+      .shortcut-grid { grid-template-columns: 1fr; }
+      .build-grid { grid-template-columns: 1fr; }
+      .app-toast { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); max-width: calc(100vw - 24px); }
+    }
+    @media (max-width: 520px) {
+      html, body { overflow-x: clip; }
+      :root { --header-height: 58px; }
+      .header-inner { padding-block: 8px; }
+      .brand-mark { width: 34px; height: 34px; border-radius: 10px; }
+      .brand-name { font-size: 15px; }
+      .brand-meta { display: none; }
+      .header-actions { gap: 11px; }
+      .language-button { padding-block: 6px; }
+      .header-icon-button { padding-block: 6px; }
+      .app-toast { left: 12px; right: auto; width: calc(100vw - 24px); max-width: calc(100vw - 24px); }
+      .app-confirm-dialog { width: 100%; max-width: none; margin: auto 0 0; border-width: 1px 0 0; border-radius: 22px 22px 0 0; }
+      .app-confirm-header { padding: 14px 18px 12px; }
+      .app-confirm-body { padding: 12px 18px calc(env(safe-area-inset-bottom) + 18px); }
+      .app-confirm-actions { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+      .app-confirm-button { min-height: 48px; font-size: 14px; }
+    }
+    @media (max-width: 390px) {
+      .file-name { max-width: 178px; }
+      .small-button .wide-label { display: none; }
+      .project-toolbar { align-items: stretch; flex-direction: column; }
+      .project-actions { width: 100%; justify-content: stretch; }
+      .project-action { flex: 1 1 auto; min-height: 35px; }
+      .export-panel { padding: 12px; }
+      .export-head { flex-direction: column; gap: 5px; }
+      .export-status { max-width: none; text-align: left; }
+      .export-actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .export-actions .button { width: 100%; min-width: 0; min-height: 42px; }
+      .export-primary { grid-column: 1 / -1; }
+      .saved-project-actions { display: grid; grid-template-columns: 1fr; }
+      .saved-project-actions .button { width: 100%; }
+      .transport-group.secondary { grid-template-columns: auto minmax(72px,1fr) auto; }
+      #fullscreenButton { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt=""></div>
+        <div class="brand-copy">
+          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.0</span></p>
+          <p class="brand-meta" data-i18n="brandMeta">時刻付きレビュー · 区間レビュー · 描画注釈</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
+        <button class="icon-button header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.72 1.9c-.92.67-1.52 1.12-1.52 2.1"/><path d="M12 17h.01"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="page-intro" aria-labelledby="heroTitle">
+      <div>
+        <h1 id="heroTitle" data-i18n="introTitle">動画の気になる場面に、時刻付きでレビューを残す。</h1>
+        <p data-i18n="lead">動画を再生しながら、気になる時点に「修正・質問・要確認・良い・メモ」のレビューを残せます。動画とレビュー内容は外部へ送信しません。</p>
+      </div>
+      <div class="local-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+        <span data-i18n="localBadge">完全ローカル処理</span>
+      </div>
+    </section>
+
+    <!-- APP:BEGIN -->
+    <section class="workspace" aria-label="Video workspace">
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-inner">
+          <div class="drop-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h16v11H4z"/><path d="m10 9 5 3-5 3z"/><path d="M8 20h8"/></svg>
+          </div>
+          <h2 data-i18n="dropTitle">動画を追加</h2>
+          <p data-i18n="dropBody">動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。</p>
+          <div class="drop-actions">
+            <button class="button primary" id="chooseVideoButton" type="button" data-i18n="chooseVideo">動画を選択</button>
+          </div>
+          <div class="privacy-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+            <span data-i18n="dropPrivacy">選択した動画は外部サーバーへ送信されません。</span>
+          </div>
+          <div class="saved-project-card" id="savedProjectCard" hidden>
+            <strong class="saved-project-title" data-i18n="savedProjectTitle">前回のレビューがあります</strong>
+            <span class="saved-project-meta" id="savedProjectMeta">—</span>
+            <span class="saved-project-detail" id="savedProjectDetail">—</span>
+            <div class="saved-project-actions">
+              <button class="button primary" id="resumeProjectButton" type="button" data-i18n="resumeProject">動画を選択して再開</button>
+              <button class="button" id="saveDetachedProjectButton" type="button" data-i18n="saveProjectJson">レビューJSONを保存</button>
+              <button class="button danger" id="discardSavedProjectButton" type="button" data-i18n="discardSavedProject">保存済み作業を削除</button>
+            </div>
+          </div>
+          <div class="project-import-row">
+            <button class="text-button" id="loadProjectFromEmptyButton" type="button" data-i18n="loadProjectJson">レビューJSONを読み込む</button>
+          </div>
+          <div class="error-box" id="errorBox" role="alert" hidden>
+            <p class="error-title" id="errorTitle" data-i18n="loadErrorTitle">動画を読み込めませんでした</p>
+            <p class="error-message" id="errorMessage"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="player-shell" id="playerShell" hidden>
+        <div class="player-column">
+          <div class="player-topbar">
+            <div class="file-heading">
+              <span class="file-name" id="fileName">—</span>
+              <span class="player-state" id="playerState" data-i18n="loadingVideo">動画を準備しています…</span>
+            </div>
+            <div class="top-actions">
+              <button class="button small-button" id="replaceVideoButton" type="button"><span data-i18n="replaceVideo" class="wide-label">動画を変更</span><span aria-hidden="true" class="sr-only">↻</span></button>
+              <button class="button small-button danger" id="removeVideoButton" type="button" data-i18n="removeVideo">外す</button>
+            </div>
+          </div>
+
+          <div class="project-toolbar" aria-label="Project controls">
+            <span class="project-status" id="projectStatus" data-i18n="autoSaveWaiting">レビューを追加すると自動保存します</span>
+            <div class="project-actions">
+              <button class="project-action" id="saveProjectButton" type="button" data-i18n="saveProjectJson">レビューJSONを保存</button>
+              <button class="project-action" id="loadProjectButton" type="button" data-i18n="loadProjectJson">レビューJSONを読み込む</button>
+              <button class="project-action danger" id="resetProjectButton" type="button" data-i18n="resetProject">作業をリセット</button>
+            </div>
+          </div>
+
+          <div class="video-frame" id="videoFrame" data-i18n-title="videoClickToggle" title="クリックで再生 / 一時停止">
+            <video id="video" preload="metadata" playsinline></video>
+            <div class="loading-overlay" id="loadingOverlay">
+              <div class="loading-panel"><span class="spinner" aria-hidden="true"></span><span data-i18n="loadingVideo">動画を準備しています…</span></div>
+            </div>
+          </div>
+
+          <div class="time-row">
+            <div class="time-code" id="timeCode" aria-live="off">00:00:00.000 / 00:00:00.000</div>
+            <label class="seek-wrap">
+              <span class="sr-only" data-i18n="seekLabel">再生位置</span>
+              <input id="seekRange" type="range" min="0" max="0" step="0.001" value="0" disabled>
+            </label>
+          </div>
+
+          <section class="review-timeline" aria-labelledby="reviewTimelineTitle">
+            <div class="timeline-head">
+              <span class="timeline-title" id="reviewTimelineTitle" data-i18n="timelineTitle">レビュータイムライン</span>
+              <span class="timeline-visible-count" id="timelineVisibleCount">0件表示</span>
+            </div>
+            <div class="timeline-track" id="reviewTimelineTrack">
+              <div class="timeline-scale">
+                <div class="timeline-rail" aria-hidden="true"></div>
+                <div class="timeline-playhead" id="reviewTimelinePlayhead" aria-hidden="true"></div>
+                <div class="timeline-markers" id="reviewTimelineMarkers" role="group" data-i18n-aria-label="timelineAriaLabel" aria-label="レビュー位置"></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="transport" aria-label="Player controls">
+            <div class="transport-group">
+              <button class="icon-button jump-button" id="backButton" type="button" disabled data-i18n-title="back5" data-i18n-aria-label="back5" title="5秒戻る" aria-label="5秒戻る">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7v5H2"/><path d="M4.6 16a8 8 0 1 0 .4-8.7L2 12"/></svg><span class="jump-value">5</span>
+              </button>
+              <button class="icon-button play-button" id="playButton" type="button" disabled data-i18n-title="play" data-i18n-aria-label="play" title="再生" aria-label="再生">
+                <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+              </button>
+              <button class="icon-button jump-button" id="forwardButton" type="button" disabled data-i18n-title="forward5" data-i18n-aria-label="forward5" title="5秒進む" aria-label="5秒進む">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7v5h5"/><path d="M19.4 16a8 8 0 1 1-.4-8.7l3 4.7"/></svg><span class="jump-value">5</span>
+              </button>
+            </div>
+            <div class="transport-group secondary">
+              <div class="volume-group">
+                <button class="icon-button" id="muteButton" type="button" disabled data-i18n-title="mute" data-i18n-aria-label="mute" title="ミュート" aria-label="ミュート">
+                  <svg class="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10v4h4l4 3V7l-4 3z"/><path d="M16 9.5a4 4 0 0 1 0 5"/></svg>
+                  <svg class="muted-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M5 10v4h4l4 3V7l-4 3z"/><path d="m16 10 4 4m0-4-4 4"/></svg>
+                </button>
+                <label class="sr-only" for="volumeRange" data-i18n="volumeLabel">音量</label>
+                <input class="volume-range" id="volumeRange" type="range" min="0" max="1" step="0.01" value="1" disabled>
+              </div>
+              <label class="sr-only" for="speedSelect" data-i18n="speedLabel">再生速度</label>
+              <select class="speed-select" id="speedSelect" disabled>
+                <option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option>
+              </select>
+              <button class="icon-button" id="fullscreenButton" type="button" disabled data-i18n-title="fullscreen" data-i18n-aria-label="fullscreen" title="全画面" aria-label="全画面">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <section class="review-editor" id="reviewEditor" aria-labelledby="reviewEditorTitle">
+            <div class="review-editor-head">
+              <div>
+                <h2 class="review-editor-title" id="reviewEditorTitle" data-i18n="reviewEditorTitle">レビューを追加</h2>
+                <p class="review-editor-guide" data-i18n="reviewEditorGuide">動画を止めて、レビュー位置と内容を順に指定します。</p>
+              </div>
+            </div>
+            <div class="review-step">
+              <div class="review-step-head">
+                <span class="review-step-number" aria-hidden="true">1</span>
+                <span class="review-step-copy"><strong class="review-step-title" data-i18n="reviewPositionTitle">レビュー位置</strong><span class="review-step-help" data-i18n="reviewPositionHelp">動画を止めた位置が自動で使われます。位置を変えたときだけ更新してください。</span></span>
+              </div>
+              <div class="review-position-control">
+                <span class="review-position-label" data-i18n="reviewPositionSelected">選択中</span>
+                <div class="review-time-wrap">
+                  <strong class="review-time" id="reviewEditorTime">00:00:00.000</strong>
+                  <button class="text-button" id="useCurrentTimeButton" type="button" data-i18n="useCurrentTime">この再生位置に更新</button>
+                </div>
+              </div>
+              <div class="review-mode-row">
+                <span class="review-mode-label" data-i18n="reviewModeLabel">レビュー範囲</span>
+                <div class="review-mode-switch" role="group" data-i18n-aria-label="reviewModeLabel" aria-label="レビュー範囲">
+                  <button class="review-mode-button" type="button" data-review-mode="point" aria-pressed="true" data-i18n="reviewModePoint">この時点</button>
+                  <button class="review-mode-button" type="button" data-review-mode="range" aria-pressed="false" data-i18n="reviewModeRange">区間</button>
+                </div>
+              </div>
+              <div class="range-editor" id="rangeEditor" hidden>
+                <div class="range-point">
+                  <span class="range-point-label" data-i18n="rangeStartLabel">開始</span>
+                  <strong class="range-point-time" id="rangeStartTime">—</strong>
+                  <button class="text-button" id="setRangeStartButton" type="button" data-i18n="setRangeStart">ここから</button>
+                </div>
+                <span class="range-arrow" aria-hidden="true">→</span>
+                <div class="range-point">
+                  <span class="range-point-label" data-i18n="rangeEndLabel">終了</span>
+                  <strong class="range-point-time" id="rangeEndTime">—</strong>
+                  <button class="text-button" id="setRangeEndButton" type="button" data-i18n="setRangeEnd">ここまで</button>
+                </div>
+              </div>
+              <div class="range-validation" id="rangeValidation" aria-live="polite"></div>
+            </div>
+            <div class="review-step">
+              <div class="review-step-head">
+                <span class="review-step-number" aria-hidden="true">2</span>
+                <span class="review-step-copy"><strong class="review-step-title" data-i18n="reviewContentTitle">レビュー内容</strong><span class="review-step-help" data-i18n="reviewContentHelp">種類を選び、コメントを入力します。コメントは必須です。</span></span>
+              </div>
+              <div class="review-types" id="reviewTypes" role="group" aria-label="Review type">
+                <button class="review-type-button" type="button" data-review-type="fix" aria-pressed="true" data-i18n="typeFix">修正</button>
+                <button class="review-type-button" type="button" data-review-type="question" aria-pressed="false" data-i18n="typeQuestion">質問</button>
+                <button class="review-type-button" type="button" data-review-type="check" aria-pressed="false" data-i18n="typeCheck">要確認</button>
+                <button class="review-type-button" type="button" data-review-type="good" aria-pressed="false" data-i18n="typeGood">良い</button>
+                <button class="review-type-button" type="button" data-review-type="note" aria-pressed="false" data-i18n="typeNote">メモ</button>
+              </div>
+              <label class="review-comment-label" for="reviewComment"><span data-i18n="reviewCommentLabel">コメント</span><span class="required-badge" data-i18n="requiredLabel">必須</span></label>
+              <textarea class="review-comment" id="reviewComment" maxlength="4000" required aria-describedby="reviewCommentHint" data-i18n-placeholder="reviewCommentPlaceholder" placeholder="修正内容や確認したいことを入力"></textarea>
+              <p class="review-comment-hint" id="reviewCommentHint" data-i18n="reviewCommentRequiredHint">コメントを入力すると「レビューを追加」が使えるようになります。</p>
+            </div>
+            <div class="review-step">
+              <div class="review-step-head">
+                <span class="review-step-number" aria-hidden="true">3</span>
+                <span class="review-step-copy"><span><strong class="review-step-title" data-i18n="annotationStepTitle">フレーム注釈</strong><span class="review-step-optional" data-i18n="optionalLabel">任意</span></span><span class="review-step-help" data-i18n="annotationStepHelp">場所を示したいときだけ、色と描画ツールを選びます。</span></span>
+              </div>
+              <section class="annotation-editor" aria-labelledby="annotationEditorTitle">
+              <div class="annotation-editor-head">
+                <h3 class="annotation-editor-title" id="annotationEditorTitle" data-i18n="annotationTitle">フレーム注釈</h3>
+                <span class="annotation-editor-meta" id="annotationMeta" data-i18n="annotationAutoCapture">レビュー時刻のフレームを自動取得</span>
+              </div>
+              <div class="annotation-stage is-empty" id="annotationStage">
+                <canvas class="annotation-canvas" id="annotationCanvas" hidden></canvas>
+                <div class="annotation-empty" id="annotationEmpty" data-i18n="annotationEmpty">レビュー時刻を決めると、そのフレームをここに表示します。必要なら矩形・矢印・フリーハンドで指示できます。</div>
+              </div>
+              <div class="annotation-color-row">
+                <span class="annotation-color-label" data-i18n="annotationColorLabel">色</span>
+                <div class="annotation-colors" role="group" data-i18n-aria-label="annotationColorLabel" aria-label="色">
+                  <button class="annotation-color" type="button" data-annotation-color="#16624f" style="--swatch:#16624f" aria-pressed="true" data-i18n-title="annotationColorGreen" data-i18n-aria-label="annotationColorGreen" title="グリーン" aria-label="グリーン"></button>
+                  <button class="annotation-color" type="button" data-annotation-color="#e5484d" style="--swatch:#e5484d" aria-pressed="false" data-i18n-title="annotationColorRed" data-i18n-aria-label="annotationColorRed" title="レッド" aria-label="レッド"></button>
+                  <button class="annotation-color" type="button" data-annotation-color="#f0b429" style="--swatch:#f0b429" aria-pressed="false" data-i18n-title="annotationColorYellow" data-i18n-aria-label="annotationColorYellow" title="イエロー" aria-label="イエロー"></button>
+                  <button class="annotation-color" type="button" data-annotation-color="#2563eb" style="--swatch:#2563eb" aria-pressed="false" data-i18n-title="annotationColorBlue" data-i18n-aria-label="annotationColorBlue" title="ブルー" aria-label="ブルー"></button>
+                  <button class="annotation-color" type="button" data-annotation-color="#ffffff" style="--swatch:#ffffff" aria-pressed="false" data-i18n-title="annotationColorWhite" data-i18n-aria-label="annotationColorWhite" title="ホワイト" aria-label="ホワイト"></button>
+                  <button class="annotation-color" type="button" data-annotation-color="#111111" style="--swatch:#111111" aria-pressed="false" data-i18n-title="annotationColorBlack" data-i18n-aria-label="annotationColorBlack" title="ブラック" aria-label="ブラック"></button>
+                </div>
+              </div>
+              <div class="annotation-toolbar" role="toolbar" data-i18n-aria-label="annotationToolbarLabel" aria-label="フレーム注釈ツール">
+                <button class="annotation-tool" type="button" data-annotation-tool="rect" aria-pressed="true" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/></svg><span data-i18n="annotationRect">矩形</span>
+                </button>
+                <button class="annotation-tool" type="button" data-annotation-tool="arrow" aria-pressed="false" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5M11 5h8v8"/></svg><span data-i18n="annotationArrow">矢印</span>
+                </button>
+                <button class="annotation-tool" type="button" data-annotation-tool="freehand" aria-pressed="false" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17c3-8 5 2 8-5s5 5 8-5"/></svg><span data-i18n="annotationFreehand">フリーハンド</span>
+                </button>
+                <span class="annotation-toolbar-spacer"></span>
+                <button class="annotation-tool" id="annotationUndoButton" type="button" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7 4 12l5 5"/><path d="M5 12h8a6 6 0 0 1 6 6"/></svg><span data-i18n="annotationUndo">1つ戻す</span>
+                </button>
+                <button class="annotation-tool" id="annotationClearButton" type="button" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M8 10v8m4-8v8m4-8v8M6 7l1 14h10l1-14"/></svg><span data-i18n="annotationClear">描画を消去</span>
+                </button>
+              </div>
+            </section>
+            </div>
+            <div class="review-editor-actions">
+              <p class="review-save-hint" id="reviewSaveHint" aria-live="polite"></p>
+              <button class="button" id="cancelReviewEditButton" type="button" data-i18n="cancelEdit" hidden>編集をやめる</button>
+              <button class="button primary" id="saveReviewButton" type="button" data-i18n="addReview" aria-describedby="reviewSaveHint reviewCommentHint" disabled>レビューを追加</button>
+            </div>
+          </section>
+
+          <section class="export-panel" aria-labelledby="exportTitle">
+            <div class="export-head">
+              <div>
+                <h2 class="export-title" id="exportTitle" data-i18n="exportTitle">レビューを書き出す</h2>
+                <p class="export-description" data-i18n="exportDescription">共有用HTMLには元動画を含めず、時刻・コメント・サムネイル・注釈を1ファイルにまとめます。</p>
+              </div>
+              <span class="export-status" id="exportStatus" data-i18n="exportWaiting">レビューを追加すると書き出せます</span>
+            </div>
+            <label class="export-filename" for="outputFilename">
+              <span class="export-label" data-i18n="outputFilenameLabel">出力ファイル名</span>
+              <span class="export-filename-control">
+                <input id="outputFilename" type="text" maxlength="120" autocomplete="off" spellcheck="false" value="video-review">
+                <span class="export-filename-hint" data-i18n="outputFilenameHint">拡張子は出力形式に合わせて付きます</span>
+              </span>
+            </label>
+            <div class="export-actions">
+              <button class="button primary export-primary" id="exportHtmlButton" type="button" data-i18n="exportHtml" disabled>レビューHTMLを保存</button>
+              <button class="button" id="exportMarkdownButton" type="button" data-i18n="exportMarkdown" disabled>Markdownを保存</button>
+              <button class="button" id="exportCsvButton" type="button" data-i18n="exportCsv" disabled>CSVを保存</button>
+              <button class="button" id="exportJsonButton" type="button" data-i18n="exportJson" disabled>レビューJSONを保存</button>
+              <button class="button" id="copyReviewsButton" type="button" data-i18n="copyReviews" disabled>レビューをコピー</button>
+            </div>
+          </section>
+        </div>
+
+        <aside class="review-panel" aria-labelledby="reviewsTitle">
+          <div class="review-panel-head">
+            <div class="review-panel-title-row"><h2 id="reviewsTitle" data-i18n="reviewsTitle">レビュー</h2><span class="review-total" id="reviewTotal">0件</span></div>
+            <div class="review-counts">
+              <div class="review-count"><strong id="openReviewCount">0</strong><span data-i18n="statusOpen">未対応</span></div>
+              <div class="review-count"><strong id="resolvedReviewCount">0</strong><span data-i18n="statusResolved">解決済み</span></div>
+            </div>
+            <div class="review-filters" aria-label="Review filters">
+              <div class="review-filter-row">
+                <span class="review-filter-label" data-i18n="filterTypeLabel">種類</span>
+                <div class="review-filter-chips" role="group" data-i18n-aria-label="filterTypeLabel" aria-label="種類">
+                  <button class="review-filter-chip" type="button" data-filter-type="all" aria-pressed="true" data-i18n="filterAll">すべて</button>
+                  <button class="review-filter-chip" type="button" data-filter-type="fix" aria-pressed="false" data-i18n="typeFix">修正</button>
+                  <button class="review-filter-chip" type="button" data-filter-type="question" aria-pressed="false" data-i18n="typeQuestion">質問</button>
+                  <button class="review-filter-chip" type="button" data-filter-type="check" aria-pressed="false" data-i18n="typeCheck">要確認</button>
+                  <button class="review-filter-chip" type="button" data-filter-type="good" aria-pressed="false" data-i18n="typeGood">良い</button>
+                  <button class="review-filter-chip" type="button" data-filter-type="note" aria-pressed="false" data-i18n="typeNote">メモ</button>
+                </div>
+              </div>
+              <div class="review-filter-row">
+                <span class="review-filter-label" data-i18n="filterStatusLabel">状態</span>
+                <div class="review-filter-chips" role="group" data-i18n-aria-label="filterStatusLabel" aria-label="状態">
+                  <button class="review-filter-chip" type="button" data-filter-status="all" aria-pressed="true" data-i18n="filterAll">すべて</button>
+                  <button class="review-filter-chip" type="button" data-filter-status="open" aria-pressed="false" data-i18n="statusOpen">未対応</button>
+                  <button class="review-filter-chip" type="button" data-filter-status="resolved" aria-pressed="false" data-i18n="statusResolved">解決済み</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="review-list" id="reviewList" aria-live="polite"></div>
+          <details class="video-info-details">
+            <summary data-i18n="videoInfoTitle">動画情報</summary>
+          <h2 id="videoInfoTitle" data-i18n="videoInfoTitle">動画情報</h2>
+          <dl class="meta-list">
+            <div class="meta-row"><dt data-i18n="metaFile">ファイル</dt><dd id="metaFile">—</dd></div>
+            <div class="meta-row"><dt data-i18n="metaSize">サイズ</dt><dd id="metaSize">—</dd></div>
+            <div class="meta-row"><dt data-i18n="metaDuration">長さ</dt><dd id="metaDuration">—</dd></div>
+            <div class="meta-row"><dt data-i18n="metaResolution">解像度</dt><dd id="metaResolution">—</dd></div>
+            <div class="meta-row"><dt data-i18n="metaType">形式</dt><dd id="metaType">—</dd></div>
+          </dl>
+          </details>
+        </aside>
+      </div>
+    </section>
+
+    <input id="videoInput" type="file" accept="video/*,.mp4,.webm,.mov,.m4v" hidden>
+    <input id="projectInput" type="file" accept="application/json,.json,.video-review.json" hidden>
+    <div class="status-live" id="statusLive" role="status" aria-live="polite" aria-atomic="true"></div>
+    <!-- APP:END -->
+
+    <div class="below-grid">
+      <section class="info-card" aria-labelledby="shortcutTitle">
+        <h2 id="shortcutTitle" data-i18n="shortcutTitle">キーボード操作</h2>
+        <p data-i18n="shortcutBody">プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。</p>
+        <div class="shortcut-grid">
+          <div class="shortcut"><span data-i18n="shortcutPlay">再生 / 一時停止</span><kbd>Space</kbd></div>
+          <div class="shortcut"><span data-i18n="shortcut5">5秒移動</span><kbd>← →</kbd></div>
+          <div class="shortcut"><span data-i18n="shortcut10">10秒移動</span><kbd>Shift + ← →</kbd></div>
+          <div class="shortcut"><span data-i18n="shortcutFullscreen">全画面</span><kbd>F</kbd></div>
+          <div class="shortcut"><span data-i18n="shortcutReview">レビュー入力</span><kbd>M</kbd></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="build-section">
+      <details class="build-details">
+        <summary data-i18n="buildInfo">ビルド情報</summary>
+        <div class="build-grid">
+          <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
+          <div class="build-item"><span data-i18n="builtAt">生成日時</span><strong id="builtAt">—</strong></div>
+          <div class="build-item"><span data-i18n="dependencies">内包依存数</span><strong id="dependencyCount">0</strong></div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer><span id="footerName">Video Review Notes</span> · MIT License · <span data-i18n="footer">動画は端末内で処理されます</span></footer>
+
+  <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default">
+    <span class="app-toast-message" id="appToastMessage"></span>
+    <button class="app-toast-action" id="appToastAction" type="button" hidden></button>
+  </div>
+
+  <dialog class="app-confirm-dialog" id="appConfirmDialog" aria-labelledby="appConfirmTitle" aria-describedby="appConfirmMessage">
+    <div class="app-confirm-header">
+      <h2 class="app-confirm-title" id="appConfirmTitle">確認</h2>
+      <button class="app-confirm-close" id="appConfirmClose" type="button" data-i18n-aria-label="close" aria-label="閉じる">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="app-confirm-body">
+      <p class="app-confirm-message" id="appConfirmMessage"></p>
+      <div class="app-confirm-actions">
+        <button class="app-confirm-button" id="appConfirmCancel" type="button">キャンセル</button>
+        <button class="app-confirm-button primary" id="appConfirmOk" type="button">実行する</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="helpDialog" aria-labelledby="helpTitle">
+    <div class="dialog-header">
+      <h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2>
+      <button class="dialog-close" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <!-- APP:HELP:BEGIN -->
+      <h3 data-i18n="helpBasicsTitle">基本操作</h3>
+      <ol>
+        <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。</li>
+        <li data-i18n="helpStep2">プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。</li>
+        <li data-i18n="helpStep3">種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。</li>
+      </ol>
+      <h3 data-i18n="helpShortcutsTitle">キーボード操作</h3>
+      <ul>
+        <li data-i18n="helpShortcut1">Space: 再生 / 一時停止</li>
+        <li data-i18n="helpShortcut2">← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。</li>
+        <li data-i18n="helpShortcut3">F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。</li>
+      </ul>
+      <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
+      <p data-i18n="helpPrivacyBody">選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。動画本体はブラウザー保存領域にも保存しません。</p>
+      <h3 data-i18n="helpNotesTitle">注意事項</h3>
+      <ul>
+        <li data-i18n="helpNoteCodec">再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。</li>
+        <li data-i18n="helpNoteReload">レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。</li>
+        <li data-i18n="helpNoteMilestone">「レビューJSONを保存」で作業をバックアップできます。「レビューを書き出す」から、共有用HTML・Markdown・CSVを保存したり、レビュー一覧をコピーできます。共有用HTMLに元動画は含まれません。</li>
+      </ul>
+      <!-- APP:HELP:END -->
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const APP_CONFIG = __APP_CONFIG_JSON__;
+      const BUILD_MANIFEST = __BUILD_MANIFEST_JSON__;
+      const assetBundle = __EMBEDDED_ASSET_BUNDLE_JSON__;
+      const blobUrls = new Set();
+      const assetByteCache = new Map();
+
+      function decodeBase64Bytes(base64) {
+        const binary = atob(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+        return bytes;
+      }
+      function getAsset(dependencyId, assetKey) {
+        const asset = assetBundle.dependencies?.[dependencyId]?.assets?.[assetKey];
+        if (!asset) throw new Error(`Embedded asset not found: ${dependencyId}/${assetKey}`);
+        return asset;
+      }
+      async function inflateAsset(asset) {
+        const stored = decodeBase64Bytes(asset.base64);
+        if (!asset.compression || asset.compression === 'none') return stored;
+        if (asset.compression !== 'gzip') throw new Error(`Unsupported embedded asset compression: ${asset.compression}`);
+        if (typeof DecompressionStream !== 'function') throw new Error('This browser cannot expand gzip-compressed embedded assets.');
+        const stream = new Blob([stored]).stream().pipeThrough(new DecompressionStream('gzip'));
+        const expanded = new Uint8Array(await new Response(stream).arrayBuffer());
+        if (Number.isFinite(asset.originalBytes) && expanded.byteLength !== asset.originalBytes) throw new Error('Embedded gzip asset size mismatch.');
+        return expanded;
+      }
+      window.StandaloneAssets = Object.freeze({
+        manifest: BUILD_MANIFEST,
+        list() { return Object.entries(assetBundle.dependencies || {}).flatMap(([dependencyId, dependency]) => Object.keys(dependency.assets || {}).map(assetKey => `${dependencyId}/${assetKey}`)); },
+        has(dependencyId, assetKey) { return Boolean(assetBundle.dependencies?.[dependencyId]?.assets?.[assetKey]); },
+        bytes(dependencyId, assetKey) {
+          const asset = getAsset(dependencyId, assetKey);
+          if (asset.compression && asset.compression !== 'none') throw new Error(`Embedded asset ${dependencyId}/${assetKey} is gzip-compressed; use await StandaloneAssets.bytesAsync().`);
+          return decodeBase64Bytes(asset.base64);
+        },
+        async bytesAsync(dependencyId, assetKey) {
+          const cacheKey = `${dependencyId}/${assetKey}`;
+          if (!assetByteCache.has(cacheKey)) assetByteCache.set(cacheKey, inflateAsset(getAsset(dependencyId, assetKey)));
+          return new Uint8Array(await assetByteCache.get(cacheKey));
+        },
+        text(dependencyId, assetKey) { return new TextDecoder().decode(this.bytes(dependencyId, assetKey)); },
+        async textAsync(dependencyId, assetKey) { return new TextDecoder().decode(await this.bytesAsync(dependencyId, assetKey)); },
+        blobUrl(dependencyId, assetKey) {
+          const asset = getAsset(dependencyId, assetKey);
+          const url = URL.createObjectURL(new Blob([this.bytes(dependencyId, assetKey)], { type: asset.mime || 'application/octet-stream' }));
+          blobUrls.add(url); return url;
+        },
+        async blobUrlAsync(dependencyId, assetKey) {
+          const asset = getAsset(dependencyId, assetKey);
+          const url = URL.createObjectURL(new Blob([await this.bytesAsync(dependencyId, assetKey)], { type: asset.mime || 'application/octet-stream' }));
+          blobUrls.add(url); return url;
+        },
+        async loadClassicScript(dependencyId, assetKey, globalName = '') {
+          const sourceUrl = await this.blobUrlAsync(dependencyId, assetKey);
+          try {
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script'); script.src = sourceUrl; script.onload = resolve;
+              script.onerror = () => reject(new Error(`Failed to load embedded script: ${dependencyId}/${assetKey}`)); document.head.append(script);
+            });
+            return globalName ? window[globalName] : true;
+          } finally { URL.revokeObjectURL(sourceUrl); blobUrls.delete(sourceUrl); }
+        },
+        async importModule(dependencyId, assetKey) {
+          const sourceUrl = await this.blobUrlAsync(dependencyId, assetKey);
+          try { return await import(sourceUrl); }
+          finally { URL.revokeObjectURL(sourceUrl); blobUrls.delete(sourceUrl); }
+        }
+      });
+
+      const translations = {
+        ja: {
+          brandMeta: '時刻付きレビュー · 区間レビュー · 描画注釈', helpTitle: '使い方と注意事項', close: '閉じる',
+          introTitle: '動画の気になる場面に、時刻付きでレビューを残す。',
+          lead: '動画を再生しながら、気になる時点に「修正・質問・要確認・良い・メモ」のレビューを残せます。動画とレビュー内容は外部へ送信しません。',
+          localBadge: '完全ローカル処理', dropTitle: '動画を追加', dropBody: '動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。',
+          chooseVideo: '動画を選択', dropPrivacy: '選択した動画は外部サーバーへ送信されません。', loadErrorTitle: '動画を読み込めませんでした',
+          loadingVideo: '動画を準備しています…', readyVideo: 'レビューできます', replaceVideo: '動画を変更', removeVideo: '外す',
+          seekLabel: '再生位置', videoClickToggle: 'クリックで再生 / 一時停止', back5: '5秒戻る', forward5: '5秒進む', play: '再生', pause: '一時停止', mute: 'ミュート', unmute: 'ミュート解除',
+          volumeLabel: '音量', speedLabel: '再生速度', fullscreen: '全画面', videoInfoTitle: '動画情報', metaFile: 'ファイル', metaSize: 'サイズ', metaDuration: '長さ', metaResolution: '解像度', metaType: '形式',
+          reviewEditorTitle: 'レビューを追加', reviewEditorEditTitle: 'レビューを編集', reviewEditorGuide: '動画を止めて、レビュー位置と内容を順に指定します。', reviewPositionTitle: 'レビュー位置', reviewPositionHelp: '動画を止めた位置が自動で使われます。位置を変えたときだけ更新してください。', reviewPositionSelected: '選択中', useCurrentTime: 'この再生位置に更新', reviewModeLabel: 'レビュー範囲', reviewModePoint: 'この時点', reviewModeRange: '区間', rangeStartLabel: '開始', rangeEndLabel: '終了', setRangeStart: 'ここから', setRangeEnd: 'ここまで', rangeEndRequired: '「ここまで」で終了位置を指定してください。', rangeOrderInvalid: '終了位置は開始位置より後にしてください。', rangeStartSet: '区間の開始位置を設定しました', rangeEndSet: '区間の終了位置を設定しました', reviewContentTitle: 'レビュー内容', reviewContentHelp: '種類を選び、コメントを入力します。コメントは必須です。', reviewCommentLabel: 'コメント', requiredLabel: '必須', reviewCommentPlaceholder: '修正内容や確認したいことを入力', reviewCommentRequiredHint: 'コメントを入力すると「レビューを追加」が使えるようになります。', reviewSaveNeedsComment: 'コメントを入力するとレビューを追加できます。', reviewSaveNeedsRange: '区間の開始と終了を決めるとレビューを追加できます。', reviewSaveReady: 'レビューを追加できます。', reviewUpdateReady: '変更を保存できます。',
+          annotationStepTitle: 'フレーム注釈', optionalLabel: '任意', annotationStepHelp: '場所を示したいときだけ、色と描画ツールを選びます。', annotationTitle: 'フレーム注釈', annotationAutoCapture: 'レビュー時刻のフレームを自動取得', annotationEmpty: 'レビュー時刻を決めると、そのフレームをここに表示します。必要なら矩形・矢印・フリーハンドで指示できます。', annotationColorLabel: '色', annotationColorGreen: 'グリーン', annotationColorRed: 'レッド', annotationColorYellow: 'イエロー', annotationColorBlue: 'ブルー', annotationColorWhite: 'ホワイト', annotationColorBlack: 'ブラック', annotationToolbarLabel: 'フレーム注釈ツール', annotationRect: '矩形', annotationArrow: '矢印', annotationFreehand: 'フリーハンド', annotationUndo: '1つ戻す', annotationClear: '描画を消去', annotationCount: '注釈 {count}件', annotationFrameCaptured: 'レビュー時刻のフレームを取得しました', annotationCaptureFailed: 'このフレームを取得できませんでした。動画を少し再生してからもう一度お試しください。',
+          typeFix: '修正', typeQuestion: '質問', typeCheck: '要確認', typeGood: '良い', typeNote: 'メモ', addReview: 'レビューを追加', updateReview: 'レビューを更新', cancelEdit: '編集をやめる',
+          reviewsTitle: 'レビュー', reviewTotal: '{count}件', statusOpen: '未対応', statusResolved: '解決済み', noReviewsTitle: 'まだレビューがありません', noReviewsBody: '動画を止めてコメントを追加すると、ここに時刻順で表示されます。', noFilteredReviewsTitle: '条件に一致するレビューはありません', noFilteredReviewsBody: 'フィルターを変更すると、ほかのレビューを表示できます。', clearFilters: 'フィルターを解除',
+          editReview: '編集', deleteReview: '削除', markResolved: '解決済みにする', markOpen: '未対応に戻す', jumpReview: 'この時刻へ移動', reviewAdded: 'レビューを追加しました', reviewUpdated: 'レビューを更新しました', reviewDeleted: 'レビューを削除しました', reviewRestored: 'レビューを元に戻しました', reviewStatusChanged: 'レビューの状態を変更しました',
+          deleteReviewTitle: 'レビューを削除しますか？', deleteReviewMessage: 'このレビューを削除します。削除後はしばらく「元に戻す」から復元できます。', confirmDelete: '削除', cancel: 'キャンセル',
+          replaceWithReviewsTitle: '動画を変更しますか？', replaceWithReviewsMessage: '現在のレビューはブラウザー内へ自動保存されています。動画を変更すると、作業領域と自動保存は新しい動画用に置き換わります。必要なら先にレビューJSONも保存してください。', replaceVideoConfirm: '動画を変更',
+          removeWithReviewsTitle: '動画を外しますか？', removeWithReviewsMessage: '現在のレビューも作業領域から外れ、ブラウザー内の自動保存も削除されます。直後なら「元に戻す」で復元できます。', removeVideoConfirm: '動画を外す',
+          reviewTimeSet: 'レビュー時刻を現在位置に変更しました', reviewFocusHint: 'コメント入力を開始すると動画を一時停止します。', timelineTitle: 'レビュータイムライン', timelineAriaLabel: 'レビュー位置', timelineShown: '{count}件表示', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start}から{end} {status}', filterTypeLabel: '種類', filterStatusLabel: '状態', filterAll: 'すべて',
+          shortcutTitle: 'キーボード操作', shortcutBody: 'プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。', shortcutPlay: '再生 / 一時停止', shortcut5: '5秒移動', shortcut10: '10秒移動', shortcutFullscreen: '全画面', shortcutReview: 'レビュー入力',
+          buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '動画とレビューは端末内で処理されます',
+          helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
+          helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
+          helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。レビュー・縮小サムネイル・注釈は自動保存のためブラウザー内のIndexedDBへ保存されますが、元動画そのものは保存しません。',
+          helpNotesTitle: '注意事項', helpNoteCodec: '再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。', helpNoteReload: 'レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。', helpNoteMilestone: '「レビューJSONを保存」で作業をバックアップできます。「レビューを書き出す」から、共有用HTML・Markdown・CSVを保存したり、レビュー一覧をコピーできます。共有用HTMLに元動画は含まれません。',
+          savedProjectTitle: '前回のレビューがあります', resumeProject: '動画を選択して再開', saveProjectJson: 'レビューJSONを保存', loadProjectJson: 'レビューJSONを読み込む', discardSavedProject: '保存済み作業を削除', resetProject: '作業をリセット', autoSaveWaiting: 'レビューを追加すると自動保存します', autoSaveSaving: '自動保存中…', autoSaveSaved: '自動保存済み', autoSaveFailed: '自動保存できません。JSONを保存してください。', projectSaved: 'レビューJSONを保存しました', projectLoaded: 'レビューJSONを読み込みました。元動画を選択してください。', projectInvalid: 'このレビューJSONを読み込めませんでした。ファイルが壊れているか、対応していない形式です。', projectDeleted: '保存済み作業を削除しました', projectReset: 'レビューと保存済み作業をリセットしました', resetProjectTitle: '作業をリセットしますか？', resetProjectMessage: 'この動画のレビュー、サムネイル、注釈とブラウザー内の自動保存を削除します。動画は開いたままです。', resetProjectConfirm: '作業をリセット', discardProjectTitle: '保存済み作業を削除しますか？', discardProjectMessage: 'ブラウザー内に保存したレビュー、サムネイル、注釈を削除します。元動画は保存されていません。', discardProjectConfirm: '削除', replaceProjectTitle: '現在の作業を置き換えますか？', replaceProjectMessage: '読み込んだレビューJSONで現在のレビューを置き換えます。必要なら先にレビューJSONを保存してください。', replaceProjectConfirm: '読み込む', relinkMismatchTitle: '前回とは異なる動画の可能性があります', relinkMismatchMessage: 'ファイル名やサイズが保存済み作業と一致しません。この動画でレビューを開きますか？', relinkMismatchConfirm: 'この動画で開く', savedProjectDetail: '{count}件のレビュー · 最終保存 {savedAt}', savedProjectNoDate: '{count}件のレビュー', projectSchemaUnsupported: 'このレビューJSONは新しい形式のため、このバージョンでは読み込めません。',
+          exportTitle: 'レビューを書き出す', exportDescription: '共有用HTMLには元動画を含めず、時刻・コメント・サムネイル・注釈を1ファイルにまとめます。', exportWaiting: 'レビューを追加すると書き出せます', exportReady: '{count}件のレビューを書き出せます', outputFilenameLabel: '出力ファイル名', outputFilenameHint: '拡張子は出力形式に合わせて付きます', exportHtml: 'レビューHTMLを保存', exportMarkdown: 'Markdownを保存', exportCsv: 'CSVを保存', exportJson: 'レビューJSONを保存', copyReviews: 'レビューをコピー', exportHtmlStarted: 'レビューHTMLの保存を開始しました', exportMarkdownStarted: 'Markdownの保存を開始しました', exportCsvStarted: 'CSVの保存を開始しました', exportCopyDone: 'レビューをコピーしました', exportCopyFailed: 'レビューをコピーできませんでした', exportNoReviews: '書き出すレビューがありません', exportStatusDone: '{format}の保存を開始しました',
+          invalidFile: '動画ファイルを選択してください。', unsupportedVideo: 'このブラウザーで再生できない映像形式または音声形式が使用されている可能性があります。別の動画を選択してください。',
+          videoLoaded: '動画を読み込みました', videoRemoved: '動画を外しました', undo: '元に戻す', restored: '動画とレビューを戻しました', fullscreenUnavailable: 'このブラウザーでは全画面表示を利用できません。', unknownType: '不明'
+        },
+        en: {
+          brandMeta: 'Time-based notes · Range reviews · Annotations', helpTitle: 'How to use & notes', close: 'Close',
+          introTitle: 'Leave time-based review notes on the moments that matter.',
+          lead: 'Play a local video and attach Fix, Question, Check, Good, or Note reviews to specific moments. The video and review text stay on this device.',
+          localBadge: 'Fully local processing', dropTitle: 'Add a video', dropBody: 'Drop a video here or choose a file. The app opens videos that your browser can play.',
+          chooseVideo: 'Choose video', dropPrivacy: 'The selected video is not uploaded to an external server.', loadErrorTitle: 'Could not load this video',
+          loadingVideo: 'Preparing video…', readyVideo: 'Ready to review', replaceVideo: 'Change video', removeVideo: 'Remove',
+          seekLabel: 'Playback position', videoClickToggle: 'Click to play / pause', back5: 'Back 5 seconds', forward5: 'Forward 5 seconds', play: 'Play', pause: 'Pause', mute: 'Mute', unmute: 'Unmute',
+          volumeLabel: 'Volume', speedLabel: 'Playback speed', fullscreen: 'Fullscreen', videoInfoTitle: 'Video information', metaFile: 'File', metaSize: 'Size', metaDuration: 'Duration', metaResolution: 'Resolution', metaType: 'Type',
+          reviewEditorTitle: 'Add review', reviewEditorEditTitle: 'Edit review', reviewEditorGuide: 'Pause the video, then choose the review position and content in order.', reviewPositionTitle: 'Review position', reviewPositionHelp: 'The paused position is used automatically. Update it only when you move to another point.', reviewPositionSelected: 'Selected', useCurrentTime: 'Update to this playback position', reviewModeLabel: 'Review range', reviewModePoint: 'This moment', reviewModeRange: 'Range', rangeStartLabel: 'Start', rangeEndLabel: 'End', setRangeStart: 'Start here', setRangeEnd: 'End here', rangeEndRequired: 'Set an end position with End here.', rangeOrderInvalid: 'The end position must be after the start.', rangeStartSet: 'Range start set', rangeEndSet: 'Range end set', reviewContentTitle: 'Review content', reviewContentHelp: 'Choose a type and enter a comment. A comment is required.', reviewCommentLabel: 'Comment', requiredLabel: 'Required', reviewCommentPlaceholder: 'Describe the change or question', reviewCommentRequiredHint: 'Enter a comment to enable Add review.', reviewSaveNeedsComment: 'Enter a comment to add this review.', reviewSaveNeedsRange: 'Set the start and end of the range to add this review.', reviewSaveReady: 'Ready to add this review.', reviewUpdateReady: 'Ready to save changes.',
+          annotationStepTitle: 'Frame annotation', optionalLabel: 'Optional', annotationStepHelp: 'Only when needed, choose a color and drawing tool to point to an area.', annotationTitle: 'Frame annotation', annotationAutoCapture: 'Captures the frame at the review time', annotationEmpty: 'Set the review time to show that frame here. Add a rectangle, arrow, or freehand mark when you need to point to a specific area.', annotationColorLabel: 'Color', annotationColorGreen: 'Green', annotationColorRed: 'Red', annotationColorYellow: 'Yellow', annotationColorBlue: 'Blue', annotationColorWhite: 'White', annotationColorBlack: 'Black', annotationToolbarLabel: 'Frame annotation tools', annotationRect: 'Rectangle', annotationArrow: 'Arrow', annotationFreehand: 'Freehand', annotationUndo: 'Undo mark', annotationClear: 'Clear marks', annotationCount: '{count} annotations', annotationFrameCaptured: 'Captured the frame at the review time', annotationCaptureFailed: 'Could not capture this frame. Play the video briefly and try again.',
+          typeFix: 'Fix', typeQuestion: 'Question', typeCheck: 'Check', typeGood: 'Good', typeNote: 'Note', addReview: 'Add review', updateReview: 'Update review', cancelEdit: 'Cancel edit',
+          reviewsTitle: 'Reviews', reviewTotal: '{count}', statusOpen: 'Open', statusResolved: 'Resolved', noReviewsTitle: 'No reviews yet', noReviewsBody: 'Pause the video and add a comment. Reviews will appear here in time order.', noFilteredReviewsTitle: 'No reviews match these filters', noFilteredReviewsBody: 'Change or clear the filters to show other reviews.', clearFilters: 'Clear filters',
+          editReview: 'Edit', deleteReview: 'Delete', markResolved: 'Mark resolved', markOpen: 'Reopen', jumpReview: 'Jump to this time', reviewAdded: 'Review added', reviewUpdated: 'Review updated', reviewDeleted: 'Review deleted', reviewRestored: 'Review restored', reviewStatusChanged: 'Review status updated',
+          deleteReviewTitle: 'Delete this review?', deleteReviewMessage: 'This review will be deleted. You can restore it for a short time with Undo.', confirmDelete: 'Delete', cancel: 'Cancel',
+          replaceWithReviewsTitle: 'Change video?', replaceWithReviewsMessage: 'The current reviews are autosaved in this browser. Changing the video replaces the workspace and autosave with a new video project. Save a review JSON first if you need another backup.', replaceVideoConfirm: 'Change video',
+          removeWithReviewsTitle: 'Remove video?', removeWithReviewsMessage: 'The current reviews will leave the workspace and the browser autosave will be deleted. You can restore them immediately with Undo.', removeVideoConfirm: 'Remove video',
+          reviewTimeSet: 'Review time updated to the current position', reviewFocusHint: 'Starting a comment pauses playback.', timelineTitle: 'Review timeline', timelineAriaLabel: 'Review positions', timelineShown: '{count} shown', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start} to {end} {status}', filterTypeLabel: 'Type', filterStatusLabel: 'Status', filterAll: 'All',
+          shortcutTitle: 'Keyboard controls', shortcutBody: 'Use the keyboard to move through the video while reviewing.', shortcutPlay: 'Play / pause', shortcut5: 'Move 5 sec', shortcut10: 'Move 10 sec', shortcutFullscreen: 'Fullscreen', shortcutReview: 'Start review',
+          buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Video and reviews are processed on this device',
+          helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
+          helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
+          helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'The selected video is played from a local File / Blob URL and is not uploaded. Reviews, resized thumbnails, and annotations are stored in this browser’s IndexedDB for autosave, but the source video itself is never stored.',
+          helpNotesTitle: 'Notes', helpNoteCodec: 'Playback support depends on the codecs inside the video as well as the filename extension and browser.', helpNoteReload: 'Reviews, thumbnails, and annotations are autosaved in this browser. The source video itself is not stored, so select the same video again when resuming.', helpNoteMilestone: 'Use Save review JSON for a project backup, or export Standalone Review HTML / Markdown / CSV for handoff.',
+          savedProjectTitle: 'A previous review project is available', resumeProject: 'Select video to resume', saveProjectJson: 'Save review JSON', loadProjectJson: 'Load review JSON', discardSavedProject: 'Delete saved project', resetProject: 'Reset project', autoSaveWaiting: 'Reviews will autosave after you add one', autoSaveSaving: 'Autosaving…', autoSaveSaved: 'Autosaved', autoSaveFailed: 'Autosave failed. Save a review JSON backup.', projectSaved: 'Review JSON saved', projectLoaded: 'Review JSON loaded. Select the source video to continue.', projectInvalid: 'Could not load this review JSON. It may be damaged or use an unsupported format.', projectDeleted: 'Saved project deleted', projectReset: 'Reviews and saved project reset', resetProjectTitle: 'Reset this project?', resetProjectMessage: 'This removes reviews, thumbnails, annotations, and the autosaved project from this browser. The video stays open.', resetProjectConfirm: 'Reset project', discardProjectTitle: 'Delete the saved project?', discardProjectMessage: 'This removes the reviews, thumbnails, and annotations stored in this browser. The source video itself is not stored.', discardProjectConfirm: 'Delete', replaceProjectTitle: 'Replace the current project?', replaceProjectMessage: 'The loaded review JSON will replace the current reviews. Save a review JSON first if you need a backup.', replaceProjectConfirm: 'Load project', relinkMismatchTitle: 'This may be a different video', relinkMismatchMessage: 'The filename or size does not match the saved project. Open these reviews with this video anyway?', relinkMismatchConfirm: 'Open with this video', savedProjectDetail: '{count} reviews · last saved {savedAt}', savedProjectNoDate: '{count} reviews', projectSchemaUnsupported: 'This review JSON uses a newer schema and cannot be opened by this version.',
+          exportTitle: 'Export reviews', exportDescription: 'The shareable HTML keeps timecodes, comments, thumbnails, and annotations in one file without embedding the source video.', exportWaiting: 'Add a review to enable export', exportReady: '{count} reviews ready to export', outputFilenameLabel: 'Output filename', outputFilenameHint: 'The extension is added for each format', exportHtml: 'Save review HTML', exportMarkdown: 'Save Markdown', exportCsv: 'Save CSV', exportJson: 'Save review JSON', copyReviews: 'Copy reviews', exportHtmlStarted: 'Review HTML download started', exportMarkdownStarted: 'Markdown download started', exportCsvStarted: 'CSV download started', exportCopyDone: 'Reviews copied', exportCopyFailed: 'Could not copy reviews', exportNoReviews: 'There are no reviews to export', exportStatusDone: '{format} download started',
+          invalidFile: 'Choose a video file.', unsupportedVideo: 'This video may use a video or audio format that this browser cannot play. Choose another video.',
+          videoLoaded: 'Video loaded', videoRemoved: 'Video removed', undo: 'Undo', restored: 'Video and reviews restored', fullscreenUnavailable: 'Fullscreen is not available in this browser.', unknownType: 'Unknown'
+        }
+      };
+
+      const $ = selector => document.querySelector(selector);
+      const storageKeys = { language: `${APP_CONFIG.slug}:language` };
+      const PROJECT_SCHEMA_VERSION = 1;
+      const PROJECT_RECORD_ID = 'current';
+      const PROJECT_DB_NAME = `${APP_CONFIG.slug}:projects`;
+      let language = readStorage(storageKeys.language) || detectLanguage();
+      let sourceGeneration = 0;
+      let phase = 'empty';
+      let currentFile = null;
+      let currentObjectUrl = '';
+      let dragDepth = 0;
+      let lastTimePaint = 0;
+      let pendingResume = null;
+      let sourceEventController = null;
+      let reviews = [];
+      let selectedReviewType = 'fix';
+      let editingReviewId = '';
+      let activeReviewId = '';
+      let draftReviewTime = null;
+      let selectedReviewMode = 'point';
+      let draftRangeStart = null;
+      let draftRangeEnd = null;
+      let reviewTypeFilter = 'all';
+      let reviewStatusFilter = 'all';
+      let draftThumbnail = '';
+      let draftFrameWidth = 0;
+      let draftFrameHeight = 0;
+      let draftAnnotations = [];
+      let annotationTool = 'rect';
+      let annotationColor = '#16624f';
+      let annotationPointer = null;
+      let annotationBaseImage = null;
+      let annotationCaptureGeneration = 0;
+      let detachedProject = null;
+      let projectDbPromise = null;
+      let autosaveTimer = 0;
+      let autosaveFailed = false;
+      let suppressAutosave = false;
+      const video = $('#video');
+      const videoInput = $('#videoInput');
+      const projectInput = $('#projectInput');
+      const outputFilename = $('#outputFilename');
+      const dropZone = $('#dropZone');
+      const playerShell = $('#playerShell');
+      const loadingOverlay = $('#loadingOverlay');
+      const seekRange = $('#seekRange');
+      const volumeRange = $('#volumeRange');
+      const speedSelect = $('#speedSelect');
+      const reviewComment = $('#reviewComment');
+      const rangeEditor = $('#rangeEditor');
+      const rangeValidation = $('#rangeValidation');
+      const saveReviewButton = $('#saveReviewButton');
+      const reviewTimelineMarkers = $('#reviewTimelineMarkers');
+      const reviewTimelinePlayhead = $('#reviewTimelinePlayhead');
+      const annotationCanvas = $('#annotationCanvas');
+      const annotationStage = $('#annotationStage');
+      const annotationEmpty = $('#annotationEmpty');
+      const annotationContext = annotationCanvas.getContext('2d');
+
+      function openProjectDb() {
+        if (projectDbPromise) return projectDbPromise;
+        projectDbPromise = new Promise((resolve, reject) => {
+          if (!('indexedDB' in window)) { reject(new Error('IndexedDB unavailable')); return; }
+          const request = indexedDB.open(PROJECT_DB_NAME, 1);
+          request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains('projects')) db.createObjectStore('projects', { keyPath: 'id' });
+          };
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error || new Error('IndexedDB open failed'));
+          request.onblocked = () => reject(new Error('IndexedDB blocked'));
+        }).catch(error => { projectDbPromise = null; throw error; });
+        return projectDbPromise;
+      }
+      async function projectDbGet() {
+        const db = await openProjectDb();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction('projects', 'readonly');
+          const request = tx.objectStore('projects').get(PROJECT_RECORD_ID);
+          request.onsuccess = () => resolve(request.result || null);
+          request.onerror = () => reject(request.error || new Error('IndexedDB read failed'));
+        });
+      }
+      async function projectDbPut(project) {
+        const db = await openProjectDb();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction('projects', 'readwrite');
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error || new Error('IndexedDB write failed'));
+          tx.onabort = () => reject(tx.error || new Error('IndexedDB write aborted'));
+          tx.objectStore('projects').put({ ...project, id: PROJECT_RECORD_ID });
+        });
+      }
+      async function projectDbDelete() {
+        try {
+          const db = await openProjectDb();
+          await new Promise((resolve, reject) => {
+            const tx = db.transaction('projects', 'readwrite');
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error || new Error('IndexedDB delete failed'));
+            tx.objectStore('projects').delete(PROJECT_RECORD_ID);
+          });
+        } catch (error) {
+          throw error;
+        }
+      }
+      function projectStatus(key, error = false) {
+        const node = $('#projectStatus');
+        if (!node) return;
+        node.textContent = t(key);
+        node.classList.toggle('is-error', error);
+      }
+      function clamp01(value) { return Math.max(0, Math.min(1, Number(value) || 0)); }
+      function normalizeAnnotationColor(value) {
+        const color = String(value || '').toLowerCase();
+        return /^#[0-9a-f]{6}$/.test(color) ? color : '#16624f';
+      }
+      function normalizedAnnotation(annotation) {
+        if (!annotation || typeof annotation !== 'object') return null;
+        const color = normalizeAnnotationColor(annotation.color);
+        if (annotation.type === 'rect') return { type: 'rect', color, x: clamp01(annotation.x), y: clamp01(annotation.y), width: clamp01(annotation.width), height: clamp01(annotation.height) };
+        if (annotation.type === 'arrow') return { type: 'arrow', color, x1: clamp01(annotation.x1), y1: clamp01(annotation.y1), x2: clamp01(annotation.x2), y2: clamp01(annotation.y2) };
+        if (annotation.type === 'freehand' && Array.isArray(annotation.points)) {
+          const points = annotation.points.slice(0, 5000).map(point => ({ x: clamp01(point?.x), y: clamp01(point?.y) }));
+          return points.length > 1 ? { type: 'freehand', color, points } : null;
+        }
+        return null;
+      }
+      function normalizedReview(review, index = 0) {
+        if (!review || typeof review !== 'object') return null;
+        const types = ['fix','question','check','good','note'];
+        const status = review.status === 'resolved' ? 'resolved' : 'open';
+        const mode = review.mode === 'range' ? 'range' : 'point';
+        const start = Number.isFinite(Number(review.startTime)) ? Number(review.startTime) : Number(review.time);
+        if (!Number.isFinite(start) || start < 0) return null;
+        let end = mode === 'range' ? Number(review.endTime) : null;
+        if (mode === 'range' && (!Number.isFinite(end) || end <= start)) end = null;
+        const normalizedMode = end == null ? 'point' : mode;
+        const thumbnail = typeof review.thumbnail === 'string' && /^data:image\/(?:jpeg|png|webp);base64,/i.test(review.thumbnail) && review.thumbnail.length <= 6000000 ? review.thumbnail : '';
+        const annotations = Array.isArray(review.annotations) ? review.annotations.slice(0, 1000).map(normalizedAnnotation).filter(Boolean) : [];
+        return {
+          id: typeof review.id === 'string' && review.id ? review.id.slice(0, 160) : `imported-${Date.now()}-${index}`,
+          type: types.includes(review.type) ? review.type : 'note', status, mode: normalizedMode,
+          time: Math.max(0, start), startTime: Math.max(0, start), endTime: normalizedMode === 'range' ? Math.max(start, end) : null,
+          comment: String(review.comment || '').slice(0, 4000), thumbnail,
+          frameWidth: Math.max(0, Math.min(8192, Number(review.frameWidth) || 0)), frameHeight: Math.max(0, Math.min(8192, Number(review.frameHeight) || 0)), annotations,
+          createdAt: typeof review.createdAt === 'string' ? review.createdAt : new Date().toISOString(),
+          updatedAt: typeof review.updatedAt === 'string' ? review.updatedAt : new Date().toISOString()
+        };
+      }
+      function normalizeProject(project) {
+        if (!project || typeof project !== 'object') throw new Error('invalid-project');
+        const schemaVersion = Number(project.schemaVersion);
+        if (schemaVersion > PROJECT_SCHEMA_VERSION) { const error = new Error('newer-schema'); error.code = 'newer-schema'; throw error; }
+        if (schemaVersion !== PROJECT_SCHEMA_VERSION) throw new Error('unsupported-schema');
+        if (!project.video || typeof project.video !== 'object' || typeof project.video.name !== 'string') throw new Error('invalid-video');
+        if (!Array.isArray(project.reviews) || project.reviews.length > 5000) throw new Error('invalid-reviews');
+        const normalizedReviews = project.reviews.map(normalizedReview).filter(Boolean);
+        const videoMeta = {
+          name: project.video.name.slice(0, 500), size: Math.max(0, Number(project.video.size) || 0), type: String(project.video.type || '').slice(0, 160),
+          lastModified: Math.max(0, Number(project.video.lastModified) || 0), duration: Math.max(0, Number(project.video.duration) || 0),
+          width: Math.max(0, Number(project.video.width) || 0), height: Math.max(0, Number(project.video.height) || 0)
+        };
+        const playback = project.playback && typeof project.playback === 'object' ? project.playback : {};
+        const settings = project.settings && typeof project.settings === 'object' ? project.settings : {};
+        return {
+          id: PROJECT_RECORD_ID, schemaVersion: PROJECT_SCHEMA_VERSION, appVersion: String(project.appVersion || APP_CONFIG.version),
+          savedAt: typeof project.savedAt === 'string' ? project.savedAt : new Date().toISOString(), video: videoMeta,
+          playback: { time: Math.max(0, Number(playback.time) || 0), rate: [0.25,0.5,1,1.5,2].includes(Number(playback.rate)) ? Number(playback.rate) : 1, volume: Math.max(0, Math.min(1, Number(playback.volume ?? 1))), muted: Boolean(playback.muted) },
+          settings: { reviewTypeFilter: ['all','fix','question','check','good','note'].includes(settings.reviewTypeFilter) ? settings.reviewTypeFilter : 'all', reviewStatusFilter: ['all','open','resolved'].includes(settings.reviewStatusFilter) ? settings.reviewStatusFilter : 'all' },
+          reviews: normalizedReviews
+        };
+      }
+      function buildProjectSnapshot() {
+        if (!currentFile) return detachedProject ? normalizeProject(detachedProject) : null;
+        return normalizeProject({
+          schemaVersion: PROJECT_SCHEMA_VERSION, appVersion: APP_CONFIG.version, savedAt: new Date().toISOString(),
+          video: { name: currentFile.name || '', size: currentFile.size || 0, type: currentFile.type || '', lastModified: currentFile.lastModified || 0, duration: Number.isFinite(video.duration) ? video.duration : 0, width: video.videoWidth || 0, height: video.videoHeight || 0 },
+          playback: { time: Number.isFinite(video.currentTime) ? video.currentTime : 0, rate: video.playbackRate || 1, volume: video.volume, muted: video.muted },
+          settings: { reviewTypeFilter, reviewStatusFilter },
+          reviews: reviews.map((review, index) => normalizedReview(review, index)).filter(Boolean)
+        });
+      }
+      function savedProjectDetailText(project) {
+        const count = project?.reviews?.length || 0;
+        if (!project?.savedAt) return t('savedProjectNoDate').replace('{count}', String(count));
+        let savedAt = project.savedAt;
+        try { savedAt = new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(project.savedAt)); } catch { /* Keep raw value. */ }
+        return t('savedProjectDetail').replace('{count}', String(count)).replace('{savedAt}', savedAt);
+      }
+      function renderDetachedProject() {
+        const card = $('#savedProjectCard');
+        const project = detachedProject;
+        card.hidden = !project;
+        if (!project) return;
+        $('#savedProjectMeta').textContent = project.video?.name || '—';
+        $('#savedProjectDetail').textContent = savedProjectDetailText(project);
+      }
+      function projectFilename(project) {
+        const source = project?.video?.name || 'video-review';
+        const stem = source.replace(/\.[^.]+$/, '').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-').trim().slice(0, 90) || 'video-review';
+        return `${stem}.video-review.json`;
+      }
+      function sanitizeOutputStem(value) {
+        const raw = String(value || '').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-').replace(/\s+/g, ' ').trim();
+        return (raw || 'video-review').slice(0, 100);
+      }
+      function defaultOutputStem() {
+        const source = currentFile?.name || detachedProject?.video?.name || 'video-review';
+        const stem = source.replace(/\.[^.]+$/, '').trim() || 'video-review';
+        return sanitizeOutputStem(`${stem}-review`);
+      }
+      function ensureOutputFilename(force = false) {
+        if (!outputFilename) return;
+        const current = sanitizeOutputStem(outputFilename.value);
+        if (force || !current || current === 'video-review') outputFilename.value = defaultOutputStem();
+      }
+      function currentOutputStem() {
+        const stem = sanitizeOutputStem(outputFilename?.value || defaultOutputStem());
+        if (outputFilename && outputFilename.value !== stem) outputFilename.value = stem;
+        return stem;
+      }
+      function downloadBlob(content, mime, extension, statusKey, includeBom = false) {
+        if (!reviews.length) { AppToast.show({ message: t('exportNoReviews'), tone: 'warning' }); return; }
+        const parts = includeBom ? ['\ufeff', content] : [content];
+        const blob = new Blob(parts, { type: mime });
+        const url = URL.createObjectURL(blob); blobUrls.add(url);
+        const anchor = document.createElement('a'); anchor.href = url; anchor.download = `${currentOutputStem()}.${extension}`; document.body.append(anchor); anchor.click(); anchor.remove();
+        window.setTimeout(() => { URL.revokeObjectURL(url); blobUrls.delete(url); }, 0);
+        const message = t(statusKey); setExportStatus(message, true); AppToast.show({ message }); announce(message);
+      }
+      function reviewExportSnapshot() {
+        const source = buildProjectSnapshot();
+        const normalized = source || detachedProject;
+        if (!normalized) return null;
+        return normalizeProject({ ...normalized, savedAt: new Date().toISOString(), appVersion: APP_CONFIG.version });
+      }
+      function csvCell(value) { return `"${String(value ?? '').replace(/"/g, '""')}"`; }
+      function buildCsvExport() {
+        const headers = ['No','Type','Status','Start','End','Comment','CreatedAt','UpdatedAt'];
+        const rows = reviews.slice().sort((a,b) => reviewStartTime(a) - reviewStartTime(b)).map((review, index) => [
+          index + 1, reviewTypeLabel(review.type), reviewStatusLabel(review.status), formatTime(reviewStartTime(review)), reviewModeOf(review) === 'range' ? formatTime(reviewEndTime(review)) : '', review.comment, review.createdAt || '', review.updatedAt || ''
+        ]);
+        return [headers, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
+      }
+      function buildMarkdownExport() {
+        const sorted = reviews.slice().sort((a,b) => reviewStartTime(a) - reviewStartTime(b));
+        const videoName = currentFile?.name || detachedProject?.video?.name || '—';
+        const open = sorted.filter(review => review.status !== 'resolved').length;
+        const resolved = sorted.length - open;
+        const lines = [`# Video Review`, '', `Video: ${videoName}`, `Reviews: ${sorted.length} · ${t('statusOpen')}: ${open} · ${t('statusResolved')}: ${resolved}`, ''];
+        sorted.forEach((review, index) => {
+          lines.push(`## ${index + 1}. ${reviewTimeText(review)}`, `${reviewTypeLabel(review.type)} / ${reviewStatusLabel(review.status)}`, '', review.comment, '');
+        });
+        return lines.join('\n').trimEnd() + '\n';
+      }
+      function buildClipboardExport() {
+        const sorted = reviews.slice().sort((a,b) => reviewStartTime(a) - reviewStartTime(b));
+        const videoName = currentFile?.name || detachedProject?.video?.name || '—';
+        const lines = [`Video Review — ${videoName}`, ''];
+        sorted.forEach((review, index) => {
+          lines.push(`${index + 1}. ${reviewTimeText(review)} · ${reviewTypeLabel(review.type)} · ${reviewStatusLabel(review.status)}`, review.comment, '');
+        });
+        return lines.join('\n').trimEnd();
+      }
+      function safeJsonForScript(value) {
+        return JSON.stringify(value).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+      }
+      function buildStandaloneReviewHtml() {
+        const project = reviewExportSnapshot();
+        if (!project) return '';
+        const data = {
+          language,
+          video: project.video,
+          generatedAt: new Date().toISOString(),
+          reviews: project.reviews.map(review => ({ ...review, annotations: cloneAnnotations(review.annotations) }))
+        };
+        const labels = language === 'ja'
+          ? { title:'動画レビュー', reviews:'レビュー', open:'未対応', resolved:'解決済み', all:'すべて', type:'種類', status:'状態', fix:'修正', question:'質問', check:'要確認', good:'良い', note:'メモ', noItems:'条件に一致するレビューはありません', annotations:'注釈', generated:'生成', sourceNote:'元動画はこのHTMLに含まれていません。', prev:'前のレビュー', next:'次のレビュー', close:'閉じる' }
+          : { title:'Video Review', reviews:'Reviews', open:'Open', resolved:'Resolved', all:'All', type:'Type', status:'Status', fix:'Fix', question:'Question', check:'Check', good:'Good', note:'Note', noItems:'No reviews match these filters.', annotations:'annotations', generated:'Generated', sourceNote:'The source video is not embedded in this HTML.', prev:'Previous review', next:'Next review', close:'Close' };
+        const csp = "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'";
+        const payload = safeJsonForScript(data);
+        const labelPayload = safeJsonForScript(labels);
+        return `<!doctype html>\n<html lang="${language}">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<meta http-equiv="Content-Security-Policy" content="${csp}">\n<meta name="color-scheme" content="light">\n<title>${language === 'ja' ? '動画レビュー' : 'Video Review'} — ${String(project.video.name || '').replace(/[&<>"']/g, '')}</title>\n<style>
+:root{--bg:#f5f5f2;--surface:#fff;--muted:#666963;--text:#20211f;--line:#dadbd6;--accent:#16624f;--soft:#e1f0ea;--danger:#b3261e}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(980px,100%);margin:auto;padding:24px 16px 60px}header{padding-bottom:18px;border-bottom:1px solid var(--line)}h1{margin:0;font-size:24px}.meta{margin:6px 0 0;color:var(--muted);overflow-wrap:anywhere}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.stat{padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}.stat strong{display:block;font-size:18px}.stat span{font-size:11px;color:var(--muted)}.filters{display:grid;gap:9px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);position:sticky;top:8px;z-index:5}.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.filter-label{width:48px;color:var(--muted);font-size:11px;font-weight:700}.chip{border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:#fff;color:var(--muted);cursor:pointer;font:inherit;font-size:11px;font-weight:700}.chip[aria-pressed=true]{border-color:var(--accent);background:var(--soft);color:var(--accent)}#list{margin-top:12px}.card{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);scroll-margin-top:120px}.card+.card{margin-top:9px}.card.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 12%,transparent)}.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--accent);font-size:11px;font-weight:800}.status{color:var(--muted);font-size:11px;font-weight:700}.time{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px}.comment{margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.thumb{position:relative;margin-top:11px;overflow:hidden;border:1px solid var(--line);border-radius:9px;background:#171a18;cursor:zoom-in}.thumb img{display:block;width:100%;max-height:420px;object-fit:contain}.thumb svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.stroke{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1.2px #fff)}.annotation-count{margin-top:6px;color:var(--muted);font-size:10px}.empty{padding:36px 10px;text-align:center;color:var(--muted)}.nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px}.nav button{min-height:40px;padding:7px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font:inherit;font-weight:700}footer{margin-top:24px;color:var(--muted);font-size:11px}dialog{width:min(1100px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:0;border-radius:12px;background:#111}dialog::backdrop{background:#000a}.viewer{position:relative;display:grid;place-items:center;min-height:200px}.viewer img{display:block;max-width:100%;max-height:calc(100dvh - 70px);object-fit:contain}.viewer svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.close{position:absolute;z-index:2;right:8px;top:8px;width:40px;height:40px;border:1px solid #ffffff55;border-radius:9px;background:#0009;color:#fff;font-size:20px;cursor:pointer}@media(max-width:560px){.wrap{padding:16px 10px 40px}.summary{grid-template-columns:1fr}.filters{top:4px}.filter-label{width:100%}.time{flex:1 0 100%;margin-left:0}.card{padding:11px}}
+</style>\n</head>\n<body>\n<div class="wrap"><header><h1 id="title"></h1><p class="meta" id="videoMeta"></p><p class="meta" id="sourceNote"></p></header><div class="summary" id="summary"></div><div class="filters"><div class="filter-row"><span class="filter-label" id="typeLabel"></span><div id="typeFilters"></div></div><div class="filter-row"><span class="filter-label" id="statusLabel"></span><div id="statusFilters"></div></div></div><div id="list"></div><div class="nav"><button id="prev"></button><button id="next"></button></div><footer id="footer"></footer></div><dialog id="viewerDialog"><div class="viewer"><button class="close" id="viewerClose" aria-label="Close">×</button><img id="viewerImage" alt=""><svg id="viewerOverlay" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg></div></dialog><script id="review-data" type="application/json">${payload}<\/script><script id="labels" type="application/json">${labelPayload}<\/script><script>
+(()=>{'use strict';const data=JSON.parse(document.getElementById('review-data').textContent);const L=JSON.parse(document.getElementById('labels').textContent);let type='all',status='all',active=-1,svgSeq=0;const types=['all','fix','question','check','good','note'];const statuses=['all','open','resolved'];const labels={fix:L.fix,question:L.question,check:L.check,good:L.good,note:L.note};const fmt=s=>{s=Math.max(0,Number(s)||0);const ms=Math.floor(s*1000+.0001),sec=Math.floor(ms/1000)%60,min=Math.floor(ms/60000)%60,h=Math.floor(ms/3600000);return String(h).padStart(2,'0')+':'+String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0')+'.'+String(ms%1000).padStart(3,'0')};const time=r=>r.mode==='range'&&Number(r.endTime)>Number(r.startTime)?fmt(r.startTime)+' – '+fmt(r.endTime):fmt(r.startTime);const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n};function annotationSvg(review,root){root.replaceChildren();for(const a of review.annotations||[]){const color=/^#[0-9a-f]{6}$/i.test(a.color||'')?a.color:'#16624f';let n;if(a.type==='rect'){n=document.createElementNS('http://www.w3.org/2000/svg','rect');n.setAttribute('x',a.x*1000);n.setAttribute('y',a.y*1000);n.setAttribute('width',a.width*1000);n.setAttribute('height',a.height*1000)}else if(a.type==='arrow'){const x1=a.x1*1000,y1=a.y1*1000,x2=a.x2*1000,y2=a.y2*1000,angle=Math.atan2(y2-y1,x2-x1),head=42;n=document.createElementNS('http://www.w3.org/2000/svg','path');n.setAttribute('d','M '+x1+' '+y1+' L '+x2+' '+y2+' M '+x2+' '+y2+' L '+(x2-head*Math.cos(angle-Math.PI/6))+' '+(y2-head*Math.sin(angle-Math.PI/6))+' M '+x2+' '+y2+' L '+(x2-head*Math.cos(angle+Math.PI/6))+' '+(y2-head*Math.sin(angle+Math.PI/6)))}else if(a.type==='freehand'){n=document.createElementNS('http://www.w3.org/2000/svg','polyline');n.setAttribute('points',(a.points||[]).map(p=>p.x*1000+','+p.y*1000).join(' '))}if(n){n.setAttribute('class','stroke');n.setAttribute('stroke',color);if(color==='#ffffff'||color==='#f0b429')n.style.filter='drop-shadow(0 0 1.2px #000)';root.append(n)}}}function chips(root,items,kind){root.replaceChildren();for(const item of items){const b=el('button','chip',item==='all'?L.all:(kind==='type'?labels[item]:(item==='open'?L.open:L.resolved)));b.type='button';b.setAttribute('aria-pressed',String((kind==='type'?type:status)===item));b.onclick=()=>{if(kind==='type')type=item;else status=item;render()};root.append(b)}}function filtered(){return data.reviews.filter(r=>(type==='all'||r.type===type)&&(status==='all'||r.status===status))}function showViewer(review){if(!review.thumbnail)return;document.getElementById('viewerImage').src=review.thumbnail;annotationSvg(review,document.getElementById('viewerOverlay'));document.getElementById('viewerDialog').showModal()}function render(){chips(document.getElementById('typeFilters'),types,'type');chips(document.getElementById('statusFilters'),statuses,'status');const items=filtered();const list=document.getElementById('list');list.replaceChildren();if(!items.length){list.append(el('div','empty',L.noItems));active=-1;document.getElementById('prev').disabled=true;document.getElementById('next').disabled=true;return}if(active<0||active>=items.length)active=0;items.forEach((review,index)=>{const card=el('article','card'+(index===active?' active':''));card.tabIndex=0;card.dataset.index=String(index);const top=el('div','top');top.append(el('span','badge',labels[review.type]||review.type),el('span','status',review.status==='resolved'?L.resolved:L.open),el('span','time',time(review)));card.append(top,el('p','comment',review.comment));if(review.thumbnail){const thumb=el('div','thumb');const img=el('img');img.src=review.thumbnail;img.alt='';const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 1000 1000');svg.setAttribute('preserveAspectRatio','none');annotationSvg(review,svg);thumb.append(img,svg);thumb.onclick=()=>showViewer(review);card.append(thumb);if((review.annotations||[]).length)card.append(el('div','annotation-count',(review.annotations||[]).length+' '+L.annotations))}card.onclick=e=>{if(e.target.closest('.thumb'))return;active=index;render();document.querySelector('.card.active')?.scrollIntoView({block:'nearest'})};list.append(card)});document.getElementById('prev').disabled=active<=0;document.getElementById('next').disabled=active>=items.length-1}function move(delta){const items=filtered();if(!items.length)return;active=Math.max(0,Math.min(items.length-1,active+delta));render();document.querySelector('.card.active')?.scrollIntoView({behavior:'smooth',block:'center'})}const open=data.reviews.filter(r=>r.status!=='resolved').length,resolved=data.reviews.length-open;document.getElementById('title').textContent=L.title;document.getElementById('videoMeta').textContent=(data.video.name||'—')+' · '+L.reviews+': '+data.reviews.length;document.getElementById('sourceNote').textContent=L.sourceNote;const summary=document.getElementById('summary');[[data.reviews.length,L.reviews],[open,L.open],[resolved,L.resolved]].forEach(([v,k])=>{const box=el('div','stat');box.append(el('strong','',String(v)),el('span','',k));summary.append(box)});document.getElementById('typeLabel').textContent=L.type;document.getElementById('statusLabel').textContent=L.status;document.getElementById('prev').textContent=L.prev;document.getElementById('next').textContent=L.next;document.getElementById('prev').onclick=()=>move(-1);document.getElementById('next').onclick=()=>move(1);document.getElementById('footer').textContent=L.generated+': '+new Date(data.generatedAt).toLocaleString()+' · Video Review Notes';const dialog=document.getElementById('viewerDialog');document.getElementById('viewerClose').setAttribute('aria-label',L.close);document.getElementById('viewerClose').onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog)dialog.close()};document.addEventListener('keydown',e=>{if(dialog.open){if(e.key==='Escape')dialog.close();return}if(e.target.closest('button'))return;if(e.key==='ArrowLeft'){e.preventDefault();move(-1)}else if(e.key==='ArrowRight'){e.preventDefault();move(1)}});render()})();
+<\/script>\n</body>\n</html>`;
+      }
+      function setExportStatus(message, success = false) {
+        const node = $('#exportStatus'); if (!node) return; node.textContent = message; node.classList.toggle('is-success', success);
+      }
+      function updateExportUi() {
+        const enabled = reviews.length > 0;
+        ['#exportHtmlButton','#exportMarkdownButton','#exportCsvButton','#exportJsonButton','#copyReviewsButton'].forEach(selector => { const node = $(selector); if (node) node.disabled = !enabled; });
+        if (!enabled) setExportStatus(t('exportWaiting'), false);
+        else setExportStatus(t('exportReady').replace('{count}', String(reviews.length)), false);
+      }
+      async function copyReviewsToClipboard() {
+        if (!reviews.length) return;
+        const text = buildClipboardExport();
+        try {
+          if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+          else { const textarea = document.createElement('textarea'); textarea.value = text; textarea.style.position = 'fixed'; textarea.style.opacity = '0'; document.body.append(textarea); textarea.select(); if (!document.execCommand('copy')) throw new Error('copy failed'); textarea.remove(); }
+          setExportStatus(t('exportCopyDone'), true); AppToast.show({ message: t('exportCopyDone') }); announce(t('exportCopyDone'));
+        } catch { setExportStatus(t('exportCopyFailed'), false); AppToast.show({ message: t('exportCopyFailed'), tone: 'warning' }); announce(t('exportCopyFailed')); }
+      }
+      function downloadProjectJson(project = buildProjectSnapshot(), filenameStem = '') {
+        if (!project) return;
+        const normalized = normalizeProject({ ...project, savedAt: new Date().toISOString(), appVersion: APP_CONFIG.version });
+        const blob = new Blob([JSON.stringify(normalized, null, 2)], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob); blobUrls.add(url);
+        const anchor = document.createElement('a'); anchor.href = url; anchor.download = filenameStem ? `${sanitizeOutputStem(filenameStem)}.video-review.json` : projectFilename(normalized); document.body.append(anchor); anchor.click(); anchor.remove();
+        window.setTimeout(() => { URL.revokeObjectURL(url); blobUrls.delete(url); }, 0);
+        AppToast.show({ message: t('projectSaved') }); announce(t('projectSaved'));
+      }
+      async function persistProjectNow() {
+        clearTimeout(autosaveTimer); autosaveTimer = 0;
+        if (suppressAutosave) return;
+        if (!currentFile || !reviews.length) {
+          if (!detachedProject) { try { await projectDbDelete(); } catch { /* Optional until a review exists. */ } }
+          projectStatus('autoSaveWaiting');
+          return;
+        }
+        const project = buildProjectSnapshot();
+        if (!project) return;
+        projectStatus('autoSaveSaving');
+        try {
+          await projectDbPut(project);
+          autosaveFailed = false;
+          detachedProject = null;
+          projectStatus('autoSaveSaved');
+        } catch (error) {
+          autosaveFailed = true;
+          projectStatus('autoSaveFailed', true);
+        }
+      }
+      function scheduleAutoSave(delay = 260) {
+        if (suppressAutosave) return;
+        clearTimeout(autosaveTimer);
+        autosaveTimer = window.setTimeout(() => { persistProjectNow(); }, delay);
+      }
+      async function loadStoredProject() {
+        try {
+          const stored = await projectDbGet();
+          if (!stored) return;
+          detachedProject = normalizeProject(stored);
+          renderDetachedProject();
+        } catch (error) {
+          if (error?.code === 'newer-schema') {
+            AppToast.show({ message: t('projectSchemaUnsupported'), tone: 'warning', duration: 6000 });
+          } else if (error?.message !== 'IndexedDB unavailable') {
+            projectStatus('autoSaveFailed', true);
+          }
+        }
+      }
+      function fileMatchesProject(file, project) {
+        const meta = project?.video;
+        if (!file || !meta) return false;
+        if (file.name !== meta.name || Number(file.size) !== Number(meta.size)) return false;
+        if (meta.lastModified && file.lastModified && Number(meta.lastModified) !== Number(file.lastModified)) return false;
+        return true;
+      }
+      function resumeSnapshotFromProject(project) {
+        return { rate: project.playback?.rate || 1, volume: project.playback?.volume ?? 1, muted: Boolean(project.playback?.muted), time: project.playback?.time || 0, reviews: project.reviews || [], reviewTypeFilter: project.settings?.reviewTypeFilter || 'all', reviewStatusFilter: project.settings?.reviewStatusFilter || 'all', project };
+      }
+      async function useDetachedProjectWithFile(file) {
+        const project = detachedProject;
+        if (!project) { loadFile(file); return; }
+        if (!fileMatchesProject(file, project)) {
+          const ok = await AppConfirm.ask({ title: t('relinkMismatchTitle'), message: t('relinkMismatchMessage'), confirmLabel: t('relinkMismatchConfirm'), cancelLabel: t('cancel') });
+          if (!ok) return;
+        }
+        loadFile(file, resumeSnapshotFromProject(project));
+      }
+      function resetWorkspaceForDetachedProject() {
+        sourceGeneration += 1; sourceEventController?.abort(); sourceEventController = null; currentFile = null; revokeCurrentObjectUrl(); resetPlayerState(); clearReviewState(); $('#errorBox').hidden = true; setPhase('empty');
+      }
+      async function importProjectFile(file) {
+        if (!file) return;
+        let project;
+        try {
+          const text = await file.text();
+          project = normalizeProject(JSON.parse(text));
+        } catch (error) {
+          const message = error?.code === 'newer-schema' ? t('projectSchemaUnsupported') : t('projectInvalid');
+          AppToast.show({ message, tone: 'warning', duration: 6000 }); announce(message); return;
+        }
+        if (currentFile || reviews.length) {
+          const ok = await AppConfirm.ask({ title: t('replaceProjectTitle'), message: t('replaceProjectMessage'), confirmLabel: t('replaceProjectConfirm'), cancelLabel: t('cancel') });
+          if (!ok) return;
+        }
+        suppressAutosave = true;
+        resetWorkspaceForDetachedProject();
+        detachedProject = project;
+        renderDetachedProject();
+        try { await projectDbPut(project); autosaveFailed = false; } catch { autosaveFailed = true; }
+        suppressAutosave = false;
+        AppToast.show({ message: t('projectLoaded') }); announce(t('projectLoaded'));
+      }
+      function chooseProjectFile() { projectInput.value = ''; projectInput.click(); }
+      async function discardDetachedProject() {
+        if (!detachedProject) return;
+        const ok = await AppConfirm.ask({ title: t('discardProjectTitle'), message: t('discardProjectMessage'), confirmLabel: t('discardProjectConfirm'), cancelLabel: t('cancel'), tone: 'danger' });
+        if (!ok) return;
+        detachedProject = null; renderDetachedProject();
+        try { await projectDbDelete(); } catch { /* UI still discards the detached copy. */ }
+        AppToast.show({ message: t('projectDeleted') }); announce(t('projectDeleted'));
+      }
+      async function resetCurrentProject() {
+        if (!currentFile && !detachedProject && !reviews.length) return;
+        const ok = await AppConfirm.ask({ title: t('resetProjectTitle'), message: t('resetProjectMessage'), confirmLabel: t('resetProjectConfirm'), cancelLabel: t('cancel'), tone: 'danger' });
+        if (!ok) return;
+        suppressAutosave = true;
+        if (currentFile) clearReviewState();
+        detachedProject = null; renderDetachedProject();
+        try { await projectDbDelete(); } catch { /* JSON remains available as a manual fallback. */ }
+        suppressAutosave = false; projectStatus('autoSaveWaiting');
+        AppToast.show({ message: t('projectReset') }); announce(t('projectReset'));
+      }
+
+      function readStorage(key) { try { return localStorage.getItem(key); } catch { return null; } }
+      function writeStorage(key, value) { try { localStorage.setItem(key, value); } catch { /* Optional preference persistence. */ } }
+      function detectLanguage() {
+        if (APP_CONFIG.defaultLanguage === 'ja' || APP_CONFIG.defaultLanguage === 'en') return APP_CONFIG.defaultLanguage;
+        return (navigator.language || '').toLowerCase().startsWith('ja') ? 'ja' : 'en';
+      }
+      function t(key) { return translations[language]?.[key] ?? translations.en[key] ?? key; }
+      function announce(message) { $('#statusLive').textContent = ''; requestAnimationFrame(() => { $('#statusLive').textContent = message; }); }
+
+      const AppToast = (() => {
+        const root = $('#appToast'); const message = $('#appToastMessage'); const action = $('#appToastAction');
+        let timer = 0; let actionHandler = null;
+        function dismiss() { clearTimeout(timer); timer = 0; root.classList.remove('show'); actionHandler = null; }
+        function show({ message: text = '', actionLabel = '', onAction = null, duration = 3200, tone = 'default' } = {}) {
+          clearTimeout(timer); message.textContent = String(text); root.dataset.tone = tone;
+          actionHandler = typeof onAction === 'function' ? onAction : null; action.textContent = actionLabel || ''; action.hidden = !actionHandler || !actionLabel;
+          root.classList.add('show'); if (duration > 0) timer = window.setTimeout(dismiss, duration); return Object.freeze({ dismiss });
+        }
+        action.addEventListener('click', () => { const handler = actionHandler; dismiss(); if (handler) handler(); });
+        return Object.freeze({ show, dismiss });
+      })();
+      window.AppToast = AppToast;
+
+      const AppConfirm = (() => {
+        const dialog = $('#appConfirmDialog'); const title = $('#appConfirmTitle'); const message = $('#appConfirmMessage');
+        const closeButton = $('#appConfirmClose'); const cancelButton = $('#appConfirmCancel'); const okButton = $('#appConfirmOk');
+        let resolver = null; let restoreFocus = null;
+        function finish(result) {
+          if (!dialog.open) return;
+          const currentResolver = resolver; resolver = null; dialog.close();
+          if (restoreFocus instanceof HTMLElement && restoreFocus.isConnected) restoreFocus.focus({ preventScroll: true });
+          restoreFocus = null; if (currentResolver) currentResolver(result);
+        }
+        function ask({ title: titleText = '', message: messageText = '', confirmLabel = '', cancelLabel = '', tone = 'default' } = {}) {
+          if (dialog.open) finish(false);
+          title.textContent = titleText || (language === 'ja' ? '確認' : 'Confirm');
+          message.textContent = messageText;
+          cancelButton.textContent = cancelLabel || t('cancel'); okButton.textContent = confirmLabel || (language === 'ja' ? '実行する' : 'Continue');
+          okButton.classList.toggle('danger', tone === 'danger'); okButton.classList.toggle('primary', tone !== 'danger');
+          restoreFocus = document.activeElement;
+          return new Promise(resolve => { resolver = resolve; dialog.showModal(); requestAnimationFrame(() => cancelButton.focus({ preventScroll: true })); });
+        }
+        closeButton.addEventListener('click', () => finish(false)); cancelButton.addEventListener('click', () => finish(false)); okButton.addEventListener('click', () => finish(true));
+        dialog.addEventListener('cancel', event => { event.preventDefault(); finish(false); });
+        dialog.addEventListener('click', event => { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) finish(false); });
+        return Object.freeze({ ask });
+      })();
+      window.AppConfirm = AppConfirm;
+
+      function setPhase(nextPhase) {
+        phase = nextPhase;
+        const hasSource = nextPhase === 'loading' || nextPhase === 'ready';
+        dropZone.hidden = hasSource;
+        playerShell.hidden = !hasSource;
+        loadingOverlay.hidden = nextPhase !== 'loading';
+        const ready = nextPhase === 'ready';
+        for (const control of [seekRange, $('#playButton'), $('#backButton'), $('#forwardButton'), $('#muteButton'), volumeRange, speedSelect]) control.disabled = !ready;
+        $('#fullscreenButton').disabled = !ready || !canFullscreen();
+        $('#playerState').textContent = t(nextPhase === 'loading' ? 'loadingVideo' : 'readyVideo');
+        reviewComment.disabled = !ready;
+        $('#useCurrentTimeButton').disabled = !ready;
+        $('#setRangeStartButton').disabled = !ready;
+        $('#setRangeEndButton').disabled = !ready;
+        document.querySelectorAll('.review-mode-button, .review-type-button').forEach(button => { button.disabled = !ready; });
+        document.querySelectorAll('[data-annotation-tool]').forEach(button => { button.disabled = !ready || !draftThumbnail; });
+        updateAnnotationControls();
+        updateReviewEditor();
+      }
+
+      function reviewTypeLabel(type) { return t({ fix: 'typeFix', question: 'typeQuestion', check: 'typeCheck', good: 'typeGood', note: 'typeNote' }[type] || 'typeNote'); }
+      function reviewStatusLabel(status) { return t(status === 'resolved' ? 'statusResolved' : 'statusOpen'); }
+      function newReviewId() { return crypto.randomUUID ? crypto.randomUUID() : `review-${Date.now()}-${Math.random().toString(16).slice(2)}`; }
+      function setReviewType(type) {
+        if (!['fix','question','check','good','note'].includes(type)) return;
+        selectedReviewType = type;
+        document.querySelectorAll('.review-type-button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.reviewType === type)));
+      }
+      function reviewModeOf(review) { return review?.mode === 'range' || Number.isFinite(review?.endTime) ? 'range' : 'point'; }
+      function reviewStartTime(review) {
+        if (Number.isFinite(review?.startTime)) return review.startTime;
+        if (Number.isFinite(review?.time)) return review.time;
+        return 0;
+      }
+      function reviewEndTime(review) { return reviewModeOf(review) === 'range' && Number.isFinite(review?.endTime) ? review.endTime : reviewStartTime(review); }
+      function reviewTimeText(review) {
+        const start = reviewStartTime(review);
+        return reviewModeOf(review) === 'range' ? `${formatTime(start)} – ${formatTime(reviewEndTime(review))}` : formatTime(start);
+      }
+      function currentDraftTime() {
+        if (Number.isFinite(draftReviewTime)) return draftReviewTime;
+        return Number.isFinite(video.currentTime) ? video.currentTime : 0;
+      }
+      function hasValidRange() { return Number.isFinite(draftRangeStart) && Number.isFinite(draftRangeEnd) && draftRangeEnd > draftRangeStart + 0.001; }
+      function rangeValidationMessage() {
+        if (selectedReviewMode !== 'range') return '';
+        if (!Number.isFinite(draftRangeEnd)) return t('rangeEndRequired');
+        if (!hasValidRange()) return t('rangeOrderInvalid');
+        return '';
+      }
+      function setReviewMode(mode) {
+        if (!['point','range'].includes(mode)) return;
+        selectedReviewMode = mode;
+        if (mode === 'point') {
+          if (!Number.isFinite(draftReviewTime)) draftReviewTime = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+        } else if (!Number.isFinite(draftRangeStart)) {
+          video.pause();
+          draftRangeStart = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+          draftRangeEnd = null;
+        }
+        if (!draftThumbnail && phase === 'ready') captureFrameSoon({ resetAnnotations: false });
+        updateReviewEditor();
+      }
+      function cloneAnnotations(items) {
+        return Array.isArray(items) ? items.map(item => item.type === 'freehand' ? { ...item, points: Array.isArray(item.points) ? item.points.map(point => ({ ...point })) : [] } : { ...item }) : [];
+      }
+      function annotationCountText(count) { return t('annotationCount').replace('{count}', String(count)); }
+      function setAnnotationTool(tool) {
+        if (!['rect','arrow','freehand'].includes(tool)) return;
+        annotationTool = tool;
+        document.querySelectorAll('[data-annotation-tool]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.annotationTool === tool)));
+      }
+      function setAnnotationColor(color) {
+        annotationColor = normalizeAnnotationColor(color);
+        document.querySelectorAll('[data-annotation-color]').forEach(button => button.setAttribute('aria-pressed', String(normalizeAnnotationColor(button.dataset.annotationColor) === annotationColor)));
+      }
+      function updateAnnotationControls() {
+        const hasFrame = Boolean(draftThumbnail);
+        annotationStage.classList.toggle('is-empty', !hasFrame);
+        annotationCanvas.hidden = !hasFrame;
+        annotationEmpty.hidden = hasFrame;
+        document.querySelectorAll('[data-annotation-tool]').forEach(button => { button.disabled = phase !== 'ready' || !hasFrame; });
+        document.querySelectorAll('[data-annotation-color]').forEach(button => { button.disabled = phase !== 'ready' || !hasFrame; });
+        $('#annotationUndoButton').disabled = !hasFrame || !draftAnnotations.length;
+        $('#annotationClearButton').disabled = !hasFrame || !draftAnnotations.length;
+        $('#annotationMeta').textContent = hasFrame ? annotationCountText(draftAnnotations.length) : t('annotationAutoCapture');
+        setAnnotationTool(annotationTool);
+        setAnnotationColor(annotationColor);
+      }
+      function drawArrow(ctx, x1, y1, x2, y2, width) {
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        const head = Math.max(11, width * 4.2);
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - head * Math.cos(angle - Math.PI / 6), y2 - head * Math.sin(angle - Math.PI / 6));
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - head * Math.cos(angle + Math.PI / 6), y2 - head * Math.sin(angle + Math.PI / 6));
+        ctx.stroke();
+      }
+      function paintAnnotationShape(ctx, annotation, width, height) {
+        const strokeWidth = Math.max(2.5, Math.min(width, height) * .006);
+        const scaleX = value => value * width;
+        const scaleY = value => value * height;
+        ctx.save();
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        const paint = (color, lineWidth) => {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lineWidth;
+          if (annotation.type === 'rect') {
+            ctx.strokeRect(scaleX(annotation.x), scaleY(annotation.y), scaleX(annotation.width), scaleY(annotation.height));
+          } else if (annotation.type === 'arrow') {
+            drawArrow(ctx, scaleX(annotation.x1), scaleY(annotation.y1), scaleX(annotation.x2), scaleY(annotation.y2), ctx.lineWidth);
+          } else if (annotation.type === 'freehand' && annotation.points?.length > 1) {
+            ctx.beginPath();
+            annotation.points.forEach((point, index) => index ? ctx.lineTo(scaleX(point.x), scaleY(point.y)) : ctx.moveTo(scaleX(point.x), scaleY(point.y)));
+            ctx.stroke();
+          }
+        };
+        const color = normalizeAnnotationColor(annotation.color);
+        const halo = color === '#ffffff' || color === '#f0b429' ? '#111111' : '#ffffff';
+        paint(halo, strokeWidth + 3); paint(color, strokeWidth);
+        ctx.restore();
+      }
+      function redrawAnnotationCanvas(preview = null) {
+        if (!draftThumbnail || !annotationBaseImage || !annotationContext) { updateAnnotationControls(); return; }
+        annotationCanvas.width = draftFrameWidth || annotationBaseImage.naturalWidth || 1;
+        annotationCanvas.height = draftFrameHeight || annotationBaseImage.naturalHeight || 1;
+        annotationContext.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+        annotationContext.drawImage(annotationBaseImage, 0, 0, annotationCanvas.width, annotationCanvas.height);
+        draftAnnotations.forEach(annotation => paintAnnotationShape(annotationContext, annotation, annotationCanvas.width, annotationCanvas.height));
+        if (preview) paintAnnotationShape(annotationContext, preview, annotationCanvas.width, annotationCanvas.height);
+        updateAnnotationControls();
+      }
+      function loadDraftThumbnail(dataUrl, width, height) {
+        draftThumbnail = dataUrl || '';
+        draftFrameWidth = Number(width) || 0;
+        draftFrameHeight = Number(height) || 0;
+        annotationBaseImage = null;
+        if (!draftThumbnail) { redrawAnnotationCanvas(); return; }
+        const image = new Image();
+        image.onload = () => { annotationBaseImage = image; if (!draftFrameWidth) draftFrameWidth = image.naturalWidth; if (!draftFrameHeight) draftFrameHeight = image.naturalHeight; redrawAnnotationCanvas(); };
+        image.onerror = () => { draftThumbnail = ''; annotationBaseImage = null; updateAnnotationControls(); };
+        image.src = draftThumbnail;
+        updateAnnotationControls();
+      }
+      function captureCurrentFrame({ resetAnnotations = true, announceCapture = false } = {}) {
+        if (phase !== 'ready' || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return false;
+        try {
+          const maxDimension = 720;
+          const scale = Math.min(1, maxDimension / Math.max(video.videoWidth, video.videoHeight));
+          const width = Math.max(1, Math.round(video.videoWidth * scale));
+          const height = Math.max(1, Math.round(video.videoHeight * scale));
+          const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d'); if (!ctx) return false;
+          ctx.drawImage(video, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', .78);
+          if (resetAnnotations) draftAnnotations = [];
+          loadDraftThumbnail(dataUrl, width, height);
+          if (announceCapture) announce(t('annotationFrameCaptured'));
+          return true;
+        } catch {
+          AppToast.show({ message: t('annotationCaptureFailed'), tone: 'warning' });
+          return false;
+        }
+      }
+      function captureFrameSoon({ resetAnnotations = true } = {}) {
+        if (phase !== 'ready') return;
+        const generation = ++annotationCaptureGeneration;
+        if (resetAnnotations) { draftAnnotations = []; draftThumbnail = ''; annotationBaseImage = null; updateAnnotationControls(); }
+        let attempts = 0;
+        const run = () => {
+          if (generation !== annotationCaptureGeneration || phase !== 'ready') return;
+          attempts += 1;
+          if (captureCurrentFrame({ resetAnnotations: false })) return;
+          if (attempts < 8) window.setTimeout(run, 80);
+        };
+        if (video.seeking) { video.addEventListener('seeked', run, { once: true }); return; }
+        run();
+      }
+      function ensureDraftFrame() {
+        if (draftThumbnail) return true;
+        return captureCurrentFrame({ resetAnnotations: false });
+      }
+      function annotationPoint(event) {
+        const rect = annotationCanvas.getBoundingClientRect();
+        return {
+          x: Math.max(0, Math.min(1, (event.clientX - rect.left) / Math.max(1, rect.width))),
+          y: Math.max(0, Math.min(1, (event.clientY - rect.top) / Math.max(1, rect.height)))
+        };
+      }
+      function annotationPreview(pointer, end) {
+        if (!pointer || !end) return null;
+        if (pointer.tool === 'rect') {
+          return { type: 'rect', color: pointer.color || annotationColor, x: Math.min(pointer.start.x, end.x), y: Math.min(pointer.start.y, end.y), width: Math.abs(end.x - pointer.start.x), height: Math.abs(end.y - pointer.start.y) };
+        }
+        if (pointer.tool === 'arrow') return { type: 'arrow', color: pointer.color || annotationColor, x1: pointer.start.x, y1: pointer.start.y, x2: end.x, y2: end.y };
+        if (pointer.tool === 'freehand') return { type: 'freehand', color: pointer.color || annotationColor, points: pointer.points || [] };
+        return null;
+      }
+      function annotationMeaningful(annotation) {
+        if (!annotation) return false;
+        if (annotation.type === 'rect') return annotation.width > .008 && annotation.height > .008;
+        if (annotation.type === 'arrow') return Math.hypot(annotation.x2 - annotation.x1, annotation.y2 - annotation.y1) > .012;
+        if (annotation.type === 'freehand') return (annotation.points?.length || 0) > 2;
+        return false;
+      }
+      function annotationSvg(review) {
+        const annotations = cloneAnnotations(review.annotations);
+        if (!annotations.length) return null;
+        const ns = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 1000 1000'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
+        const add = (node, annotation) => { const color = normalizeAnnotationColor(annotation.color); node.setAttribute('class', 'annotation-stroke'); node.setAttribute('stroke', color); if (color === '#ffffff' || color === '#f0b429') node.style.filter = 'drop-shadow(0 0 1.2px rgba(0,0,0,.95))'; svg.append(node); };
+        for (const annotation of annotations) {
+          if (annotation.type === 'rect') {
+            const node = document.createElementNS(ns, 'rect'); node.setAttribute('x', annotation.x * 1000); node.setAttribute('y', annotation.y * 1000); node.setAttribute('width', annotation.width * 1000); node.setAttribute('height', annotation.height * 1000); add(node, annotation);
+          } else if (annotation.type === 'arrow') {
+            const x1=annotation.x1*1000, y1=annotation.y1*1000, x2=annotation.x2*1000, y2=annotation.y2*1000, angle=Math.atan2(y2-y1,x2-x1), head=42;
+            const path = document.createElementNS(ns, 'path');
+            path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2} M ${x2} ${y2} L ${x2-head*Math.cos(angle-Math.PI/6)} ${y2-head*Math.sin(angle-Math.PI/6)} M ${x2} ${y2} L ${x2-head*Math.cos(angle+Math.PI/6)} ${y2-head*Math.sin(angle+Math.PI/6)}`); add(path, annotation);
+          } else if (annotation.type === 'freehand' && annotation.points?.length > 1) {
+            const path = document.createElementNS(ns, 'path'); path.setAttribute('d', annotation.points.map((point,index)=>`${index?'L':'M'} ${point.x*1000} ${point.y*1000}`).join(' ')); add(path, annotation);
+          }
+        }
+        return svg;
+      }
+      function resetDraftFrame() {
+        annotationCaptureGeneration += 1; draftThumbnail = ''; draftFrameWidth = 0; draftFrameHeight = 0; draftAnnotations = []; annotationPointer = null; annotationBaseImage = null;
+        if (annotationContext) annotationContext.clearRect(0,0,annotationCanvas.width,annotationCanvas.height);
+        updateAnnotationControls();
+      }
+      function updateReviewEditor() {
+        const ready = phase === 'ready';
+        $('#reviewEditorTime').textContent = selectedReviewMode === 'range'
+          ? (hasValidRange() ? `${formatTime(draftRangeStart)} – ${formatTime(draftRangeEnd)}` : formatTime(Number.isFinite(draftRangeStart) ? draftRangeStart : (video.currentTime || 0)))
+          : formatTime(currentDraftTime());
+        $('#reviewEditorTitle').textContent = t(editingReviewId ? 'reviewEditorEditTitle' : 'reviewEditorTitle');
+        saveReviewButton.textContent = t(editingReviewId ? 'updateReview' : 'addReview');
+        document.querySelectorAll('.review-mode-button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.reviewMode === selectedReviewMode)));
+        $('#useCurrentTimeButton').hidden = selectedReviewMode === 'range';
+        rangeEditor.hidden = selectedReviewMode !== 'range';
+        $('#rangeStartTime').textContent = Number.isFinite(draftRangeStart) ? formatTime(draftRangeStart) : '—';
+        $('#rangeEndTime').textContent = Number.isFinite(draftRangeEnd) ? formatTime(draftRangeEnd) : '—';
+        rangeValidation.textContent = rangeValidationMessage();
+        const missingComment = !reviewComment.value.trim();
+        const missingRange = selectedReviewMode === 'range' && !hasValidRange();
+        saveReviewButton.disabled = !ready || missingComment || missingRange;
+        const saveHint = $('#reviewSaveHint');
+        saveHint.classList.remove('is-ready','is-warning');
+        if (!ready || missingComment) { saveHint.textContent = t('reviewSaveNeedsComment'); saveHint.classList.add('is-warning'); }
+        else if (missingRange) { saveHint.textContent = t('reviewSaveNeedsRange'); saveHint.classList.add('is-warning'); }
+        else { saveHint.textContent = t(editingReviewId ? 'reviewUpdateReady' : 'reviewSaveReady'); saveHint.classList.add('is-ready'); }
+        $('#cancelReviewEditButton').hidden = !editingReviewId;
+        setReviewType(selectedReviewType);
+        updateAnnotationControls();
+      }
+      function resetReviewEditor({ keepFocus = false } = {}) {
+        editingReviewId = ''; draftReviewTime = null; selectedReviewMode = 'point'; draftRangeStart = null; draftRangeEnd = null; selectedReviewType = 'fix'; annotationColor = '#16624f'; reviewComment.value = ''; activeReviewId = ''; resetDraftFrame();
+        updateReviewEditor(); renderReviews();
+        if (keepFocus) reviewComment.focus({ preventScroll: true });
+      }
+      function clearReviewState() {
+        reviews = []; editingReviewId = ''; activeReviewId = ''; draftReviewTime = null; selectedReviewMode = 'point'; draftRangeStart = null; draftRangeEnd = null; selectedReviewType = 'fix'; annotationColor = '#16624f'; reviewTypeFilter = 'all'; reviewStatusFilter = 'all'; reviewComment.value = ''; resetDraftFrame();
+        updateReviewEditor(); renderReviews();
+      }
+      function reviewTotalText(count) { return t('reviewTotal').replace('{count}', String(count)); }
+      function timelineShownText(count) { return t('timelineShown').replace('{count}', String(count)); }
+      function getSortedReviews() { return reviews.slice().sort((a,b) => reviewStartTime(a) - reviewStartTime(b) || a.createdAt.localeCompare(b.createdAt)); }
+      function getFilteredReviews() {
+        return getSortedReviews().filter(review =>
+          (reviewTypeFilter === 'all' || review.type === reviewTypeFilter) &&
+          (reviewStatusFilter === 'all' || review.status === reviewStatusFilter));
+      }
+      function renderReviewFilters() {
+        document.querySelectorAll('[data-filter-type]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filterType === reviewTypeFilter)));
+        document.querySelectorAll('[data-filter-status]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filterStatus === reviewStatusFilter)));
+      }
+      function setReviewFilter(kind, value) {
+        if (kind === 'type') reviewTypeFilter = ['all','fix','question','check','good','note'].includes(value) ? value : 'all';
+        if (kind === 'status') reviewStatusFilter = ['all','open','resolved'].includes(value) ? value : 'all';
+        const visibleIds = new Set(getFilteredReviews().map(review => review.id));
+        if (activeReviewId && !visibleIds.has(activeReviewId)) activeReviewId = '';
+        renderReviews(); scheduleAutoSave();
+      }
+      function clearReviewFilters() {
+        reviewTypeFilter = 'all'; reviewStatusFilter = 'all'; renderReviews(); scheduleAutoSave();
+      }
+      function timelineMarkerLabel(review) {
+        if (reviewModeOf(review) === 'range') {
+          return t('timelineRangeLabel')
+            .replace('{type}', reviewTypeLabel(review.type))
+            .replace('{start}', formatTime(reviewStartTime(review)))
+            .replace('{end}', formatTime(reviewEndTime(review)))
+            .replace('{status}', reviewStatusLabel(review.status));
+        }
+        return t('timelineMarkerLabel')
+          .replace('{type}', reviewTypeLabel(review.type))
+          .replace('{time}', formatTime(reviewStartTime(review)))
+          .replace('{status}', reviewStatusLabel(review.status));
+      }
+      function timelineLanes(sorted, duration) {
+        const laneLastEnd = [-Infinity, -Infinity, -Infinity];
+        const threshold = .014;
+        return sorted.map((review, index) => {
+          const start = duration > 0 ? Math.max(0, Math.min(1, reviewStartTime(review) / duration)) : 0;
+          const endRaw = reviewModeOf(review) === 'range' ? reviewEndTime(review) : reviewStartTime(review);
+          const end = duration > 0 ? Math.max(start, Math.min(1, endRaw / duration)) : start;
+          let lane = laneLastEnd.findIndex(last => start - last >= threshold);
+          if (lane < 0) lane = index % laneLastEnd.length;
+          laneLastEnd[lane] = Math.max(start, end);
+          return { review, start, end, lane };
+        });
+      }
+      function renderTimeline() {
+        const visible = getFilteredReviews();
+        const duration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 0;
+        $('#timelineVisibleCount').textContent = timelineShownText(visible.length);
+        reviewTimelineMarkers.replaceChildren();
+        for (const item of timelineLanes(visible, duration)) {
+          const isRange = reviewModeOf(item.review) === 'range';
+          const marker = document.createElement('button');
+          marker.type = 'button';
+          marker.className = `${isRange ? 'timeline-range' : 'timeline-marker'}${item.review.id === activeReviewId ? ' is-active' : ''}${item.review.status === 'resolved' ? ' is-resolved' : ''}`;
+          marker.dataset.reviewId = item.review.id;
+          marker.style.setProperty('--lane', String(item.lane));
+          if (isRange) {
+            marker.style.setProperty('--start', `${item.start * 100}%`);
+            marker.style.setProperty('--width', `${Math.max(0, item.end - item.start) * 100}%`);
+          } else marker.style.setProperty('--position', `${item.start * 100}%`);
+          marker.title = `${reviewTypeLabel(item.review.type)} · ${reviewTimeText(item.review)} · ${item.review.comment}`;
+          marker.setAttribute('aria-label', timelineMarkerLabel(item.review));
+          marker.addEventListener('click', () => jumpToReview(item.review, { focusCard: true, scrollCard: true }));
+          reviewTimelineMarkers.append(marker);
+        }
+      }
+      function jumpToReview(review, { focusCard = false, scrollCard = false } = {}) {
+        if (!review || phase !== 'ready') return;
+        const target = reviewStartTime(review); video.pause(); video.currentTime = Math.max(0, Math.min(Number.isFinite(video.duration) ? video.duration : target, target)); paintTime(true);
+        activeReviewId = review.id; renderReviews();
+        const card = document.querySelector(`[data-review-id="${CSS.escape(review.id)}"]`);
+        if (scrollCard) card?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (focusCard) card?.focus({ preventScroll: true });
+      }
+      function renderReviews() {
+        const list = $('#reviewList');
+        const sorted = getSortedReviews();
+        const visible = getFilteredReviews();
+        $('#reviewTotal').textContent = reviewTotalText(sorted.length);
+        $('#openReviewCount').textContent = String(sorted.filter(review => review.status !== 'resolved').length);
+        $('#resolvedReviewCount').textContent = String(sorted.filter(review => review.status === 'resolved').length);
+        renderReviewFilters();
+        list.replaceChildren();
+        if (!sorted.length) {
+          const empty = document.createElement('div'); empty.className = 'review-empty';
+          const strong = document.createElement('strong'); strong.textContent = t('noReviewsTitle'); strong.style.display = 'block'; strong.style.color = 'var(--text)'; strong.style.marginBottom = '5px';
+          const body = document.createElement('span'); body.textContent = t('noReviewsBody');
+          empty.append(strong, body); list.append(empty); renderTimeline(); return;
+        }
+        if (!visible.length) {
+          const empty = document.createElement('div'); empty.className = 'review-empty';
+          const strong = document.createElement('strong'); strong.textContent = t('noFilteredReviewsTitle'); strong.style.display = 'block'; strong.style.color = 'var(--text)'; strong.style.marginBottom = '5px';
+          const body = document.createElement('span'); body.textContent = t('noFilteredReviewsBody');
+          const clear = document.createElement('button'); clear.type = 'button'; clear.className = 'text-button'; clear.style.marginTop = '8px'; clear.textContent = t('clearFilters'); clear.addEventListener('click', clearReviewFilters);
+          empty.append(strong, body, document.createElement('br'), clear); list.append(empty); renderTimeline(); return;
+        }
+        for (const review of visible) {
+          const card = document.createElement('article'); card.className = `review-card${review.id === activeReviewId ? ' is-active' : ''}${review.status === 'resolved' ? ' is-resolved' : ''}`;
+          card.tabIndex = 0; card.dataset.reviewId = review.id; card.setAttribute('aria-label', `${reviewTypeLabel(review.type)} ${reviewTimeText(review)} ${review.comment}`);
+          const top = document.createElement('div'); top.className = 'review-card-top';
+          const type = document.createElement('span'); type.className = 'review-type'; type.textContent = reviewTypeLabel(review.type);
+          const time = document.createElement('span'); time.className = 'review-card-time'; time.textContent = reviewTimeText(review);
+          top.append(type, time);
+          const comment = document.createElement('p'); comment.className = 'review-card-comment'; comment.textContent = review.comment;
+          let thumb = null; let annotationCount = null;
+          if (review.thumbnail) {
+            thumb = document.createElement('div'); thumb.className = 'review-card-thumb';
+            const image = document.createElement('img'); image.src = review.thumbnail; image.alt = ''; image.loading = 'lazy'; thumb.append(image);
+            const overlay = annotationSvg(review); if (overlay) thumb.append(overlay);
+            if (review.annotations?.length) { annotationCount = document.createElement('div'); annotationCount.className = 'review-card-annotation-count'; annotationCount.textContent = annotationCountText(review.annotations.length); }
+          }
+          const status = document.createElement('div'); status.className = 'review-card-status'; status.textContent = reviewStatusLabel(review.status);
+          const actions = document.createElement('div'); actions.className = 'review-card-actions';
+          const statusButton = document.createElement('button'); statusButton.type = 'button'; statusButton.className = 'review-action'; statusButton.textContent = t(review.status === 'resolved' ? 'markOpen' : 'markResolved');
+          statusButton.addEventListener('click', event => { event.stopPropagation(); review.status = review.status === 'resolved' ? 'open' : 'resolved'; review.updatedAt = new Date().toISOString(); if (reviewStatusFilter !== 'all' && review.status !== reviewStatusFilter) activeReviewId = ''; renderReviews(); scheduleAutoSave(); announce(t('reviewStatusChanged')); });
+          const editButton = document.createElement('button'); editButton.type = 'button'; editButton.className = 'review-action'; editButton.textContent = t('editReview');
+          editButton.addEventListener('click', event => { event.stopPropagation(); beginEditReview(review.id); });
+          const deleteButton = document.createElement('button'); deleteButton.type = 'button'; deleteButton.className = 'review-action danger'; deleteButton.textContent = t('deleteReview');
+          deleteButton.addEventListener('click', event => { event.stopPropagation(); deleteReview(review.id); });
+          actions.append(statusButton, editButton, deleteButton); card.append(top, comment); if (thumb) card.append(thumb); if (annotationCount) card.append(annotationCount); card.append(status, actions);
+          card.addEventListener('click', () => jumpToReview(review));
+          card.addEventListener('keydown', event => { if (event.target === card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); jumpToReview(review); } });
+          list.append(card);
+        }
+        renderTimeline();
+        updateExportUi();
+      }
+      function beginEditReview(id) {
+        const review = reviews.find(item => item.id === id); if (!review) return;
+        jumpToReview(review); editingReviewId = review.id; activeReviewId = review.id; selectedReviewMode = reviewModeOf(review); draftReviewTime = reviewStartTime(review); draftRangeStart = selectedReviewMode === 'range' ? reviewStartTime(review) : null; draftRangeEnd = selectedReviewMode === 'range' ? reviewEndTime(review) : null; selectedReviewType = review.type; reviewComment.value = review.comment; draftAnnotations = cloneAnnotations(review.annotations); annotationColor = normalizeAnnotationColor(draftAnnotations[0]?.color || annotationColor); loadDraftThumbnail(review.thumbnail || '', review.frameWidth, review.frameHeight); updateReviewEditor(); renderReviews();
+        reviewComment.focus({ preventScroll: true }); $('#reviewEditor').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      async function deleteReview(id) {
+        const index = reviews.findIndex(item => item.id === id); if (index < 0) return;
+        const ok = await AppConfirm.ask({ title: t('deleteReviewTitle'), message: t('deleteReviewMessage'), confirmLabel: t('confirmDelete'), cancelLabel: t('cancel'), tone: 'danger' });
+        if (!ok) return;
+        const [removed] = reviews.splice(index, 1); if (editingReviewId === id) resetReviewEditor(); if (activeReviewId === id) activeReviewId = '';
+        renderReviews(); scheduleAutoSave(); announce(t('reviewDeleted'));
+        AppToast.show({ message: t('reviewDeleted'), actionLabel: t('undo'), duration: 5000, onAction: () => { reviews.splice(Math.min(index, reviews.length), 0, removed); renderReviews(); scheduleAutoSave(); announce(t('reviewRestored')); } });
+      }
+      async function saveReview() {
+        if (phase !== 'ready') return;
+        const comment = reviewComment.value.trim(); if (!comment) { updateReviewEditor(); return; }
+        if (selectedReviewMode === 'range' && !hasValidRange()) { updateReviewEditor(); return; }
+        video.pause(); ensureDraftFrame(); const now = new Date().toISOString();
+        const startTime = selectedReviewMode === 'range' ? draftRangeStart : currentDraftTime();
+        const endTime = selectedReviewMode === 'range' ? draftRangeEnd : null;
+        if (editingReviewId) {
+          const review = reviews.find(item => item.id === editingReviewId); if (!review) { resetReviewEditor(); return; }
+          review.type = selectedReviewType; review.comment = comment; review.mode = selectedReviewMode; review.time = startTime; review.startTime = startTime; review.endTime = endTime; review.thumbnail = draftThumbnail || ''; review.frameWidth = draftFrameWidth || 0; review.frameHeight = draftFrameHeight || 0; review.annotations = cloneAnnotations(draftAnnotations); review.updatedAt = now; activeReviewId = review.id;
+          AppToast.show({ message: t('reviewUpdated') }); announce(t('reviewUpdated'));
+        } else {
+          const review = { id: newReviewId(), type: selectedReviewType, status: 'open', mode: selectedReviewMode, time: startTime, startTime, endTime, comment, thumbnail: draftThumbnail || '', frameWidth: draftFrameWidth || 0, frameHeight: draftFrameHeight || 0, annotations: cloneAnnotations(draftAnnotations), createdAt: now, updatedAt: now };
+          reviews.push(review); activeReviewId = review.id; AppToast.show({ message: t('reviewAdded') }); announce(t('reviewAdded'));
+        }
+        editingReviewId = ''; draftReviewTime = null; selectedReviewMode = 'point'; draftRangeStart = null; draftRangeEnd = null; selectedReviewType = 'fix'; reviewComment.value = ''; resetDraftFrame(); updateReviewEditor(); renderReviews(); scheduleAutoSave();
+      }
+
+      function revokeCurrentObjectUrl() {
+        if (!currentObjectUrl) return;
+        URL.revokeObjectURL(currentObjectUrl);
+        currentObjectUrl = '';
+      }
+
+      function resetPlayerState() {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        video.dataset.sourceGeneration = '';
+        seekRange.value = '0'; seekRange.max = '0';
+        $('#timeCode').textContent = '00:00:00.000 / 00:00:00.000';
+        $('#metaFile').textContent = '—'; $('#metaSize').textContent = '—'; $('#metaDuration').textContent = '—'; $('#metaResolution').textContent = '—'; $('#metaType').textContent = '—';
+        $('#fileName').textContent = '—'; speedSelect.value = '1'; volumeRange.value = '1';
+        video.playbackRate = 1; video.volume = 1; video.muted = false;
+        updatePlayButton(); updateMuteButton();
+      }
+
+      function clearSource() {
+        sourceGeneration += 1;
+        sourceEventController?.abort();
+        sourceEventController = null;
+        currentFile = null;
+        revokeCurrentObjectUrl();
+        resetPlayerState();
+        clearReviewState();
+        $('#errorBox').hidden = true;
+        setPhase('empty');
+      }
+
+      function isVideoLike(file) {
+        if (!file) return false;
+        if (file.type && file.type.startsWith('video/')) return true;
+        return /\.(mp4|webm|mov|m4v|ogv|ogg)$/i.test(file.name || '');
+      }
+
+      function showLoadError(message) {
+        $('#errorMessage').textContent = message;
+        $('#errorBox').hidden = false;
+        setPhase('error');
+        announce(`${t('loadErrorTitle')}: ${message}`);
+      }
+
+      function loadFile(file, resume = null) {
+        clearTimeout(autosaveTimer); autosaveTimer = 0;
+        if (!isVideoLike(file)) {
+          if (currentFile && phase === 'ready') {
+            AppToast.show({ message: t('invalidFile'), tone: 'warning' });
+            announce(t('invalidFile'));
+          } else {
+            showLoadError(t('invalidFile'));
+          }
+          return;
+        }
+        sourceGeneration += 1;
+        const generation = sourceGeneration;
+        revokeCurrentObjectUrl();
+        resetPlayerState();
+        clearReviewState();
+        currentFile = file;
+        pendingResume = resume;
+        $('#errorBox').hidden = true;
+        $('#fileName').textContent = file.name || t('unknownType');
+        $('#metaFile').textContent = file.name || '—';
+        ensureOutputFilename(true);
+        $('#metaSize').textContent = formatBytes(file.size);
+        $('#metaType').textContent = file.type || t('unknownType');
+        setPhase('loading');
+        const url = URL.createObjectURL(file);
+        currentObjectUrl = url;
+        video.dataset.sourceGeneration = String(generation);
+        bindSourceEvents(generation, file);
+        video.src = url;
+        video.load();
+      }
+
+      function bindSourceEvents(generation, file) {
+        sourceEventController?.abort();
+        sourceEventController = new AbortController();
+        const { signal } = sourceEventController;
+        const stillCurrent = () => generation === sourceGeneration && currentFile === file;
+
+        video.addEventListener('loadedmetadata', () => {
+          if (!stillCurrent()) return;
+          const duration = Number.isFinite(video.duration) ? video.duration : 0;
+          seekRange.max = String(duration);
+          $('#metaDuration').textContent = formatDurationCompact(duration);
+          $('#metaResolution').textContent = video.videoWidth && video.videoHeight ? `${video.videoWidth} × ${video.videoHeight}` : '—';
+          setPhase('ready');
+          const hadResume = Boolean(pendingResume);
+          if (pendingResume) {
+            const restore = pendingResume;
+            pendingResume = null;
+            video.playbackRate = restore.rate;
+            speedSelect.value = String(restore.rate);
+            video.volume = restore.volume;
+            volumeRange.value = String(restore.volume);
+            video.muted = restore.muted;
+            if (Number.isFinite(restore.time)) video.currentTime = Math.min(duration || restore.time, restore.time);
+            if (Array.isArray(restore.reviews)) reviews = restore.reviews.map(review => ({ ...review, annotations: cloneAnnotations(review.annotations) }));
+            reviewTypeFilter = ['all','fix','question','check','good','note'].includes(restore.reviewTypeFilter) ? restore.reviewTypeFilter : 'all';
+            reviewStatusFilter = ['all','open','resolved'].includes(restore.reviewStatusFilter) ? restore.reviewStatusFilter : 'all';
+            if (restore.project) { detachedProject = null; renderDetachedProject(); }
+            updateMuteButton(); renderReviews();
+            if (reviews.length) scheduleAutoSave(40);
+          }
+          if (!hadResume && !reviews.length) { projectDbDelete().catch(() => { autosaveFailed = true; projectStatus('autoSaveFailed', true); }); projectStatus('autoSaveWaiting'); }
+          paintTime(true);
+          announce(t('videoLoaded'));
+        }, { signal });
+
+        video.addEventListener('durationchange', () => {
+          if (!stillCurrent() || !Number.isFinite(video.duration)) return;
+          seekRange.max = String(video.duration);
+          $('#metaDuration').textContent = formatDurationCompact(video.duration);
+          renderTimeline();
+          paintTime(true);
+        }, { signal });
+
+        video.addEventListener('error', () => {
+          if (!stillCurrent()) return;
+          sourceEventController?.abort();
+          sourceEventController = null;
+          revokeCurrentObjectUrl();
+          video.removeAttribute('src');
+          video.load();
+          currentFile = null;
+          showLoadError(t('unsupportedVideo'));
+        }, { signal });
+      }
+
+      function formatBytes(bytes) {
+        if (!Number.isFinite(bytes) || bytes < 0) return '—';
+        if (bytes === 0) return '0 B';
+        const units = ['B','KB','MB','GB','TB'];
+        const index = Math.min(units.length - 1, Math.floor(Math.log(bytes) / Math.log(1024)));
+        const value = bytes / (1024 ** index);
+        return `${new Intl.NumberFormat(language, { maximumFractionDigits: index === 0 ? 0 : 2 }).format(value)} ${units[index]}`;
+      }
+      function formatTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) seconds = 0;
+        const totalMs = Math.floor(seconds * 1000 + 0.0001);
+        const ms = totalMs % 1000;
+        const totalSeconds = Math.floor(totalMs / 1000);
+        const sec = totalSeconds % 60;
+        const totalMinutes = Math.floor(totalSeconds / 60);
+        const min = totalMinutes % 60;
+        const hour = Math.floor(totalMinutes / 60);
+        return `${String(hour).padStart(2,'0')}:${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(ms).padStart(3,'0')}`;
+      }
+      function formatDurationCompact(seconds) {
+        if (!Number.isFinite(seconds)) return '—';
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+        return hours ? `${hours}:${String(minutes).padStart(2,'0')}:${String(secs).padStart(2,'0')}` : `${minutes}:${String(secs).padStart(2,'0')}`;
+      }
+      function paintTime(force = false) {
+        const now = performance.now();
+        if (!force && now - lastTimePaint < 33) return;
+        lastTimePaint = now;
+        const duration = Number.isFinite(video.duration) ? video.duration : 0;
+        const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+        $('#timeCode').textContent = `${formatTime(current)} / ${formatTime(duration)}`;
+        if (!seekRange.matches(':active')) seekRange.value = String(Math.min(current, duration || 0));
+        reviewTimelinePlayhead.style.left = `${duration > 0 ? Math.max(0, Math.min(1, current / duration)) * 100 : 0}%`;
+        if (!editingReviewId && selectedReviewMode === 'point' && !Number.isFinite(draftReviewTime)) $('#reviewEditorTime').textContent = formatTime(current);
+      }
+      function jumpBy(delta) {
+        if (phase !== 'ready' || !Number.isFinite(video.duration)) return;
+        video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + delta));
+        paintTime(true);
+      }
+      async function togglePlayback() {
+        if (phase !== 'ready') return;
+        if (video.paused || video.ended) {
+          try { await video.play(); } catch { /* Browser may block playback until a direct user gesture. */ }
+        } else {
+          video.pause();
+        }
+      }
+      function updatePlayButton() {
+        const playing = !video.paused && !video.ended;
+        $('#playButton').classList.toggle('is-playing', playing);
+        $('.play-icon').removeAttribute('hidden');
+        $('.pause-icon').removeAttribute('hidden');
+        const key = playing ? 'pause' : 'play';
+        $('#playButton').title = t(key);
+        $('#playButton').setAttribute('aria-label', t(key));
+      }
+      function updateMuteButton() {
+        const muted = video.muted || video.volume === 0;
+        $('.volume-icon').hidden = muted;
+        $('.muted-icon').hidden = !muted;
+        const key = muted ? 'unmute' : 'mute';
+        $('#muteButton').title = t(key);
+        $('#muteButton').setAttribute('aria-label', t(key));
+      }
+      function canFullscreen() {
+        return Boolean($('#videoFrame').requestFullscreen || video.webkitEnterFullscreen);
+      }
+      async function enterFullscreen() {
+        if (phase !== 'ready') return;
+        try {
+          if ($('#videoFrame').requestFullscreen) await $('#videoFrame').requestFullscreen();
+          else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+          else AppToast.show({ message: t('fullscreenUnavailable'), tone: 'warning' });
+        } catch {
+          AppToast.show({ message: t('fullscreenUnavailable'), tone: 'warning' });
+        }
+      }
+
+      function applyLanguage() {
+        document.documentElement.lang = language;
+        document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = t(element.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-title]').forEach(element => { element.title = t(element.dataset.i18nTitle); });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach(element => { element.setAttribute('aria-label', t(element.dataset.i18nAriaLabel)); });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => { element.setAttribute('placeholder', t(element.dataset.i18nPlaceholder)); });
+        $('#languageButton').textContent = language === 'ja' ? 'EN' : '日本語';
+        $('#languageButton').setAttribute('aria-label', language === 'ja' ? '英語に切り替え' : 'Switch to Japanese');
+        document.title = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
+        $('#brandName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
+        $('#footerName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
+        if (currentFile) {
+          $('#metaSize').textContent = formatBytes(currentFile.size);
+          $('#playerState').textContent = t(phase === 'loading' ? 'loadingVideo' : 'readyVideo');
+        }
+        updatePlayButton();
+        updateMuteButton();
+        updateReviewEditor();
+        renderReviews();
+        updateExportUi();
+        renderDetachedProject();
+        if (autosaveFailed) projectStatus('autoSaveFailed', true); else projectStatus(reviews.length ? 'autoSaveSaved' : 'autoSaveWaiting');
+      }
+
+      async function requestLoadFile(file) {
+        if (!file) return;
+        if (detachedProject && !currentFile) { await useDetachedProjectWithFile(file); return; }
+        if (reviews.length) {
+          const ok = await AppConfirm.ask({ title: t('replaceWithReviewsTitle'), message: t('replaceWithReviewsMessage'), confirmLabel: t('replaceVideoConfirm'), cancelLabel: t('cancel') });
+          if (!ok) return;
+        }
+        loadFile(file);
+      }
+
+      function chooseVideo() {
+        videoInput.value = '';
+        videoInput.click();
+      }
+
+      $('#chooseVideoButton').addEventListener('click', chooseVideo);
+      $('#replaceVideoButton').addEventListener('click', chooseVideo);
+      videoInput.addEventListener('change', () => {
+        const file = videoInput.files?.[0];
+        if (file) requestLoadFile(file);
+      });
+      projectInput.addEventListener('change', () => { const file = projectInput.files?.[0]; if (file) importProjectFile(file); });
+      $('#resumeProjectButton').addEventListener('click', chooseVideo);
+      $('#saveDetachedProjectButton').addEventListener('click', () => downloadProjectJson(detachedProject));
+      $('#discardSavedProjectButton').addEventListener('click', discardDetachedProject);
+      $('#loadProjectFromEmptyButton').addEventListener('click', chooseProjectFile);
+      $('#saveProjectButton').addEventListener('click', () => downloadProjectJson());
+      $('#loadProjectButton').addEventListener('click', chooseProjectFile);
+      $('#resetProjectButton').addEventListener('click', resetCurrentProject);
+      $('#exportHtmlButton').addEventListener('click', () => { const html = buildStandaloneReviewHtml(); if (html) downloadBlob(html, 'text/html;charset=utf-8', 'html', 'exportHtmlStarted'); });
+      $('#exportMarkdownButton').addEventListener('click', () => downloadBlob(buildMarkdownExport(), 'text/markdown;charset=utf-8', 'md', 'exportMarkdownStarted'));
+      $('#exportCsvButton').addEventListener('click', () => downloadBlob(buildCsvExport(), 'text/csv;charset=utf-8', 'csv', 'exportCsvStarted', true));
+      $('#exportJsonButton').addEventListener('click', () => downloadProjectJson(buildProjectSnapshot(), currentOutputStem()));
+      $('#copyReviewsButton').addEventListener('click', copyReviewsToClipboard);
+      outputFilename.addEventListener('change', () => { outputFilename.value = sanitizeOutputStem(outputFilename.value || defaultOutputStem()); });
+
+      ['dragenter','dragover'].forEach(type => dropZone.addEventListener(type, event => {
+        event.preventDefault();
+        if (type === 'dragenter') dragDepth += 1;
+        dropZone.classList.add('is-dragging');
+      }));
+      dropZone.addEventListener('dragleave', event => {
+        event.preventDefault();
+        dragDepth = Math.max(0, dragDepth - 1);
+        if (!dragDepth) dropZone.classList.remove('is-dragging');
+      });
+      dropZone.addEventListener('drop', event => {
+        event.preventDefault();
+        dragDepth = 0;
+        dropZone.classList.remove('is-dragging');
+        const file = Array.from(event.dataTransfer?.files || []).find(isVideoLike) || event.dataTransfer?.files?.[0];
+        if (file) requestLoadFile(file);
+        else showLoadError(t('invalidFile'));
+      });
+
+      $('#removeVideoButton').addEventListener('click', async () => {
+        if (!currentFile) return;
+        if (reviews.length) {
+          const ok = await AppConfirm.ask({ title: t('removeWithReviewsTitle'), message: t('removeWithReviewsMessage'), confirmLabel: t('removeVideoConfirm'), cancelLabel: t('cancel') });
+          if (!ok) return;
+        }
+        const snapshot = { file: currentFile, time: video.currentTime, rate: video.playbackRate, volume: video.volume, muted: video.muted, reviewTypeFilter, reviewStatusFilter, reviews: reviews.map(review => ({ ...review, annotations: cloneAnnotations(review.annotations) })) };
+        suppressAutosave = true; clearSource(); detachedProject = null; renderDetachedProject();
+        try { await projectDbDelete(); } catch { /* Manual JSON backup remains available if IndexedDB fails. */ }
+        suppressAutosave = false; projectStatus('autoSaveWaiting');
+        AppToast.show({ message: t('videoRemoved'), actionLabel: t('undo'), duration: 5000, onAction: () => { loadFile(snapshot.file, snapshot); AppToast.show({ message: t('restored') }); } });
+      });
+
+      video.addEventListener('timeupdate' , () => paintTime());
+      video.addEventListener('play', updatePlayButton);
+      video.addEventListener('playing', updatePlayButton);
+      video.addEventListener('pause', () => { updatePlayButton(); scheduleAutoSave(120); });
+      video.addEventListener('ended', updatePlayButton);
+      video.addEventListener('volumechange', () => {
+        if (!video.muted) volumeRange.value = String(video.volume);
+        updateMuteButton(); scheduleAutoSave();
+      });
+      video.addEventListener('ratechange', () => { speedSelect.value = String(video.playbackRate); scheduleAutoSave(); });
+
+      $('#playButton').addEventListener('click', togglePlayback);
+      $('#videoFrame').addEventListener('click', async () => {
+        if (phase !== 'ready') return;
+        const wasPlaying = !video.paused && !video.ended;
+        await togglePlayback();
+        if (wasPlaying && video.paused && !editingReviewId && selectedReviewMode === 'point' && !reviewComment.value.trim()) {
+          draftReviewTime = video.currentTime;
+          captureFrameSoon({ resetAnnotations: true });
+          updateReviewEditor();
+        }
+      });
+      $('#backButton').addEventListener('click', () => jumpBy(-5));
+      $('#forwardButton').addEventListener('click', () => jumpBy(5));
+      seekRange.addEventListener('input', () => { if (phase === 'ready') { video.currentTime = Number(seekRange.value); paintTime(true); } });
+      volumeRange.addEventListener('input', () => { video.volume = Number(volumeRange.value); if (video.volume > 0) video.muted = false; });
+      $('#muteButton').addEventListener('click', () => { video.muted = !video.muted; });
+      speedSelect.addEventListener('change', () => { video.playbackRate = Number(speedSelect.value) || 1; });
+      $('#fullscreenButton').addEventListener('click', enterFullscreen);
+
+      document.querySelectorAll('.review-mode-button').forEach(button => button.addEventListener('click', () => setReviewMode(button.dataset.reviewMode)));
+      document.querySelectorAll('.review-type-button').forEach(button => button.addEventListener('click', () => setReviewType(button.dataset.reviewType)));
+      document.querySelectorAll('[data-filter-type]').forEach(button => button.addEventListener('click', () => setReviewFilter('type', button.dataset.filterType)));
+      document.querySelectorAll('[data-filter-status]').forEach(button => button.addEventListener('click', () => setReviewFilter('status', button.dataset.filterStatus)));
+      reviewComment.addEventListener('focus', () => {
+        if (phase !== 'ready') return;
+        video.pause();
+        let capturedNewTime = false;
+        if (!editingReviewId && selectedReviewMode === 'point' && !Number.isFinite(draftReviewTime)) { draftReviewTime = video.currentTime; capturedNewTime = true; }
+        if (!editingReviewId && selectedReviewMode === 'range' && !Number.isFinite(draftRangeStart)) { draftRangeStart = video.currentTime; capturedNewTime = true; }
+        if (capturedNewTime || !draftThumbnail) captureFrameSoon({ resetAnnotations: true });
+        updateReviewEditor();
+      });
+      reviewComment.addEventListener('input', updateReviewEditor);
+      $('#useCurrentTimeButton').addEventListener('click', () => { if (phase !== 'ready') return; video.pause(); draftReviewTime = video.currentTime; captureFrameSoon({ resetAnnotations: true }); updateReviewEditor(); announce(t('reviewTimeSet')); });
+      $('#setRangeStartButton').addEventListener('click', () => {
+        if (phase !== 'ready') return;
+        video.pause(); draftRangeStart = video.currentTime;
+        if (Number.isFinite(draftRangeEnd) && draftRangeEnd <= draftRangeStart) draftRangeEnd = null;
+        captureFrameSoon({ resetAnnotations: true }); updateReviewEditor(); announce(t('rangeStartSet'));
+      });
+      $('#setRangeEndButton').addEventListener('click', () => {
+        if (phase !== 'ready') return;
+        video.pause();
+        if (!Number.isFinite(draftRangeStart)) draftRangeStart = Math.max(0, video.currentTime);
+        draftRangeEnd = video.currentTime; updateReviewEditor(); announce(t('rangeEndSet'));
+      });
+      document.querySelectorAll('[data-annotation-tool]').forEach(button => button.addEventListener('click', () => setAnnotationTool(button.dataset.annotationTool)));
+      document.querySelectorAll('[data-annotation-color]').forEach(button => button.addEventListener('click', () => setAnnotationColor(button.dataset.annotationColor)));
+      $('#annotationUndoButton').addEventListener('click', () => { if (!draftAnnotations.length) return; draftAnnotations.pop(); redrawAnnotationCanvas(); });
+      $('#annotationClearButton').addEventListener('click', () => { if (!draftAnnotations.length) return; draftAnnotations = []; redrawAnnotationCanvas(); });
+      annotationCanvas.addEventListener('pointerdown', event => {
+        if (!draftThumbnail || phase !== 'ready') return;
+        event.preventDefault(); annotationCanvas.setPointerCapture?.(event.pointerId);
+        const point = annotationPoint(event); annotationPointer = { id: event.pointerId, tool: annotationTool, color: annotationColor, start: point, points: [point] };
+      });
+      annotationCanvas.addEventListener('pointermove', event => {
+        if (!annotationPointer || annotationPointer.id !== event.pointerId) return;
+        event.preventDefault(); const point = annotationPoint(event);
+        if (annotationPointer.tool === 'freehand') {
+          const last = annotationPointer.points[annotationPointer.points.length - 1];
+          if (!last || Math.hypot(point.x-last.x, point.y-last.y) > .0025) annotationPointer.points.push(point);
+        }
+        redrawAnnotationCanvas(annotationPreview(annotationPointer, point));
+      });
+      function finishAnnotationPointer(event, cancelled = false) {
+        if (!annotationPointer || annotationPointer.id !== event.pointerId) return;
+        const pointer = annotationPointer; annotationPointer = null;
+        if (cancelled) { redrawAnnotationCanvas(); return; }
+        const point = annotationPoint(event); if (pointer.tool === 'freehand') pointer.points.push(point);
+        const annotation = annotationPreview(pointer, point);
+        if (annotationMeaningful(annotation)) draftAnnotations.push(annotation);
+        redrawAnnotationCanvas();
+      }
+      annotationCanvas.addEventListener('pointerup', event => finishAnnotationPointer(event));
+      annotationCanvas.addEventListener('pointercancel', event => finishAnnotationPointer(event, true));
+      annotationCanvas.addEventListener('lostpointercapture', () => { if (annotationPointer) { annotationPointer = null; redrawAnnotationCanvas(); } });
+      saveReviewButton.addEventListener('click', saveReview);
+      $('#cancelReviewEditButton').addEventListener('click', () => resetReviewEditor());
+
+      document.addEventListener('keydown' , event => {
+        if (phase !== 'ready' || event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+        const target = event.target;
+        if (target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(target.tagName))) return;
+        if (event.code === 'Space') { event.preventDefault(); togglePlayback(); return; }
+        if (event.key === 'ArrowLeft') { event.preventDefault(); jumpBy(event.shiftKey ? -10 : -5); return; }
+        if (event.key === 'ArrowRight') { event.preventDefault(); jumpBy(event.shiftKey ? 10 : 5); return; }
+        if (event.key.toLowerCase() === 'm') { event.preventDefault(); video.pause(); if (!editingReviewId) { activeReviewId = ''; selectedReviewMode = 'point'; draftReviewTime = video.currentTime; draftRangeStart = null; draftRangeEnd = null; resetDraftFrame(); captureFrameSoon({ resetAnnotations: true }); } updateReviewEditor(); reviewComment.focus({ preventScroll: true }); $('#reviewEditor').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
+        if (event.key.toLowerCase() === 'f') { event.preventDefault(); enterFullscreen(); }
+      });
+
+      $('#languageButton').addEventListener('click', () => { language = language === 'ja' ? 'en' : 'ja'; writeStorage(storageKeys.language, language); applyLanguage(); });
+      const helpDialog = $('#helpDialog');
+      $('#helpButton').addEventListener('click', () => helpDialog.showModal());
+      $('#closeHelpButton').addEventListener('click', () => helpDialog.close());
+      helpDialog.addEventListener('click', event => {
+        const rect = helpDialog.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close();
+      });
+
+      window.addEventListener('pagehide', () => {
+        sourceGeneration += 1;
+        sourceEventController?.abort();
+        sourceEventController = null;
+        revokeCurrentObjectUrl();
+        blobUrls.forEach(url => URL.revokeObjectURL(url));
+        blobUrls.clear();
+      });
+
+      $('#versionBadge').textContent = `v${APP_CONFIG.version}`;
+      $('#buildVersion').textContent = APP_CONFIG.version;
+      $('#builtAt').textContent = BUILD_MANIFEST.generatedAtUtc || '—';
+      $('#dependencyCount').textContent = String(BUILD_MANIFEST.dependencies?.length || 0);
+      ensureOutputFilename();
+      setPhase('empty');
+      renderReviews();
+      applyLanguage();
+      loadStoredProject();
+    })();
+  </script>
+</body>
+</html>
