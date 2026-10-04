@@ -93,14 +93,15 @@ The v1.0 definition is:
 - Starting comment input pauses playback and freezes the draft review time.
 - Review delete requires confirmation and offers Undo.
 - Changing/removing the video while reviews exist requires confirmation. Removing the video also removes the browser autosave unless the user immediately restores the workspace with Undo.
-- Export controls remain disabled until at least one review exists.
+- File export controls remain disabled until at least one review exists. Copy visible reviews remains disabled when the current type/status filters match no reviews, including after edits, status changes, deletion, Undo, and source reset.
 - Output filename editing is separate from file extensions; filenames are sanitized and `.html`, `.md`, `.csv`, or `.video-review.json` is applied as appropriate.
 - Standalone Review HTML contains review metadata, comments, derived thumbnails, and vector annotations but never source-video bytes.
 - Standalone Review HTML must work offline with `connect-src 'none'`, no external assets, and no runtime network access.
 - Standalone Review HTML supports type/status filters, review counts, thumbnail zoom, and ArrowLeft / ArrowRight navigation between visible reviews.
 - Markdown export contains ordered review timecodes, type/status, and comments.
 - CSV export uses UTF-8 with BOM and includes No, Type, Status, Start, End, Comment, CreatedAt, UpdatedAt.
-- Clipboard export provides a plain-text review handoff suitable for chat or email.
+- **Copy visible reviews** / **表示中のレビューをコピー** provides a plain-text handoff of only the reviews matching the current type/status filters. It uses the same time/creation-order sorting as the visible list, numbers the subset from 1, and captures that subset when clicked. The video header, point/range timecodes, type/status labels, and literal comment text are preserved. With no filters, it copies all reviews.
+- HTML, Markdown, CSV, review JSON, and project backup continue to include all reviews regardless of active filters. Clipboard failure keeps the existing warning feedback and removes any temporary fallback textarea.
 
 ## 5. Data and privacy
 
@@ -206,7 +207,8 @@ The v1.0 definition is:
 - Standalone Review HTML has no external runtime dependency and keeps `connect-src 'none'`.
 - Markdown export contains ordered timecodes, type/status labels, and comments.
 - CSV export is UTF-8 with BOM and includes the documented columns.
-- Plain-text clipboard export produces a readable review handoff.
+- Plain-text clipboard export matches the visible list under type-only, status-only, and combined filters in both languages; empty results never write to the clipboard. Clearing filters, resolve/reopen, editing type, delete/Undo, and source reset refresh copy availability.
+- All file exports and JSON backups retain every review with filters active.
 - Output filename sanitation prevents path separators and reserved filename characters.
 - Japanese and English desktop smoke tests complete with a real browser-playable MP4.
 - Japanese and English smartphone layouts are checked at 360px and 320px with no horizontal overflow or fixed-UI overlap.

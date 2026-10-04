@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - "src/**"
+      - "tests/**"
       - "scripts/**"
       - "app.config.json"
       - "dependencies.json"
@@ -37,6 +38,20 @@ jobs:
       - name: Build and verify standalone HTML
         shell: pwsh
         run: ./scripts/check-repository.ps1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Test review clipboard behavior
+        shell: pwsh
+        run: |
+          node --test tests/*.test.cjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:REVIEW_APP_SOURCE = "dist/index.html"
+          node --test tests/*.test.cjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload standalone artifact
         uses: actions/upload-artifact@v7

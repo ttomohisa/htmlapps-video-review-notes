@@ -23,7 +23,7 @@ GitHub Pages delivers the initial HTML. After it loads, video playback, review e
 - **Keep review work organized** — Use Fix, Question, Check, Good, or Note, switch reviews between Open and Resolved, and filter the list and timeline together.
 - **Jump through feedback from the timeline** — Point reviews appear as pins and range reviews as bars; selecting either seeks the video to that review.
 - **Resume without storing the source video** — Reviews, resized thumbnails, annotations, filters, and playback settings autosave in IndexedDB. Re-select the original video to resume later.
-- **Hand off the result without a cloud review service** — Export a standalone review HTML, Markdown, UTF-8 CSV, review JSON, or copy the review list as text.
+- **Hand off the result without a cloud review service** — Export a standalone review HTML, Markdown, UTF-8 CSV, review JSON, or copy only the currently visible reviews as text.
 - **Private, single-HTML operation** — No runtime CDN, analytics, telemetry, or external API. Runtime CSP uses `connect-src 'none'`.
 
 ## Quick start
@@ -58,7 +58,7 @@ The current app has no third-party runtime dependency, so no application library
 6. Add the review. Select a review card, timeline pin, or range bar to jump back to its start time.
 7. Filter by review type and Open / Resolved status. Edit, resolve/reopen, or delete reviews as needed.
 8. Reviews autosave locally. Use **Save review JSON** when you want a portable project backup.
-9. Use **Export reviews** to save a standalone review HTML, Markdown, CSV, or JSON, or copy the review list as plain text.
+9. Use **Export reviews** to save a standalone review HTML, Markdown, CSV, or JSON, or use **Copy visible reviews** for the current type/status-filtered list.
 
 ### Review modes
 
@@ -120,7 +120,9 @@ The source video itself is **not** embedded in the exported HTML.
 - **Markdown** — ordered timecodes, type/status, and comments
 - **CSV** — UTF-8 with BOM for spreadsheet use
 - **Review JSON** — portable review/project data using `schemaVersion: 1`
-- **Clipboard text** — quick handoff to chat or email
+- **Copy visible reviews** — copy only reviews matching the type/status filters, in list order, for chat or email. Clear filters to copy all reviews. Copy is disabled when no reviews match.
+
+HTML, Markdown, CSV, review JSON, and project backups always include all reviews, even while the list is filtered.
 
 ## Publish with GitHub Pages
 
@@ -216,6 +218,8 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the dependency notice.
 ## Contributing
 
 Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidance.
+
+The dependency-free regression tests run with `node --test tests/*.test.cjs` (Node.js 24). To test the readable build, set `REVIEW_APP_SOURCE=dist/index.html`.
 
 ## License
 

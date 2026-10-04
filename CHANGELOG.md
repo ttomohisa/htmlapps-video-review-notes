@@ -2,6 +2,18 @@
 
 All notable changes to Video Review Notes are documented here.
 
+## [Unreleased]
+
+### Changed
+
+- Renamed clipboard export to **Copy visible reviews** / **表示中のレビューをコピー**. It now copies the current type/status-filtered list in display order with contiguous numbering.
+- Disabled copy for empty filter results and refreshed export availability after edits, status changes, deletion/Undo, and source reset. File exports and JSON backups still include every review.
+- Cleaned up the legacy clipboard textarea even when copying fails, while preserving existing success/failure feedback.
+
+### Tests
+
+- Added dependency-free regression coverage for both languages, every type/status combination, time-order ties, ranges, literal multiline comments, clipboard errors, review-state transitions, and complete file exports.
+
 ## [1.0.0] - 2026-09-19
 
 ### Changed
