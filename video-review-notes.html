@@ -787,7 +787,7 @@
               <button class="button" id="exportMarkdownButton" type="button" data-i18n="exportMarkdown" disabled>Markdownを保存</button>
               <button class="button" id="exportCsvButton" type="button" data-i18n="exportCsv" disabled>CSVを保存</button>
               <button class="button" id="exportJsonButton" type="button" data-i18n="exportJson" disabled>レビューJSONを保存</button>
-              <button class="button" id="copyReviewsButton" type="button" data-i18n="copyReviews" disabled>レビューをコピー</button>
+              <button class="button" id="copyReviewsButton" type="button" data-i18n="copyReviews" disabled>表示中のレビューをコピー</button>
             </div>
           </section>
         </div>
@@ -918,7 +918,7 @@
       <ul>
         <li data-i18n="helpNoteCodec">再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。</li>
         <li data-i18n="helpNoteReload">レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。</li>
-        <li data-i18n="helpNoteMilestone">「レビューJSONを保存」で作業をバックアップできます。「レビューを書き出す」から、共有用HTML・Markdown・CSVを保存したり、レビュー一覧をコピーできます。共有用HTMLに元動画は含まれません。</li>
+        <li data-i18n="helpNoteMilestone">「表示中のレビューをコピー」は種類・状態のフィルターに一致するレビューだけを時刻順でコピーします。全件をコピーするにはフィルターを解除してください。HTML・Markdown・CSV・レビューJSONの保存とバックアップは常に全件が対象です。共有用HTMLに元動画は含まれません。</li>
       </ul>
       <!-- APP:HELP:END -->
     </div>
@@ -929,7 +929,7 @@
       'use strict';
 
       const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Video Review Notes","nameJa":"動画レビュー付箋","slug":"video-review-notes","version":"1.0.0","description":"Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.","descriptionJa":"動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-video-review-notes"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-09-19T15:08:43.5833460Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.0"},"dependencies":[]};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-04T08:08:20.0240830Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.0"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -1022,9 +1022,9 @@
           helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
           helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
           helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。レビュー・縮小サムネイル・注釈は自動保存のためブラウザー内のIndexedDBへ保存されますが、元動画そのものは保存しません。',
-          helpNotesTitle: '注意事項', helpNoteCodec: '再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。', helpNoteReload: 'レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。', helpNoteMilestone: '「レビューJSONを保存」で作業をバックアップできます。「レビューを書き出す」から、共有用HTML・Markdown・CSVを保存したり、レビュー一覧をコピーできます。共有用HTMLに元動画は含まれません。',
+          helpNotesTitle: '注意事項', helpNoteCodec: '再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。', helpNoteReload: 'レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。', helpNoteMilestone: '「表示中のレビューをコピー」は種類・状態のフィルターに一致するレビューだけを時刻順でコピーします。全件をコピーするにはフィルターを解除してください。HTML・Markdown・CSV・レビューJSONの保存とバックアップは常に全件が対象です。共有用HTMLに元動画は含まれません。',
           savedProjectTitle: '前回のレビューがあります', resumeProject: '動画を選択して再開', saveProjectJson: 'レビューJSONを保存', loadProjectJson: 'レビューJSONを読み込む', discardSavedProject: '保存済み作業を削除', resetProject: '作業をリセット', autoSaveWaiting: 'レビューを追加すると自動保存します', autoSaveSaving: '自動保存中…', autoSaveSaved: '自動保存済み', autoSaveFailed: '自動保存できません。JSONを保存してください。', projectSaved: 'レビューJSONを保存しました', projectLoaded: 'レビューJSONを読み込みました。元動画を選択してください。', projectInvalid: 'このレビューJSONを読み込めませんでした。ファイルが壊れているか、対応していない形式です。', projectDeleted: '保存済み作業を削除しました', projectReset: 'レビューと保存済み作業をリセットしました', resetProjectTitle: '作業をリセットしますか？', resetProjectMessage: 'この動画のレビュー、サムネイル、注釈とブラウザー内の自動保存を削除します。動画は開いたままです。', resetProjectConfirm: '作業をリセット', discardProjectTitle: '保存済み作業を削除しますか？', discardProjectMessage: 'ブラウザー内に保存したレビュー、サムネイル、注釈を削除します。元動画は保存されていません。', discardProjectConfirm: '削除', replaceProjectTitle: '現在の作業を置き換えますか？', replaceProjectMessage: '読み込んだレビューJSONで現在のレビューを置き換えます。必要なら先にレビューJSONを保存してください。', replaceProjectConfirm: '読み込む', relinkMismatchTitle: '前回とは異なる動画の可能性があります', relinkMismatchMessage: 'ファイル名やサイズが保存済み作業と一致しません。この動画でレビューを開きますか？', relinkMismatchConfirm: 'この動画で開く', savedProjectDetail: '{count}件のレビュー · 最終保存 {savedAt}', savedProjectNoDate: '{count}件のレビュー', projectSchemaUnsupported: 'このレビューJSONは新しい形式のため、このバージョンでは読み込めません。',
-          exportTitle: 'レビューを書き出す', exportDescription: '共有用HTMLには元動画を含めず、時刻・コメント・サムネイル・注釈を1ファイルにまとめます。', exportWaiting: 'レビューを追加すると書き出せます', exportReady: '{count}件のレビューを書き出せます', outputFilenameLabel: '出力ファイル名', outputFilenameHint: '拡張子は出力形式に合わせて付きます', exportHtml: 'レビューHTMLを保存', exportMarkdown: 'Markdownを保存', exportCsv: 'CSVを保存', exportJson: 'レビューJSONを保存', copyReviews: 'レビューをコピー', exportHtmlStarted: 'レビューHTMLの保存を開始しました', exportMarkdownStarted: 'Markdownの保存を開始しました', exportCsvStarted: 'CSVの保存を開始しました', exportCopyDone: 'レビューをコピーしました', exportCopyFailed: 'レビューをコピーできませんでした', exportNoReviews: '書き出すレビューがありません', exportStatusDone: '{format}の保存を開始しました',
+          exportTitle: 'レビューを書き出す', exportDescription: '共有用HTMLには元動画を含めず、時刻・コメント・サムネイル・注釈を1ファイルにまとめます。', exportWaiting: 'レビューを追加すると書き出せます', exportReady: '{count}件のレビューを書き出せます', outputFilenameLabel: '出力ファイル名', outputFilenameHint: '拡張子は出力形式に合わせて付きます', exportHtml: 'レビューHTMLを保存', exportMarkdown: 'Markdownを保存', exportCsv: 'CSVを保存', exportJson: 'レビューJSONを保存', copyReviews: '表示中のレビューをコピー', exportHtmlStarted: 'レビューHTMLの保存を開始しました', exportMarkdownStarted: 'Markdownの保存を開始しました', exportCsvStarted: 'CSVの保存を開始しました', exportCopyDone: 'レビューをコピーしました', exportCopyFailed: 'レビューをコピーできませんでした', exportNoReviews: '書き出すレビューがありません', exportStatusDone: '{format}の保存を開始しました',
           invalidFile: '動画ファイルを選択してください。', unsupportedVideo: 'このブラウザーで再生できない映像形式または音声形式が使用されている可能性があります。別の動画を選択してください。',
           videoLoaded: '動画を読み込みました', videoRemoved: '動画を外しました', undo: '元に戻す', restored: '動画とレビューを戻しました', fullscreenUnavailable: 'このブラウザーでは全画面表示を利用できません。', unknownType: '不明'
         },
@@ -1051,9 +1051,9 @@
           helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
           helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
           helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'The selected video is played from a local File / Blob URL and is not uploaded. Reviews, resized thumbnails, and annotations are stored in this browser’s IndexedDB for autosave, but the source video itself is never stored.',
-          helpNotesTitle: 'Notes', helpNoteCodec: 'Playback support depends on the codecs inside the video as well as the filename extension and browser.', helpNoteReload: 'Reviews, thumbnails, and annotations are autosaved in this browser. The source video itself is not stored, so select the same video again when resuming.', helpNoteMilestone: 'Use Save review JSON for a project backup, or export Standalone Review HTML / Markdown / CSV for handoff.',
+          helpNotesTitle: 'Notes', helpNoteCodec: 'Playback support depends on the codecs inside the video as well as the filename extension and browser.', helpNoteReload: 'Reviews, thumbnails, and annotations are autosaved in this browser. The source video itself is not stored, so select the same video again when resuming.', helpNoteMilestone: 'Copy visible reviews copies only the reviews matching the type/status filters, in list order. Clear filters to copy all reviews. HTML, Markdown, CSV, review JSON, and project backups always include all reviews. The source video is not included in the shareable HTML.',
           savedProjectTitle: 'A previous review project is available', resumeProject: 'Select video to resume', saveProjectJson: 'Save review JSON', loadProjectJson: 'Load review JSON', discardSavedProject: 'Delete saved project', resetProject: 'Reset project', autoSaveWaiting: 'Reviews will autosave after you add one', autoSaveSaving: 'Autosaving…', autoSaveSaved: 'Autosaved', autoSaveFailed: 'Autosave failed. Save a review JSON backup.', projectSaved: 'Review JSON saved', projectLoaded: 'Review JSON loaded. Select the source video to continue.', projectInvalid: 'Could not load this review JSON. It may be damaged or use an unsupported format.', projectDeleted: 'Saved project deleted', projectReset: 'Reviews and saved project reset', resetProjectTitle: 'Reset this project?', resetProjectMessage: 'This removes reviews, thumbnails, annotations, and the autosaved project from this browser. The video stays open.', resetProjectConfirm: 'Reset project', discardProjectTitle: 'Delete the saved project?', discardProjectMessage: 'This removes the reviews, thumbnails, and annotations stored in this browser. The source video itself is not stored.', discardProjectConfirm: 'Delete', replaceProjectTitle: 'Replace the current project?', replaceProjectMessage: 'The loaded review JSON will replace the current reviews. Save a review JSON first if you need a backup.', replaceProjectConfirm: 'Load project', relinkMismatchTitle: 'This may be a different video', relinkMismatchMessage: 'The filename or size does not match the saved project. Open these reviews with this video anyway?', relinkMismatchConfirm: 'Open with this video', savedProjectDetail: '{count} reviews · last saved {savedAt}', savedProjectNoDate: '{count} reviews', projectSchemaUnsupported: 'This review JSON uses a newer schema and cannot be opened by this version.',
-          exportTitle: 'Export reviews', exportDescription: 'The shareable HTML keeps timecodes, comments, thumbnails, and annotations in one file without embedding the source video.', exportWaiting: 'Add a review to enable export', exportReady: '{count} reviews ready to export', outputFilenameLabel: 'Output filename', outputFilenameHint: 'The extension is added for each format', exportHtml: 'Save review HTML', exportMarkdown: 'Save Markdown', exportCsv: 'Save CSV', exportJson: 'Save review JSON', copyReviews: 'Copy reviews', exportHtmlStarted: 'Review HTML download started', exportMarkdownStarted: 'Markdown download started', exportCsvStarted: 'CSV download started', exportCopyDone: 'Reviews copied', exportCopyFailed: 'Could not copy reviews', exportNoReviews: 'There are no reviews to export', exportStatusDone: '{format} download started',
+          exportTitle: 'Export reviews', exportDescription: 'The shareable HTML keeps timecodes, comments, thumbnails, and annotations in one file without embedding the source video.', exportWaiting: 'Add a review to enable export', exportReady: '{count} reviews ready to export', outputFilenameLabel: 'Output filename', outputFilenameHint: 'The extension is added for each format', exportHtml: 'Save review HTML', exportMarkdown: 'Save Markdown', exportCsv: 'Save CSV', exportJson: 'Save review JSON', copyReviews: 'Copy visible reviews', exportHtmlStarted: 'Review HTML download started', exportMarkdownStarted: 'Markdown download started', exportCsvStarted: 'CSV download started', exportCopyDone: 'Reviews copied', exportCopyFailed: 'Could not copy reviews', exportNoReviews: 'There are no reviews to export', exportStatusDone: '{format} download started',
           invalidFile: 'Choose a video file.', unsupportedVideo: 'This video may use a video or audio format that this browser cannot play. Choose another video.',
           videoLoaded: 'Video loaded', videoRemoved: 'Video removed', undo: 'Undo', restored: 'Video and reviews restored', fullscreenUnavailable: 'Fullscreen is not available in this browser.', unknownType: 'Unknown'
         }
@@ -1315,11 +1315,10 @@
         });
         return lines.join('\n').trimEnd() + '\n';
       }
-      function buildClipboardExport() {
-        const sorted = reviews.slice().sort((a,b) => reviewStartTime(a) - reviewStartTime(b));
+      function buildClipboardExport(visible = getFilteredReviews()) {
         const videoName = currentFile?.name || detachedProject?.video?.name || '—';
         const lines = [`Video Review — ${videoName}`, ''];
-        sorted.forEach((review, index) => {
+        visible.forEach((review, index) => {
           lines.push(`${index + 1}. ${reviewTimeText(review)} · ${reviewTypeLabel(review.type)} · ${reviewStatusLabel(review.status)}`, review.comment, '');
         });
         return lines.join('\n').trimEnd();
@@ -1353,16 +1352,18 @@
       }
       function updateExportUi() {
         const enabled = reviews.length > 0;
-        ['#exportHtmlButton','#exportMarkdownButton','#exportCsvButton','#exportJsonButton','#copyReviewsButton'].forEach(selector => { const node = $(selector); if (node) node.disabled = !enabled; });
+        ['#exportHtmlButton','#exportMarkdownButton','#exportCsvButton','#exportJsonButton'].forEach(selector => { const node = $(selector); if (node) node.disabled = !enabled; });
+        $('#copyReviewsButton').disabled = getFilteredReviews().length === 0;
         if (!enabled) setExportStatus(t('exportWaiting'), false);
         else setExportStatus(t('exportReady').replace('{count}', String(reviews.length)), false);
       }
       async function copyReviewsToClipboard() {
-        if (!reviews.length) return;
-        const text = buildClipboardExport();
+        const visible = getFilteredReviews();
+        if (!visible.length) return;
+        const text = buildClipboardExport(visible);
         try {
           if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
-          else { const textarea = document.createElement('textarea'); textarea.value = text; textarea.style.position = 'fixed'; textarea.style.opacity = '0'; document.body.append(textarea); textarea.select(); if (!document.execCommand('copy')) throw new Error('copy failed'); textarea.remove(); }
+          else { const textarea = document.createElement('textarea'); textarea.value = text; textarea.style.position = 'fixed'; textarea.style.opacity = '0'; document.body.append(textarea); try { textarea.select(); if (!document.execCommand('copy')) throw new Error('copy failed'); } finally { textarea.remove(); } }
           setExportStatus(t('exportCopyDone'), true); AppToast.show({ message: t('exportCopyDone') }); announce(t('exportCopyDone'));
         } catch { setExportStatus(t('exportCopyFailed'), false); AppToast.show({ message: t('exportCopyFailed'), tone: 'warning' }); announce(t('exportCopyFailed')); }
       }
@@ -1880,6 +1881,7 @@
         $('#openReviewCount').textContent = String(sorted.filter(review => review.status !== 'resolved').length);
         $('#resolvedReviewCount').textContent = String(sorted.filter(review => review.status === 'resolved').length);
         renderReviewFilters();
+        updateExportUi();
         list.replaceChildren();
         if (!sorted.length) {
           const empty = document.createElement('div'); empty.className = 'review-empty';
@@ -1923,7 +1925,6 @@
           list.append(card);
         }
         renderTimeline();
-        updateExportUi();
       }
       function beginEditReview(id) {
         const review = reviews.find(item => item.id === id); if (!review) return;
