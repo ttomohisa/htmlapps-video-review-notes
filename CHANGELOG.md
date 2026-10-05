@@ -4,6 +4,16 @@ All notable changes to Video Review Notes are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- Added localized **Duplicate review** / **レビューを複製** card actions. Copies retain the same timing, status, comment, frame and independent annotations, with a new identity and selective Undo. The current draft, filters and playback remain unchanged.
+
+### Fixed
+
+- Rescheduled replacement-workspace autosave after pending video-removal storage cleanup so new edits are not silently left unsaved.
+- Prevented deleted reviews or removed videos from being restored into a replacement/reset/imported workspace by stale Undo callbacks or delayed confirmations.
+- Kept draft frames and annotations tied to the selected point/range start, invalidating outdated capture, seek and image callbacks and avoiding wrong-time frame capture on save.
+
 ### Changed
 
 - Renamed clipboard export to **Copy visible reviews** / **表示中のレビューをコピー**. It now copies the current type/status-filtered list in display order with contiguous numbering.
@@ -11,6 +21,8 @@ All notable changes to Video Review Notes are documented here.
 - Cleaned up the legacy clipboard textarea even when copying fails, while preserving existing success/failure feedback.
 
 ### Tests
+
+- Added runtime regressions for duplicate independence, current-draft/playback preservation, filters/exports/autosave, workspace-scoped Undo, mode-switch capture ownership, late callbacks and failure/retry boundaries. These source-level checks do not verify browser media decoding, visual layout or native keyboard focus.
 
 - Added dependency-free regression coverage for both languages, every type/status combination, time-order ties, ranges, literal multiline comments, clipboard errors, review-state transitions, and complete file exports.
 

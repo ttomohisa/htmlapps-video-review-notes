@@ -905,6 +905,8 @@
         <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。</li>
         <li data-i18n="helpStep2">プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。</li>
         <li data-i18n="helpStep3">種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。</li>
+        <li data-i18n="helpDuplicate">「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。</li>
+        <li data-i18n="helpFrameOwnership">レビューの開始時刻を変えるとフレームを取り直し、以前の画像への注釈を消します。取得できない場合もコメントは保存できます。「元に戻す」は同じ作業内でのみ使えます。</li>
       </ol>
       <h3 data-i18n="helpShortcutsTitle">キーボード操作</h3>
       <ul>
@@ -929,7 +931,7 @@
       'use strict';
 
       const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Video Review Notes","nameJa":"動画レビュー付箋","slug":"video-review-notes","version":"1.0.0","description":"Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.","descriptionJa":"動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-video-review-notes"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-04T08:08:20.0240830Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.0"},"dependencies":[]};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-05T15:56:04.3785294Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.0"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -1012,7 +1014,7 @@
           annotationStepTitle: 'フレーム注釈', optionalLabel: '任意', annotationStepHelp: '場所を示したいときだけ、色と描画ツールを選びます。', annotationTitle: 'フレーム注釈', annotationAutoCapture: 'レビュー時刻のフレームを自動取得', annotationEmpty: 'レビュー時刻を決めると、そのフレームをここに表示します。必要なら矩形・矢印・フリーハンドで指示できます。', annotationColorLabel: '色', annotationColorGreen: 'グリーン', annotationColorRed: 'レッド', annotationColorYellow: 'イエロー', annotationColorBlue: 'ブルー', annotationColorWhite: 'ホワイト', annotationColorBlack: 'ブラック', annotationToolbarLabel: 'フレーム注釈ツール', annotationRect: '矩形', annotationArrow: '矢印', annotationFreehand: 'フリーハンド', annotationUndo: '1つ戻す', annotationClear: '描画を消去', annotationCount: '注釈 {count}件', annotationFrameCaptured: 'レビュー時刻のフレームを取得しました', annotationCaptureFailed: 'このフレームを取得できませんでした。動画を少し再生してからもう一度お試しください。',
           typeFix: '修正', typeQuestion: '質問', typeCheck: '要確認', typeGood: '良い', typeNote: 'メモ', addReview: 'レビューを追加', updateReview: 'レビューを更新', cancelEdit: '編集をやめる',
           reviewsTitle: 'レビュー', reviewTotal: '{count}件', statusOpen: '未対応', statusResolved: '解決済み', noReviewsTitle: 'まだレビューがありません', noReviewsBody: '動画を止めてコメントを追加すると、ここに時刻順で表示されます。', noFilteredReviewsTitle: '条件に一致するレビューはありません', noFilteredReviewsBody: 'フィルターを変更すると、ほかのレビューを表示できます。', clearFilters: 'フィルターを解除',
-          editReview: '編集', deleteReview: '削除', markResolved: '解決済みにする', markOpen: '未対応に戻す', jumpReview: 'この時刻へ移動', reviewAdded: 'レビューを追加しました', reviewUpdated: 'レビューを更新しました', reviewDeleted: 'レビューを削除しました', reviewRestored: 'レビューを元に戻しました', reviewStatusChanged: 'レビューの状態を変更しました',
+          editReview: '編集', duplicateReview: 'レビューを複製', reviewDuplicated: 'レビューを複製しました', reviewDuplicateUndone: 'レビューの複製を取り消しました', deleteReview: '削除', markResolved: '解決済みにする', markOpen: '未対応に戻す', jumpReview: 'この時刻へ移動', reviewAdded: 'レビューを追加しました', reviewUpdated: 'レビューを更新しました', reviewDeleted: 'レビューを削除しました', reviewRestored: 'レビューを元に戻しました', reviewStatusChanged: 'レビューの状態を変更しました',
           deleteReviewTitle: 'レビューを削除しますか？', deleteReviewMessage: 'このレビューを削除します。削除後はしばらく「元に戻す」から復元できます。', confirmDelete: '削除', cancel: 'キャンセル',
           replaceWithReviewsTitle: '動画を変更しますか？', replaceWithReviewsMessage: '現在のレビューはブラウザー内へ自動保存されています。動画を変更すると、作業領域と自動保存は新しい動画用に置き換わります。必要なら先にレビューJSONも保存してください。', replaceVideoConfirm: '動画を変更',
           removeWithReviewsTitle: '動画を外しますか？', removeWithReviewsMessage: '現在のレビューも作業領域から外れ、ブラウザー内の自動保存も削除されます。直後なら「元に戻す」で復元できます。', removeVideoConfirm: '動画を外す',
@@ -1020,6 +1022,7 @@
           shortcutTitle: 'キーボード操作', shortcutBody: 'プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。', shortcutPlay: '再生 / 一時停止', shortcut5: '5秒移動', shortcut10: '10秒移動', shortcutFullscreen: '全画面', shortcutReview: 'レビュー入力',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '動画とレビューは端末内で処理されます',
           helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
+          helpDuplicate: '「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。', helpFrameOwnership: 'レビューの開始時刻を変えるとフレームを取り直し、以前の画像への注釈を消します。取得できない場合もコメントは保存できます。「元に戻す」は同じ作業内でのみ使えます。',
           helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
           helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。レビュー・縮小サムネイル・注釈は自動保存のためブラウザー内のIndexedDBへ保存されますが、元動画そのものは保存しません。',
           helpNotesTitle: '注意事項', helpNoteCodec: '再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。', helpNoteReload: 'レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。', helpNoteMilestone: '「表示中のレビューをコピー」は種類・状態のフィルターに一致するレビューだけを時刻順でコピーします。全件をコピーするにはフィルターを解除してください。HTML・Markdown・CSV・レビューJSONの保存とバックアップは常に全件が対象です。共有用HTMLに元動画は含まれません。',
@@ -1041,7 +1044,7 @@
           annotationStepTitle: 'Frame annotation', optionalLabel: 'Optional', annotationStepHelp: 'Only when needed, choose a color and drawing tool to point to an area.', annotationTitle: 'Frame annotation', annotationAutoCapture: 'Captures the frame at the review time', annotationEmpty: 'Set the review time to show that frame here. Add a rectangle, arrow, or freehand mark when you need to point to a specific area.', annotationColorLabel: 'Color', annotationColorGreen: 'Green', annotationColorRed: 'Red', annotationColorYellow: 'Yellow', annotationColorBlue: 'Blue', annotationColorWhite: 'White', annotationColorBlack: 'Black', annotationToolbarLabel: 'Frame annotation tools', annotationRect: 'Rectangle', annotationArrow: 'Arrow', annotationFreehand: 'Freehand', annotationUndo: 'Undo mark', annotationClear: 'Clear marks', annotationCount: '{count} annotations', annotationFrameCaptured: 'Captured the frame at the review time', annotationCaptureFailed: 'Could not capture this frame. Play the video briefly and try again.',
           typeFix: 'Fix', typeQuestion: 'Question', typeCheck: 'Check', typeGood: 'Good', typeNote: 'Note', addReview: 'Add review', updateReview: 'Update review', cancelEdit: 'Cancel edit',
           reviewsTitle: 'Reviews', reviewTotal: '{count}', statusOpen: 'Open', statusResolved: 'Resolved', noReviewsTitle: 'No reviews yet', noReviewsBody: 'Pause the video and add a comment. Reviews will appear here in time order.', noFilteredReviewsTitle: 'No reviews match these filters', noFilteredReviewsBody: 'Change or clear the filters to show other reviews.', clearFilters: 'Clear filters',
-          editReview: 'Edit', deleteReview: 'Delete', markResolved: 'Mark resolved', markOpen: 'Reopen', jumpReview: 'Jump to this time', reviewAdded: 'Review added', reviewUpdated: 'Review updated', reviewDeleted: 'Review deleted', reviewRestored: 'Review restored', reviewStatusChanged: 'Review status updated',
+          editReview: 'Edit', duplicateReview: 'Duplicate review', reviewDuplicated: 'Review duplicated', reviewDuplicateUndone: 'Review duplication undone', deleteReview: 'Delete', markResolved: 'Mark resolved', markOpen: 'Reopen', jumpReview: 'Jump to this time', reviewAdded: 'Review added', reviewUpdated: 'Review updated', reviewDeleted: 'Review deleted', reviewRestored: 'Review restored', reviewStatusChanged: 'Review status updated',
           deleteReviewTitle: 'Delete this review?', deleteReviewMessage: 'This review will be deleted. You can restore it for a short time with Undo.', confirmDelete: 'Delete', cancel: 'Cancel',
           replaceWithReviewsTitle: 'Change video?', replaceWithReviewsMessage: 'The current reviews are autosaved in this browser. Changing the video replaces the workspace and autosave with a new video project. Save a review JSON first if you need another backup.', replaceVideoConfirm: 'Change video',
           removeWithReviewsTitle: 'Remove video?', removeWithReviewsMessage: 'The current reviews will leave the workspace and the browser autosave will be deleted. You can restore them immediately with Undo.', removeVideoConfirm: 'Remove video',
@@ -1049,6 +1052,7 @@
           shortcutTitle: 'Keyboard controls', shortcutBody: 'Use the keyboard to move through the video while reviewing.', shortcutPlay: 'Play / pause', shortcut5: 'Move 5 sec', shortcut10: 'Move 10 sec', shortcutFullscreen: 'Fullscreen', shortcutReview: 'Start review',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Video and reviews are processed on this device',
           helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
+          helpDuplicate: 'Duplicate review creates an independent note at the same moment or range, keeping its status, comment, image, and annotations. Your current draft is preserved. Undo removes only the new duplicate.', helpFrameOwnership: 'Changing the review start refreshes its frame and clears annotations from the old image. If capture fails, you can still save the comment. Undo is available only within the same workspace.',
           helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
           helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'The selected video is played from a local File / Blob URL and is not uploaded. Reviews, resized thumbnails, and annotations are stored in this browser’s IndexedDB for autosave, but the source video itself is never stored.',
           helpNotesTitle: 'Notes', helpNoteCodec: 'Playback support depends on the codecs inside the video as well as the filename extension and browser.', helpNoteReload: 'Reviews, thumbnails, and annotations are autosaved in this browser. The source video itself is not stored, so select the same video again when resuming.', helpNoteMilestone: 'Copy visible reviews copies only the reviews matching the type/status filters, in list order. Clear filters to copy all reviews. HTML, Markdown, CSV, review JSON, and project backups always include all reviews. The source video is not included in the shareable HTML.',
@@ -1074,6 +1078,7 @@
       let pendingResume = null;
       let sourceEventController = null;
       let reviews = [];
+      let workspaceGeneration = 0;
       let selectedReviewType = 'fix';
       let editingReviewId = '';
       let activeReviewId = '';
@@ -1086,6 +1091,8 @@
       let draftThumbnail = '';
       let draftFrameWidth = 0;
       let draftFrameHeight = 0;
+      let draftFrameTime = null;
+      let draftFrameSourceGeneration = null;
       let draftAnnotations = [];
       let annotationTool = 'rect';
       let annotationColor = '#16624f';
@@ -1573,6 +1580,11 @@
         if (Number.isFinite(draftReviewTime)) return draftReviewTime;
         return Number.isFinite(video.currentTime) ? video.currentTime : 0;
       }
+      function draftCaptureTime() {
+        return selectedReviewMode === 'range'
+          ? (Number.isFinite(draftRangeStart) ? draftRangeStart : (video.currentTime || 0))
+          : currentDraftTime();
+      }
       function hasValidRange() { return Number.isFinite(draftRangeStart) && Number.isFinite(draftRangeEnd) && draftRangeEnd > draftRangeStart + 0.001; }
       function rangeValidationMessage() {
         if (selectedReviewMode !== 'range') return '';
@@ -1590,7 +1602,13 @@
           draftRangeStart = Number.isFinite(video.currentTime) ? video.currentTime : 0;
           draftRangeEnd = null;
         }
-        if (!draftThumbnail && phase === 'ready') captureFrameSoon({ resetAnnotations: false });
+        if (phase === 'ready' && (!draftThumbnail || draftFrameTime !== draftCaptureTime() || draftFrameSourceGeneration !== sourceGeneration)) {
+          video.pause();
+          const time = draftCaptureTime();
+          // A mode change may return to a remembered start that is no longer the playback position.
+          if (Math.abs(video.currentTime - time) > .001) video.currentTime = time;
+          captureFrameSoon({ resetAnnotations: false });
+        }
         updateReviewEditor();
       }
       function cloneAnnotations(items) {
@@ -1665,19 +1683,28 @@
         updateAnnotationControls();
       }
       function loadDraftThumbnail(dataUrl, width, height) {
+        const generation = ++annotationCaptureGeneration;
+        const source = sourceGeneration, editId = editingReviewId, time = draftCaptureTime();
+        draftFrameTime = time;
+        draftFrameSourceGeneration = source;
         draftThumbnail = dataUrl || '';
         draftFrameWidth = Number(width) || 0;
         draftFrameHeight = Number(height) || 0;
         annotationBaseImage = null;
-        if (!draftThumbnail) { redrawAnnotationCanvas(); return; }
+        if (!draftThumbnail) { resetDraftFrame(); return; }
         const image = new Image();
-        image.onload = () => { annotationBaseImage = image; if (!draftFrameWidth) draftFrameWidth = image.naturalWidth; if (!draftFrameHeight) draftFrameHeight = image.naturalHeight; redrawAnnotationCanvas(); };
-        image.onerror = () => { draftThumbnail = ''; annotationBaseImage = null; updateAnnotationControls(); };
+        const isCurrent = () => generation === annotationCaptureGeneration && source === sourceGeneration && editId === editingReviewId && time === draftCaptureTime();
+        image.onload = () => { if (!isCurrent()) return; annotationBaseImage = image; if (!draftFrameWidth) draftFrameWidth = image.naturalWidth; if (!draftFrameHeight) draftFrameHeight = image.naturalHeight; redrawAnnotationCanvas(); };
+        image.onerror = () => { if (!isCurrent()) return; resetDraftFrame(); AppToast.show({ message: t('annotationCaptureFailed'), tone: 'warning' }); };
         image.src = draftThumbnail;
         updateAnnotationControls();
       }
       function captureCurrentFrame({ resetAnnotations = true, announceCapture = false } = {}) {
-        if (phase !== 'ready' || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return false;
+        const time = draftCaptureTime();
+        if (resetAnnotations || draftFrameTime !== time || draftFrameSourceGeneration !== sourceGeneration) resetDraftFrame();
+        draftFrameTime = time;
+        draftFrameSourceGeneration = sourceGeneration;
+        if (phase !== 'ready' || video.seeking || Math.abs(video.currentTime - time) > .001 || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return false;
         try {
           const maxDimension = 720;
           const scale = Math.min(1, maxDimension / Math.max(video.videoWidth, video.videoHeight));
@@ -1687,32 +1714,38 @@
           const ctx = canvas.getContext('2d'); if (!ctx) return false;
           ctx.drawImage(video, 0, 0, width, height);
           const dataUrl = canvas.toDataURL('image/jpeg', .78);
-          if (resetAnnotations) draftAnnotations = [];
           loadDraftThumbnail(dataUrl, width, height);
           if (announceCapture) announce(t('annotationFrameCaptured'));
           return true;
         } catch {
-          AppToast.show({ message: t('annotationCaptureFailed'), tone: 'warning' });
           return false;
         }
       }
       function captureFrameSoon({ resetAnnotations = true } = {}) {
         if (phase !== 'ready') return;
+        const source = sourceGeneration, editId = editingReviewId, time = draftCaptureTime();
+        if (resetAnnotations || draftFrameTime !== time || draftFrameSourceGeneration !== source) resetDraftFrame();
+        draftFrameTime = time;
+        draftFrameSourceGeneration = source;
         const generation = ++annotationCaptureGeneration;
-        if (resetAnnotations) { draftAnnotations = []; draftThumbnail = ''; annotationBaseImage = null; updateAnnotationControls(); }
         let attempts = 0;
         const run = () => {
-          if (generation !== annotationCaptureGeneration || phase !== 'ready') return;
+          if (generation !== annotationCaptureGeneration || source !== sourceGeneration || editId !== editingReviewId || time !== draftCaptureTime() || phase !== 'ready') return;
+          // A later user seek cancels this attempt; retries must never follow unrelated playback.
+          if (Math.abs(video.currentTime - time) > .001) return;
           attempts += 1;
           if (captureCurrentFrame({ resetAnnotations: false })) return;
           if (attempts < 8) window.setTimeout(run, 80);
+          else AppToast.show({ message: t('annotationCaptureFailed'), tone: 'warning' });
         };
         if (video.seeking) { video.addEventListener('seeked', run, { once: true }); return; }
         run();
       }
       function ensureDraftFrame() {
-        if (draftThumbnail) return true;
-        return captureCurrentFrame({ resetAnnotations: false });
+        if (draftThumbnail && draftFrameTime === draftCaptureTime() && draftFrameSourceGeneration === sourceGeneration) return true;
+        const captured = captureCurrentFrame({ resetAnnotations: false });
+        if (!captured) AppToast.show({ message: t('annotationCaptureFailed'), tone: 'warning' });
+        return captured;
       }
       function annotationPoint(event) {
         const rect = annotationCanvas.getBoundingClientRect();
@@ -1757,7 +1790,7 @@
         return svg;
       }
       function resetDraftFrame() {
-        annotationCaptureGeneration += 1; draftThumbnail = ''; draftFrameWidth = 0; draftFrameHeight = 0; draftAnnotations = []; annotationPointer = null; annotationBaseImage = null;
+        annotationCaptureGeneration += 1; draftThumbnail = ''; draftFrameWidth = 0; draftFrameHeight = 0; draftFrameTime = null; draftFrameSourceGeneration = null; draftAnnotations = []; annotationPointer = null; annotationBaseImage = null;
         if (annotationContext) annotationContext.clearRect(0,0,annotationCanvas.width,annotationCanvas.height);
         updateAnnotationControls();
       }
@@ -1792,6 +1825,7 @@
         if (keepFocus) reviewComment.focus({ preventScroll: true });
       }
       function clearReviewState() {
+        invalidateWorkspace();
         reviews = []; editingReviewId = ''; activeReviewId = ''; draftReviewTime = null; selectedReviewMode = 'point'; draftRangeStart = null; draftRangeEnd = null; selectedReviewType = 'fix'; annotationColor = '#16624f'; reviewTypeFilter = 'all'; reviewStatusFilter = 'all'; reviewComment.value = ''; resetDraftFrame();
         updateReviewEditor(); renderReviews();
       }
@@ -1919,7 +1953,9 @@
           editButton.addEventListener('click', event => { event.stopPropagation(); beginEditReview(review.id); });
           const deleteButton = document.createElement('button'); deleteButton.type = 'button'; deleteButton.className = 'review-action danger'; deleteButton.textContent = t('deleteReview');
           deleteButton.addEventListener('click', event => { event.stopPropagation(); deleteReview(review.id); });
-          actions.append(statusButton, editButton, deleteButton); card.append(top, comment); if (thumb) card.append(thumb); if (annotationCount) card.append(annotationCount); card.append(status, actions);
+          const duplicateButton = document.createElement('button'); duplicateButton.type = 'button'; duplicateButton.className = 'review-action'; duplicateButton.textContent = t('duplicateReview'); duplicateButton.disabled = phase !== 'ready';
+          duplicateButton.addEventListener('click', event => { event.stopPropagation(); duplicateReview(review.id); });
+          actions.append(statusButton, editButton, duplicateButton, deleteButton); card.append(top, comment); if (thumb) card.append(thumb); if (annotationCount) card.append(annotationCount); card.append(status, actions);
           card.addEventListener('click', () => jumpToReview(review));
           card.addEventListener('keydown', event => { if (event.target === card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); jumpToReview(review); } });
           list.append(card);
@@ -1928,32 +1964,70 @@
       }
       function beginEditReview(id) {
         const review = reviews.find(item => item.id === id); if (!review) return;
+        resetDraftFrame();
         jumpToReview(review); editingReviewId = review.id; activeReviewId = review.id; selectedReviewMode = reviewModeOf(review); draftReviewTime = reviewStartTime(review); draftRangeStart = selectedReviewMode === 'range' ? reviewStartTime(review) : null; draftRangeEnd = selectedReviewMode === 'range' ? reviewEndTime(review) : null; selectedReviewType = review.type; reviewComment.value = review.comment; draftAnnotations = cloneAnnotations(review.annotations); annotationColor = normalizeAnnotationColor(draftAnnotations[0]?.color || annotationColor); loadDraftThumbnail(review.thumbnail || '', review.frameWidth, review.frameHeight); updateReviewEditor(); renderReviews();
         reviewComment.focus({ preventScroll: true }); $('#reviewEditor').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
+      function invalidateWorkspace() {
+        workspaceGeneration += 1;
+        AppToast.dismiss();
+      }
+      function duplicateReview(id) {
+        if (phase !== 'ready') return;
+        const original = reviews.find(item => item.id === id); if (!original) return;
+        const generation = workspaceGeneration;
+        const now = new Date().toISOString();
+        const duplicate = { ...original, id: newReviewId(), createdAt: now, updatedAt: now, annotations: cloneAnnotations(original.annotations) };
+        reviews.push(duplicate); activeReviewId = duplicate.id;
+        renderReviews(); scheduleAutoSave(); announce(t('reviewDuplicated'));
+        const card = Array.from($('#reviewList').children).find(item => item.dataset.reviewId === duplicate.id);
+        card?.focus({ preventScroll: true }); card?.scrollIntoView({ block: 'nearest' });
+        AppToast.show({ message: t('reviewDuplicated'), actionLabel: t('undo'), duration: 5000, onAction: () => {
+          if (generation !== workspaceGeneration) return;
+          const index = reviews.indexOf(duplicate); if (index < 0) return;
+          reviews.splice(index, 1);
+          if (activeReviewId === duplicate.id) activeReviewId = '';
+          if (editingReviewId === duplicate.id) {
+            editingReviewId = '';
+            // The retained draft has a new owner; restart only unfinished frame work.
+            if (draftThumbnail && !annotationBaseImage) loadDraftThumbnail(draftThumbnail, draftFrameWidth, draftFrameHeight);
+            else if (!draftThumbnail) captureFrameSoon({ resetAnnotations: false });
+            updateReviewEditor();
+          }
+          renderReviews(); scheduleAutoSave(); announce(t('reviewDuplicateUndone'));
+        } });
+      }
       async function deleteReview(id) {
-        const index = reviews.findIndex(item => item.id === id); if (index < 0) return;
+        const generation = workspaceGeneration;
+        const review = reviews.find(item => item.id === id); if (!review) return;
         const ok = await AppConfirm.ask({ title: t('deleteReviewTitle'), message: t('deleteReviewMessage'), confirmLabel: t('confirmDelete'), cancelLabel: t('cancel'), tone: 'danger' });
-        if (!ok) return;
+        if (!ok || generation !== workspaceGeneration) return;
+        const index = reviews.indexOf(review); if (index < 0) return;
         const [removed] = reviews.splice(index, 1); if (editingReviewId === id) resetReviewEditor(); if (activeReviewId === id) activeReviewId = '';
         renderReviews(); scheduleAutoSave(); announce(t('reviewDeleted'));
-        AppToast.show({ message: t('reviewDeleted'), actionLabel: t('undo'), duration: 5000, onAction: () => { reviews.splice(Math.min(index, reviews.length), 0, removed); renderReviews(); scheduleAutoSave(); announce(t('reviewRestored')); } });
+        let undone = false;
+        AppToast.show({ message: t('reviewDeleted'), actionLabel: t('undo'), duration: 5000, onAction: () => {
+          if (undone || generation !== workspaceGeneration || reviews.some(item => item.id === id)) return;
+          undone = true; reviews.splice(Math.min(index, reviews.length), 0, removed); renderReviews(); scheduleAutoSave(); announce(t('reviewRestored'));
+        } });
       }
       async function saveReview() {
         if (phase !== 'ready') return;
         const comment = reviewComment.value.trim(); if (!comment) { updateReviewEditor(); return; }
         if (selectedReviewMode === 'range' && !hasValidRange()) { updateReviewEditor(); return; }
-        video.pause(); ensureDraftFrame(); const now = new Date().toISOString();
+        video.pause(); const hasFrame = ensureDraftFrame(); const now = new Date().toISOString();
+        const savedMessage = t(editingReviewId ? 'reviewUpdated' : 'reviewAdded');
         const startTime = selectedReviewMode === 'range' ? draftRangeStart : currentDraftTime();
         const endTime = selectedReviewMode === 'range' ? draftRangeEnd : null;
         if (editingReviewId) {
           const review = reviews.find(item => item.id === editingReviewId); if (!review) { resetReviewEditor(); return; }
           review.type = selectedReviewType; review.comment = comment; review.mode = selectedReviewMode; review.time = startTime; review.startTime = startTime; review.endTime = endTime; review.thumbnail = draftThumbnail || ''; review.frameWidth = draftFrameWidth || 0; review.frameHeight = draftFrameHeight || 0; review.annotations = cloneAnnotations(draftAnnotations); review.updatedAt = now; activeReviewId = review.id;
-          AppToast.show({ message: t('reviewUpdated') }); announce(t('reviewUpdated'));
         } else {
           const review = { id: newReviewId(), type: selectedReviewType, status: 'open', mode: selectedReviewMode, time: startTime, startTime, endTime, comment, thumbnail: draftThumbnail || '', frameWidth: draftFrameWidth || 0, frameHeight: draftFrameHeight || 0, annotations: cloneAnnotations(draftAnnotations), createdAt: now, updatedAt: now };
-          reviews.push(review); activeReviewId = review.id; AppToast.show({ message: t('reviewAdded') }); announce(t('reviewAdded'));
+          reviews.push(review); activeReviewId = review.id;
         }
+        const message = hasFrame ? savedMessage : `${savedMessage} ${t('annotationCaptureFailed')}`;
+        AppToast.show({ message, ...(hasFrame ? {} : { tone: 'warning' }) }); announce(message);
         editingReviewId = ''; draftReviewTime = null; selectedReviewMode = 'point'; draftRangeStart = null; draftRangeEnd = null; selectedReviewType = 'fix'; reviewComment.value = ''; resetDraftFrame(); updateReviewEditor(); renderReviews(); scheduleAutoSave();
       }
 
@@ -2249,18 +2323,23 @@
         else showLoadError(t('invalidFile'));
       });
 
-      $('#removeVideoButton').addEventListener('click', async () => {
+      async function removeVideo() {
         if (!currentFile) return;
+        const requestedGeneration = workspaceGeneration;
         if (reviews.length) {
           const ok = await AppConfirm.ask({ title: t('removeWithReviewsTitle'), message: t('removeWithReviewsMessage'), confirmLabel: t('removeVideoConfirm'), cancelLabel: t('cancel') });
-          if (!ok) return;
+          if (!ok || requestedGeneration !== workspaceGeneration) return;
         }
         const snapshot = { file: currentFile, time: video.currentTime, rate: video.playbackRate, volume: video.volume, muted: video.muted, reviewTypeFilter, reviewStatusFilter, reviews: reviews.map(review => ({ ...review, annotations: cloneAnnotations(review.annotations) })) };
         suppressAutosave = true; clearSource(); detachedProject = null; renderDetachedProject();
+        const generation = workspaceGeneration;
         try { await projectDbDelete(); } catch { /* Manual JSON backup remains available if IndexedDB fails. */ }
-        suppressAutosave = false; projectStatus('autoSaveWaiting');
-        AppToast.show({ message: t('videoRemoved'), actionLabel: t('undo'), duration: 5000, onAction: () => { loadFile(snapshot.file, snapshot); AppToast.show({ message: t('restored') }); } });
-      });
+        suppressAutosave = false;
+        if (generation !== workspaceGeneration) { scheduleAutoSave(); return; }
+        projectStatus('autoSaveWaiting');
+        AppToast.show({ message: t('videoRemoved'), actionLabel: t('undo'), duration: 5000, onAction: () => { if (generation !== workspaceGeneration) return; loadFile(snapshot.file, snapshot); AppToast.show({ message: t('restored') }); } });
+      }
+      $('#removeVideoButton').addEventListener('click', removeVideo);
 
       video.addEventListener('timeupdate' , () => paintTime());
       video.addEventListener('play', updatePlayButton);
@@ -2373,6 +2452,7 @@
       });
 
       window.addEventListener('pagehide', () => {
+        invalidateWorkspace();
         sourceGeneration += 1;
         sourceEventController?.abort();
         sourceEventController = null;
