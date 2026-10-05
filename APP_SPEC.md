@@ -91,7 +91,10 @@ The v1.0 definition is:
 - When filters match no reviews, show an explicit empty state with a Clear filters action.
 - Editing can change type, comment, mode, point time, and range start/end positions.
 - Starting comment input pauses playback and freezes the draft review time.
-- Review delete requires confirmation and offers Undo.
+- Review delete requires confirmation and offers Undo. Review deletion and source-removal Undo are bound to the workspace generation; replacement, reset, import and page exit invalidate retained callbacks. A delayed delete confirmation cannot act on a replacement workspace.
+- **Duplicate review** / **レビューを複製** is a native button on each review card, enabled only for a ready workspace. It creates exactly one independent copy with a new ID and fresh creation/update timestamps, preserving type, status, point/range timing, comment, thumbnail, dimensions and deeply cloned annotations. The original and current draft remain unchanged.
+- Duplication keeps playback and filters unchanged, selects/focuses the new visible card, refreshes list/timeline/counts/export availability and autosave, and offers Undo that removes only the created review in its originating workspace, retaining later changes to other reviews.
+- Mode switches retain a valid same-anchor frame and annotations. When the effective point/range start changes, clear the old frame and annotations and capture at the selected start. Late seek/retry/image callbacks cannot overwrite a newer draft, edit or source. Save must never attach a frame from another playback time; capture failure permits a text-only review.
 - Changing/removing the video while reviews exist requires confirmation. Removing the video also removes the browser autosave unless the user immediately restores the workspace with Undo.
 - File export controls remain disabled until at least one review exists. Copy visible reviews remains disabled when the current type/status filters match no reviews, including after edits, status changes, deletion, Undo, and source reset.
 - Output filename editing is separate from file extensions; filenames are sanitized and `.html`, `.md`, `.csv`, or `.video-review.json` is applied as appropriate.

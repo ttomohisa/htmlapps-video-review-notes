@@ -44,13 +44,10 @@ jobs:
         with:
           node-version: 24
 
-      - name: Test review clipboard behavior
+      - name: Test review behavior and release parity
         shell: pwsh
         run: |
-          node --test tests/*.test.cjs
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $env:REVIEW_APP_SOURCE = "dist/index.html"
-          node --test tests/*.test.cjs
+          node tests/check-artifacts.cjs
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload standalone artifact
