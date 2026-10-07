@@ -2,13 +2,15 @@
 
 All notable changes to Video Review Notes are documented here.
 
-## [Unreleased]
+## [1.0.1] - 2026-10-07
 
 ### Added
 
 - Added localized **Duplicate review** / **レビューを複製** card actions. Copies retain the same timing, status, comment, frame and independent annotations, with a new identity and selective Undo. The current draft, filters and playback remain unchanged.
 
 ### Fixed
+
+- Standardized the language target to EN / JA with a matching localized tooltip and accessible label. Kept localized Help and local-processing copy, and synchronized the visible version with v1.0.1.
 
 - Rescheduled replacement-workspace autosave after pending video-removal storage cleanup so new edits are not silently left unsaved.
 - Prevented deleted reviews or removed videos from being restored into a replacement/reset/imported workspace by stale Undo callbacks or delayed confirmations.
@@ -21,6 +23,8 @@ All notable changes to Video Review Notes are documented here.
 - Cleaned up the legacy clipboard textarea even when copying fails, while preserving existing success/failure feedback.
 
 ### Tests
+
+- Added source/DOM-boundary header, Help, canonical-version, and JA → EN → JA regressions that preserve filtered reviews, playback, export names, and valid/incomplete range drafts.
 
 - Added runtime regressions for duplicate independence, current-draft/playback preservation, filters/exports/autosave, workspace-scoped Undo, mode-switch capture ownership, late callbacks and failure/retry boundaries. These source-level checks do not verify browser media decoding, visual layout or native keyboard focus.
 

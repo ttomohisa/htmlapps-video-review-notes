@@ -5,7 +5,7 @@
 - **Name:** Video Review Notes
 - **Japanese name:** 動画レビュー付箋
 - **Repository:** `ttomohisa/htmlapps-video-review-notes`
-- **Current development version:** `v1.0.0`
+- **Current development version:** `v1.0.1`
 - **One-sentence purpose:** Open a local video, attach point or range reviews with captured frame annotations, autosave the review project locally, and export portable review deliverables without uploading or embedding the source video.
 - **Primary users:** People reviewing videos before publication or handoff, including editors, reviewers, internal teams, educators, and creators.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
@@ -53,7 +53,8 @@ The v1.0 definition is:
 - The review editor must visually explain the sequence: review position, required review content, optional frame annotation.
 - Comment is required; the disabled Add review state must include visible text explaining why it is disabled.
 - Show loaded-video metadata: filename, size, duration, resolution, MIME type.
-- Preserve Japanese/English UI selection in local storage.
+- Preserve Japanese/English UI selection in local storage. The header shows the target language as EN / JA, with matching localized tooltip and accessible label (英語に切り替え / Switch to Japanese). Switching preserves the loaded video, reviews, filters, playback, output filename, and current draft.
+- Keep the privacy badge 完全ローカル処理 / Fully local processing and localized Help controls in both languages; the visible version is derived from `app.config.json`.
 - Do **not** persist the video file or video bytes.
 - Revoke obsolete Blob URLs on source replacement, removal, and page exit.
 - Use a monotonically increasing source generation token so late events from an old source cannot overwrite a newly selected source.
@@ -231,7 +232,8 @@ The v1.0 definition is:
 - **v0.7.0 — Export:** standalone review HTML, Markdown, CSV, JSON, clipboard.
 - **v0.8.0 — Mobile / UX / Accessibility:** playback click behavior, play/pause state, clearer review-entry flow, required-comment feedback, colored annotations, and continued mobile/accessibility polish.
 - **v0.9.0 — Release Candidate:** large-file, browser, state, CSP, output, bilingual regression tests.
-- **v1.0.0 — Stable Release:** final README, screenshots, favicon, release regression, publication assets. **Current.**
+- **v1.0.0 — Stable Release:** final README, screenshots, favicon, release regression, publication assets.
+- **v1.0.1 — Header consistency:** compact EN / JA targets, localized language tooltips, and retained workspace state. **Current.**
 
 ## 12. v1.0 non-goals
 

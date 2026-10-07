@@ -27,6 +27,8 @@ GitHub Pages delivers the initial HTML. After it loads, video playback, review e
 - **Hand off the result without a cloud review service** — Export a standalone review HTML, Markdown, UTF-8 CSV, review JSON, or copy only the currently visible reviews as text.
 - **Private, single-HTML operation** — No runtime CDN, analytics, telemetry, or external API. Runtime CSP uses `connect-src 'none'`.
 
+The header’s EN / JA button switches languages without clearing your video, reviews, filters, or current draft. Its tooltip names the target language; the adjacent Help button follows the selected language.
+
 ## Quick start
 
 ### Use the web demo
@@ -214,7 +216,7 @@ Safari and Firefox are supported where the required media, fullscreen, IndexedDB
 
 ## Dependencies
 
-Video Review Notes v1.0.0 uses **no third-party runtime library**. Playback, canvas capture, IndexedDB, file handling, drawing input, and export use browser APIs.
+Video Review Notes v1.0.1 uses **no third-party runtime library**. Playback, canvas capture, IndexedDB, file handling, drawing input, and export use browser APIs.
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the dependency notice.
 

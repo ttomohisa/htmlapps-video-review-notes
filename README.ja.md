@@ -26,6 +26,8 @@ GitHub Pagesから最初のHTMLを読み込んだ後、動画再生、レビュ�
 - **クラウドレビューサービスなしで受け渡し** — 単一HTMLレビュー、Markdown、UTF-8 CSV、レビューJSONへ書き出したり、表示中のレビューだけをコピーできます。
 - **完全ローカル処理の単一HTML** — runtime CDN、analytics、telemetry、外部APIを使わず、CSPは `connect-src 'none'` です。
 
+ヘッダーのEN / JAで表示言語を切り替えても、動画、レビュー、フィルター、入力中の下書きは保持されます。ツールチップは切り替え先を示し、隣のヘルプも選択中の言語で表示されます。
+
 ## すぐに使う
 
 ### Webで使う
@@ -213,7 +215,7 @@ Safari / Firefoxも、利用するメディアAPI、Fullscreen、IndexedDB、Fil
 
 ## 使用ライブラリ
 
-Video Review Notes v1.0.0では**第三者runtimeライブラリを使用していません**。動画再生、Canvas取得、IndexedDB、ファイル操作、描画入力、書き出しにはブラウザーAPIを使用します。
+Video Review Notes v1.0.1では**第三者runtimeライブラリを使用していません**。動画再生、Canvas取得、IndexedDB、ファイル操作、描画入力、書き出しにはブラウザーAPIを使用します。
 
 詳細は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を確認してください。
 
