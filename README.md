@@ -27,7 +27,7 @@ GitHub Pages delivers the initial HTML. After it loads, video playback, review e
 - **Hand off the result without a cloud review service** — Export a standalone review HTML, Markdown, UTF-8 CSV, review JSON, or copy only the currently visible reviews as text.
 - **Private, single-HTML operation** — No runtime CDN, analytics, telemetry, or external API. Runtime CSP uses `connect-src 'none'`.
 
-The header’s EN / JA button switches languages without clearing your video, reviews, filters, or current draft. Its tooltip names the target language; the adjacent Help button follows the selected language.
+The header’s EN / JA button switches languages without clearing your video, reviews, filters, or current draft. Its tooltip names the target language; the adjacent Help button follows the selected language. The title and version wrap on narrow screens, and open dialogs keep the background page stationary.
 
 ## Quick start
 

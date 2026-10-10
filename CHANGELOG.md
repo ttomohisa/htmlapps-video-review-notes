@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3 - 2026-10-10
+
+- Keep the page behind native dialogs stationary while retaining Help body scrolling.
+- Keep the English title, version and header controls visible at narrow widths.
+- Add responsive layout contracts without changing review or export behavior.
+- Restore keyboard continuation after Add / Save and Resolve / Reopen, with visible fallback controls and guards for existing focus and dialogs.
+
 ## 1.0.2 - 2026-10-09
 
 - Normalize icon brand color and exact 25% background corner radii without changing artwork.

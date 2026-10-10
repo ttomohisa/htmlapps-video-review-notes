@@ -34,6 +34,7 @@
     }
     * { box-sizing: border-box; }
     html { min-width: 320px; background: var(--page); }
+    html:has(dialog:modal), body:has(dialog:modal) { overflow: hidden; }
     body { margin: 0; color: var(--text); background: var(--page); font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; }
     button, input, select { font: inherit; }
     button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
@@ -486,6 +487,11 @@
       .app-confirm-actions { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
       .app-confirm-button { min-height: 48px; font-size: 14px; }
     }
+    @media (max-width: 420px) {
+      .brand-name { display: flex; flex-wrap: wrap; gap: 2px 7px; white-space: normal; overflow: visible; }
+      .version-badge { flex: 0 0 auto; margin-left: 0; white-space: nowrap; }
+      .header-actions { flex-shrink: 0; }
+    }
     @media (max-width: 390px) {
       .file-name { max-width: 178px; }
       .small-button .wide-label { display: none; }
@@ -514,7 +520,7 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMWUzIDFlMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMWUzIiBoZWlnaHQ9IjFlMyIgcng9IjI1MCIgZmlsbD0iIzE2NjI0ZiIvPjxwYXRoIGQ9Im04MzMgNDk2aC00M2MtMS0xNy0wLjItMzQtMC4yLTUxLTAuMDItMzItMC4wOC02NC0wLjA0LTk2IDAuMDEtOC0wLjAyLTE1LTAuMDMtMjMtMC4wMS0xMyAxLTI1LTktMzUtMTAtMTAtMjUtOC0zOC04LTI3LTAuMDEtNTUtMC4wMy04MiAwLjAxLTExMyAwLjItMjI1LTAuMy0zMzgtMC4wNC0zMCAwLjA3LTYwLTAuMDUtOTAtMC4wMS0xNSAwLjAyLTMwLTItNDAgMTItOSAxMi02IDMzLTYgNDctMC4wMiAzNyAwLjEgNzUgMC4wMSAxMTItMC4xIDU1IDAuMDIgMTEwLTAuMDMgMTY1LTAuMDEgMTIgMC4wMyAyNCAwLjAxIDM2LTAuMDEgMTEtMC43IDIwIDYgMjkgOSAxMiAyMiAxMSAzNSAxMSAyMC0wLjA0IDQxLTAuMDIgNjEgMC4wMSA2MiAwLjEgMTIzLTAuMSAxODUgMCAyMCAwLjA1IDQwLTAuMDMgNjAtMC4wMSAxMCAwIDIxLTAuNiAzMSAwLjN2NDJjLTExIDItMjMgMC40LTM0IDAuNC0yMiAwLjAyLTQzIDAuMDMtNjUgMC4wMi02OC0wLjA1LTEzNi0wLjItMjA0LTAuMDEtMTIgMC4wMy0yMyAwLjAzLTM1IDAtOS0wLjAyLTE5IDAuNi0yOC0wLjgtMTgtMy0zNS0xNC00NS0yOC0xNi0yMy0xMS01NC0xMS04MSAwLjA1LTU3IDAuMy0xMTMtMC4wMS0xNzAtMC4yLTQxLTAuMDctODItMC4wMi0xMjMgMC4wMy0yNC0yLTQ4IDEyLTY4IDExLTE2IDMwLTI2IDQ5LTI4IDExLTEgMjItMC4zIDMzLTAuNCAyMi0wLjAzIDQzIDAuMDMgNjUgMC4wMyAxMjMtMC4wNCAyNDYgMC4zIDM2OSAwLjEgMjQtMC4wMiA0OC0wLjA2IDcyIDAuMDEgMjggMC4wOSA0OS0yIDcwIDE5IDIzIDIyIDIwIDUxIDIwIDgwLTAuMSAzMy0wLjIgNjUtMC4wMiA5OCAwLjA4IDIwIDEgNDAtMC4zIDYwem0tNDMxLTE0MWMxMy0zIDMxIDExIDQyIDE4IDMzIDE5IDY2IDM5IDk5IDU3IDUgMyAxMCA2IDE0IDkgOSA1IDIxIDEwIDIxIDIyIDAuMDQgNC0xIDktNCAxMi01IDYtMjQgMTUtMzEgMTktMzEgMTctNjIgMzUtOTMgNTItOCA1LTE3IDktMjUgMTQtNiAzLTExIDctMTcgNy0yMiAwLjYtMTgtMjMtMTgtMzgtMC4wNi00MiAwLjEtODMgMC0xMjUtMC4wMi02IDAuMDQtMTIgMC4wNC0xOC0wLjAxLTExLTAuNi0yNSAxMy0yOHptNDgzIDQxMGMxIDcgMC40IDE2IDAuNCAyMyAwLjAxIDE2IDIgMzMtMTEgNDUtMTQgMTItMzQgOS01MSA5LTQwLTAuMDctNzktMC4wOC0xMTktMC4wMi0yMSAwLjAzLTQxIDAuMDMtNjIgMC4wMy0xMyAwLjAxLTI1IDEtMzYtNy0xNy0xMi0xMy0zNS0xMy01MyAwLjAyLTQ1LTAuMDctODktMC4wMi0xMzQgMC4wMi0yNS0wLjA0LTUxLTAuMDEtNzYgMC4wMS0xMy0yLTI3IDctMzcgMTQtMTggNDAtMTMgNjEtMTMgNTMtMC4yIDEwNi0wLjAyIDE1OS0wLjAzIDIyIDAgNTAtNCA1OSAyMSAzIDggMiAxNiAyIDI0LTAuMDEgMyAwLjcgNy0wLjMgMTAtMSA0LTUgOC03IDExLTYgOS0xMiAxOS0xOSAyOC0xMSAxNi0yMiAzMy0zMyA1MC01IDctOSAxMy0xMyAyMC0zIDQtNiA3LTcgMTItNSAxMi01IDI2LTggMzktMiAxMS00IDIzLTYgMzQtMSA2LTMgMTMtMiAxOSAyIDExIDEyIDE5IDIzIDE3IDgtMSAxNS03IDIxLTExIDEzLTcgMjUtMTQgMzctMjEgNi00IDEzLTggMjAtMTB6bTg5LTE2My01Ni00MGMyLTQgNS04IDgtMTIgNi05IDEzLTI0IDI1LTI2IDEwLTIgMTcgNiAyNCAxMSA3IDUgMTggMTAgMjEgMTggNyAxNC00IDI1LTEyIDM2LTMgNS02IDExLTExIDE0em0tNjYtMjUgNTYgNDBjLTI5IDQzLTU5IDg2LTg4IDEyOC0xOS0xMy0zNy0yNi01Ni0zOSAyOS00MyA1OS04NiA4OC0xMzB6bS0yNjQgMmMtMTUgNC0xNSAyNi0wLjA3IDMwIDUgMSAxMSAwLjYgMTYgMC42IDEwIDAuMDIgMTkgMC4wMSAyOSAwLjAxIDMxIDAgNjMgMCA5NC0wLjAxIDEzLTAuMDEgMzkgNSA0MS0xNCAyLTIyLTI1LTE4LTM5LTE4LTMyLTAuMDMtNjMgMC4wNi05NSAwLjAyLTEwLTAuMDItMjAtMC4wNC0zMC0wLjAxLTUgMC4wMi0xMS0wLjctMTYgMC41em0tMjk1IDQyaDIxOHYyM2gtMjE4Yy0yIDQtNCA4LTcgMTEtMTIgMTQtMzIgMTctNDcgNy03LTUtOS0xMS0xMy0xNy0xNi0wLjctMzMtMC4xLTQ5LTAuMS04LTAuMDEtMTYtMy0xNi0xMiAwLjMtOSA5LTExIDE3LTExIDEwIDAuMDIgMjAtMC4wMiAzMCAwIDYgMC4wMSAxMiAwLjUgMTgtMC4zIDMtNiA2LTExIDExLTE2IDEzLTExIDMzLTExIDQ2IDAuNiA1IDQgNyAxMCAxMCAxNXptMjk1IDI3Yy0xNSA0LTE1IDI2IDAuMDcgMzAgOCAyIDI1IDAuNSAzNSAwLjUgMjQgMC4wNSA0OSAwLjAyIDczIDAuMDMgMTEgMCAyOSAyIDMwLTE0IDItMTgtMTYtMTgtMjgtMTgtMjUgMC4wNC00OSAwLjA2LTc0IDAuMDMtOS0wLjAxLTI4LTEtMzYgMC41em00IDY4Yy0xNyAwLjgtMjIgMjQtNiAzMCA4IDMgMjQgMSAzMyAxIDIzIDAuMDMgNDctMC4xIDcwLTAuMDEgMTEgMC4wNSAyNiAwLjkgMjctMTQgMC4yLTMtMC41LTYtMi04LTQtMTAtMTYtOS0yNi05LTIwIDAuMDctNDEgMC4yLTYxIDAuMDQtMTItMC4wOC0yNC0wLjYtMzYtMC4wMXptMTY2IDljMTEgNyAyMiAxNSAzMiAyMiA0IDMgMTAgNSAxMiAxMC0xMiA3LTI1IDE0LTM3IDIxLTQgMi0xMSA4LTE1IDctMy00LTAuNS0xMSAwLjQtMTYgMi0xMCAzLTE5IDUtMjkgMC44LTUgMS0xMCAzLTE1eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPgo=" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.2</span></p>
+          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.3</span></p>
           <p class="brand-meta" data-i18n="brandMeta">時刻付きレビュー · 区間レビュー · 描画注釈</p>
         </div>
       </div>
@@ -900,7 +906,7 @@
     </div>
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
-      <p data-i18n="helpLanguage">右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。</p>
+      <p data-i18n="helpLanguage">右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。 ダイアログを開いている間は背面のページを固定し、閉じると通常のスクロールに戻ります。</p>
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol>
         <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。</li>
@@ -914,6 +920,7 @@
         <li data-i18n="helpShortcut1">Space: 再生 / 一時停止</li>
         <li data-i18n="helpShortcut2">← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。</li>
         <li data-i18n="helpShortcut3">F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。</li>
+        <li data-i18n="helpReviewFocus">追加・保存後はコメント欄、対応状態の変更後は同じレビューの操作ボタンからキーボード操作を続けられます。絞り込みでレビューが隠れたときは、コメント欄または選択中の状態フィルターへ移ります。</li>
       </ul>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。動画本体はブラウザー保存領域にも保存しません。</p>
@@ -931,8 +938,8 @@
     (() => {
       'use strict';
 
-      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Video Review Notes","nameJa":"動画レビュー付箋","slug":"video-review-notes","version":"1.0.2","description":"Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.","descriptionJa":"動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-video-review-notes"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-09T08:45:02.7603838Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.2"},"dependencies":[]};
+      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Video Review Notes","nameJa":"動画レビュー付箋","slug":"video-review-notes","version":"1.0.3","description":"Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.","descriptionJa":"動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-video-review-notes"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-10T23:11:03.105Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.3"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -1022,10 +1029,10 @@
           reviewTimeSet: 'レビュー時刻を現在位置に変更しました', reviewFocusHint: 'コメント入力を開始すると動画を一時停止します。', timelineTitle: 'レビュータイムライン', timelineAriaLabel: 'レビュー位置', timelineShown: '{count}件表示', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start}から{end} {status}', filterTypeLabel: '種類', filterStatusLabel: '状態', filterAll: 'すべて',
           shortcutTitle: 'キーボード操作', shortcutBody: 'プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。', shortcutPlay: '再生 / 一時停止', shortcut5: '5秒移動', shortcut10: '10秒移動', shortcutFullscreen: '全画面', shortcutReview: 'レビュー入力',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '動画とレビューは端末内で処理されます',
-          helpLanguage: '右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。',
+          helpLanguage: '右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。 ダイアログを開いている間は背面のページを固定し、閉じると通常のスクロールに戻ります。',
           helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
           helpDuplicate: '「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。', helpFrameOwnership: 'レビューの開始時刻を変えるとフレームを取り直し、以前の画像への注釈を消します。取得できない場合もコメントは保存できます。「元に戻す」は同じ作業内でのみ使えます。',
-          helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
+          helpReviewFocus: '追加・保存後はコメント欄、対応状態の変更後は同じレビューの操作ボタンからキーボード操作を続けられます。絞り込みでレビューが隠れたときは、コメント欄または選択中の状態フィルターへ移ります。', helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
           helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。レビュー・縮小サムネイル・注釈は自動保存のためブラウザー内のIndexedDBへ保存されますが、元動画そのものは保存しません。',
           helpNotesTitle: '注意事項', helpNoteCodec: '再生可否は拡張子だけでなく、動画内部の映像・音声形式とブラウザーの対応状況で決まります。', helpNoteReload: 'レビュー・サムネイル・注釈はブラウザー内へ自動保存されます。元動画そのものは保存しないため、再開時は同じ動画を選び直してください。', helpNoteMilestone: '「表示中のレビューをコピー」は種類・状態のフィルターに一致するレビューだけを時刻順でコピーします。全件をコピーするにはフィルターを解除してください。HTML・Markdown・CSV・レビューJSONの保存とバックアップは常に全件が対象です。共有用HTMLに元動画は含まれません。',
           savedProjectTitle: '前回のレビューがあります', resumeProject: '動画を選択して再開', saveProjectJson: 'レビューJSONを保存', loadProjectJson: 'レビューJSONを読み込む', discardSavedProject: '保存済み作業を削除', resetProject: '作業をリセット', autoSaveWaiting: 'レビューを追加すると自動保存します', autoSaveSaving: '自動保存中…', autoSaveSaved: '自動保存済み', autoSaveFailed: '自動保存できません。JSONを保存してください。', projectSaved: 'レビューJSONを保存しました', projectLoaded: 'レビューJSONを読み込みました。元動画を選択してください。', projectInvalid: 'このレビューJSONを読み込めませんでした。ファイルが壊れているか、対応していない形式です。', projectDeleted: '保存済み作業を削除しました', projectReset: 'レビューと保存済み作業をリセットしました', resetProjectTitle: '作業をリセットしますか？', resetProjectMessage: 'この動画のレビュー、サムネイル、注釈とブラウザー内の自動保存を削除します。動画は開いたままです。', resetProjectConfirm: '作業をリセット', discardProjectTitle: '保存済み作業を削除しますか？', discardProjectMessage: 'ブラウザー内に保存したレビュー、サムネイル、注釈を削除します。元動画は保存されていません。', discardProjectConfirm: '削除', replaceProjectTitle: '現在の作業を置き換えますか？', replaceProjectMessage: '読み込んだレビューJSONで現在のレビューを置き換えます。必要なら先にレビューJSONを保存してください。', replaceProjectConfirm: '読み込む', relinkMismatchTitle: '前回とは異なる動画の可能性があります', relinkMismatchMessage: 'ファイル名やサイズが保存済み作業と一致しません。この動画でレビューを開きますか？', relinkMismatchConfirm: 'この動画で開く', savedProjectDetail: '{count}件のレビュー · 最終保存 {savedAt}', savedProjectNoDate: '{count}件のレビュー', projectSchemaUnsupported: 'このレビューJSONは新しい形式のため、このバージョンでは読み込めません。',
@@ -1053,10 +1060,10 @@
           reviewTimeSet: 'Review time updated to the current position', reviewFocusHint: 'Starting a comment pauses playback.', timelineTitle: 'Review timeline', timelineAriaLabel: 'Review positions', timelineShown: '{count} shown', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start} to {end} {status}', filterTypeLabel: 'Type', filterStatusLabel: 'Status', filterAll: 'All',
           shortcutTitle: 'Keyboard controls', shortcutBody: 'Use the keyboard to move through the video while reviewing.', shortcutPlay: 'Play / pause', shortcut5: 'Move 5 sec', shortcut10: 'Move 10 sec', shortcutFullscreen: 'Fullscreen', shortcutReview: 'Start review',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Video and reviews are processed on this device',
-          helpLanguage: 'Use EN / JA in the header to switch languages. Your video, reviews, filters, and current draft are preserved.',
+          helpLanguage: 'Use EN / JA in the header to switch languages. Your video, reviews, filters, and current draft are preserved. Dialogs keep the background page stationary; closing them restores normal page scrolling.',
           helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
           helpDuplicate: 'Duplicate review creates an independent note at the same moment or range, keeping its status, comment, image, and annotations. Your current draft is preserved. Undo removes only the new duplicate.', helpFrameOwnership: 'Changing the review start refreshes its frame and clears annotations from the old image. If capture fails, you can still save the comment. Undo is available only within the same workspace.',
-          helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
+          helpReviewFocus: 'After adding or saving, keyboard focus continues in Comment. After resolving or reopening, it stays on that review’s status button. If a filter hides the review, focus moves to Comment or the selected status filter.', helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
           helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'The selected video is played from a local File / Blob URL and is not uploaded. Reviews, resized thumbnails, and annotations are stored in this browser’s IndexedDB for autosave, but the source video itself is never stored.',
           helpNotesTitle: 'Notes', helpNoteCodec: 'Playback support depends on the codecs inside the video as well as the filename extension and browser.', helpNoteReload: 'Reviews, thumbnails, and annotations are autosaved in this browser. The source video itself is not stored, so select the same video again when resuming.', helpNoteMilestone: 'Copy visible reviews copies only the reviews matching the type/status filters, in list order. Clear filters to copy all reviews. HTML, Markdown, CSV, review JSON, and project backups always include all reviews. The source video is not included in the shareable HTML.',
           savedProjectTitle: 'A previous review project is available', resumeProject: 'Select video to resume', saveProjectJson: 'Save review JSON', loadProjectJson: 'Load review JSON', discardSavedProject: 'Delete saved project', resetProject: 'Reset project', autoSaveWaiting: 'Reviews will autosave after you add one', autoSaveSaving: 'Autosaving…', autoSaveSaved: 'Autosaved', autoSaveFailed: 'Autosave failed. Save a review JSON backup.', projectSaved: 'Review JSON saved', projectLoaded: 'Review JSON loaded. Select the source video to continue.', projectInvalid: 'Could not load this review JSON. It may be damaged or use an unsupported format.', projectDeleted: 'Saved project deleted', projectReset: 'Reviews and saved project reset', resetProjectTitle: 'Reset this project?', resetProjectMessage: 'This removes reviews, thumbnails, annotations, and the autosaved project from this browser. The video stays open.', resetProjectConfirm: 'Reset project', discardProjectTitle: 'Delete the saved project?', discardProjectMessage: 'This removes the reviews, thumbnails, and annotations stored in this browser. The source video itself is not stored.', discardProjectConfirm: 'Delete', replaceProjectTitle: 'Replace the current project?', replaceProjectMessage: 'The loaded review JSON will replace the current reviews. Save a review JSON first if you need a backup.', replaceProjectConfirm: 'Load project', relinkMismatchTitle: 'This may be a different video', relinkMismatchMessage: 'The filename or size does not match the saved project. Open these reviews with this video anyway?', relinkMismatchConfirm: 'Open with this video', savedProjectDetail: '{count} reviews · last saved {savedAt}', savedProjectNoDate: '{count} reviews', projectSchemaUnsupported: 'This review JSON uses a newer schema and cannot be opened by this version.',
@@ -1910,6 +1917,20 @@
         if (scrollCard) card?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (focusCard) card?.focus({ preventScroll: true });
       }
+      function restoreReviewActionFocus(reviewId = '') {
+        // A disabled Save or rebuilt card can leave focus on the page body.
+        // Do not interrupt another control or a dialog that took focus meanwhile.
+        const available = element => element instanceof HTMLElement && element.isConnected &&
+          !element.matches(':disabled') && !element.closest('[hidden], [inert]') &&
+          element.getClientRects().length > 0 && !['hidden', 'collapse'].includes(getComputedStyle(element).visibility);
+        if (document.querySelector('dialog[open]')) return;
+        const active = document.activeElement;
+        if (active !== document.body && active !== document.documentElement && available(active)) return;
+        const action = reviewId ? document.querySelector(`[data-review-id="${CSS.escape(reviewId)}"] [data-review-action="status"]`) : null;
+        const target = [action, reviewComment, document.querySelector('[data-filter-status][aria-pressed="true"]')].find(available);
+        // Native focus also reveals a fallback above or below the current viewport.
+        target?.focus();
+      }
       function renderReviews() {
         const list = $('#reviewList');
         const sorted = getSortedReviews();
@@ -1950,8 +1971,8 @@
           }
           const status = document.createElement('div'); status.className = 'review-card-status'; status.textContent = reviewStatusLabel(review.status);
           const actions = document.createElement('div'); actions.className = 'review-card-actions';
-          const statusButton = document.createElement('button'); statusButton.type = 'button'; statusButton.className = 'review-action'; statusButton.textContent = t(review.status === 'resolved' ? 'markOpen' : 'markResolved');
-          statusButton.addEventListener('click', event => { event.stopPropagation(); review.status = review.status === 'resolved' ? 'open' : 'resolved'; review.updatedAt = new Date().toISOString(); if (reviewStatusFilter !== 'all' && review.status !== reviewStatusFilter) activeReviewId = ''; renderReviews(); scheduleAutoSave(); announce(t('reviewStatusChanged')); });
+          const statusButton = document.createElement('button'); statusButton.type = 'button'; statusButton.className = 'review-action'; statusButton.dataset.reviewAction = 'status'; statusButton.textContent = t(review.status === 'resolved' ? 'markOpen' : 'markResolved');
+          statusButton.addEventListener('click', event => { event.stopPropagation(); review.status = review.status === 'resolved' ? 'open' : 'resolved'; review.updatedAt = new Date().toISOString(); if (reviewStatusFilter !== 'all' && review.status !== reviewStatusFilter) activeReviewId = ''; renderReviews(); scheduleAutoSave(); announce(t('reviewStatusChanged')); restoreReviewActionFocus(review.id); });
           const editButton = document.createElement('button'); editButton.type = 'button'; editButton.className = 'review-action'; editButton.textContent = t('editReview');
           editButton.addEventListener('click', event => { event.stopPropagation(); beginEditReview(review.id); });
           const deleteButton = document.createElement('button'); deleteButton.type = 'button'; deleteButton.className = 'review-action danger'; deleteButton.textContent = t('deleteReview');
@@ -2032,6 +2053,7 @@
         const message = hasFrame ? savedMessage : `${savedMessage} ${t('annotationCaptureFailed')}`;
         AppToast.show({ message, ...(hasFrame ? {} : { tone: 'warning' }) }); announce(message);
         editingReviewId = ''; draftReviewTime = null; selectedReviewMode = 'point'; draftRangeStart = null; draftRangeEnd = null; selectedReviewType = 'fix'; reviewComment.value = ''; resetDraftFrame(); updateReviewEditor(); renderReviews(); scheduleAutoSave();
+        restoreReviewActionFocus();
       }
 
       function revokeCurrentObjectUrl() {
