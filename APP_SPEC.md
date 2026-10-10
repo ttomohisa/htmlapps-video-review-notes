@@ -5,6 +5,7 @@
 - Lock background page scrolling only while a native modal is open; preserve the existing fixed Help header and inner scroll body.
 - At narrow widths, wrap the English title and version without shrinking the language/Help controls.
 - Preserve review data, annotations, exports, privacy shield and media behavior.
+- After Add review / Save changes disables its button, continue keyboard focus in the visible Comment field. Resolve / Reopen returns focus to that review’s rebuilt status action; if filtering removes the card, use Comment, then the selected status filter. Allow native focus to reveal an offscreen continuation target. Skip unavailable targets and preserve any meaningful existing focus or open dialog.
 
 ## v1.0.2 — Icon normalization
 

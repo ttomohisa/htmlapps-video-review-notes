@@ -55,6 +55,8 @@ function fixture() {
       }
     }
   };
+  // Focus behavior is exercised with the production helper in review-action-focus.test.cjs.
+  c.restoreReviewActionFocus = () => {};
   vm.createContext(c);
   const stateStart = source.indexOf('      let draftThumbnail =');
   const stateEnd = source.indexOf('      let detachedProject =', stateStart);
