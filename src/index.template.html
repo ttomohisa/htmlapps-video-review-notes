@@ -34,6 +34,7 @@
     }
     * { box-sizing: border-box; }
     html { min-width: 320px; background: var(--page); }
+    html:has(dialog:modal), body:has(dialog:modal) { overflow: hidden; }
     body { margin: 0; color: var(--text); background: var(--page); font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; }
     button, input, select { font: inherit; }
     button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
@@ -486,6 +487,11 @@
       .app-confirm-actions { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
       .app-confirm-button { min-height: 48px; font-size: 14px; }
     }
+    @media (max-width: 420px) {
+      .brand-name { display: flex; flex-wrap: wrap; gap: 2px 7px; white-space: normal; overflow: visible; }
+      .version-badge { flex: 0 0 auto; margin-left: 0; white-space: nowrap; }
+      .header-actions { flex-shrink: 0; }
+    }
     @media (max-width: 390px) {
       .file-name { max-width: 178px; }
       .small-button .wide-label { display: none; }
@@ -514,7 +520,7 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.2</span></p>
+          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.3</span></p>
           <p class="brand-meta" data-i18n="brandMeta">時刻付きレビュー · 区間レビュー · 描画注釈</p>
         </div>
       </div>
@@ -900,7 +906,7 @@
     </div>
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
-      <p data-i18n="helpLanguage">右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。</p>
+      <p data-i18n="helpLanguage">右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。 ダイアログを開いている間は背面のページを固定し、閉じると通常のスクロールに戻ります。</p>
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol>
         <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。</li>
@@ -1022,7 +1028,7 @@
           reviewTimeSet: 'レビュー時刻を現在位置に変更しました', reviewFocusHint: 'コメント入力を開始すると動画を一時停止します。', timelineTitle: 'レビュータイムライン', timelineAriaLabel: 'レビュー位置', timelineShown: '{count}件表示', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start}から{end} {status}', filterTypeLabel: '種類', filterStatusLabel: '状態', filterAll: 'すべて',
           shortcutTitle: 'キーボード操作', shortcutBody: 'プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。', shortcutPlay: '再生 / 一時停止', shortcut5: '5秒移動', shortcut10: '10秒移動', shortcutFullscreen: '全画面', shortcutReview: 'レビュー入力',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '動画とレビューは端末内で処理されます',
-          helpLanguage: '右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。',
+          helpLanguage: '右上のEN / JAで表示言語を切り替えます。動画、レビュー、フィルター、入力中の下書きは保持されます。 ダイアログを開いている間は背面のページを固定し、閉じると通常のスクロールに戻ります。',
           helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
           helpDuplicate: '「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。', helpFrameOwnership: 'レビューの開始時刻を変えるとフレームを取り直し、以前の画像への注釈を消します。取得できない場合もコメントは保存できます。「元に戻す」は同じ作業内でのみ使えます。',
           helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
@@ -1053,7 +1059,7 @@
           reviewTimeSet: 'Review time updated to the current position', reviewFocusHint: 'Starting a comment pauses playback.', timelineTitle: 'Review timeline', timelineAriaLabel: 'Review positions', timelineShown: '{count} shown', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start} to {end} {status}', filterTypeLabel: 'Type', filterStatusLabel: 'Status', filterAll: 'All',
           shortcutTitle: 'Keyboard controls', shortcutBody: 'Use the keyboard to move through the video while reviewing.', shortcutPlay: 'Play / pause', shortcut5: 'Move 5 sec', shortcut10: 'Move 10 sec', shortcutFullscreen: 'Fullscreen', shortcutReview: 'Start review',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Video and reviews are processed on this device',
-          helpLanguage: 'Use EN / JA in the header to switch languages. Your video, reviews, filters, and current draft are preserved.',
+          helpLanguage: 'Use EN / JA in the header to switch languages. Your video, reviews, filters, and current draft are preserved. Dialogs keep the background page stationary; closing them restores normal page scrolling.',
           helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
           helpDuplicate: 'Duplicate review creates an independent note at the same moment or range, keeping its status, comment, image, and annotations. Your current draft is preserved. Undo removes only the new duplicate.', helpFrameOwnership: 'Changing the review start refreshes its frame and clears annotations from the old image. If capture fails, you can still save the comment. Undo is available only within the same workspace.',
           helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',

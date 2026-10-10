@@ -3,7 +3,7 @@
   "name": "Video Review Notes",
   "nameJa": "動画レビュー付箋",
   "slug": "video-review-notes",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.",
   "descriptionJa": "動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。",
   "defaultLanguage": "auto",

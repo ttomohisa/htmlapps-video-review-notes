@@ -1,5 +1,11 @@
 # APP_SPEC.md
 
+## v1.0.3 — Responsive modal and header audit
+
+- Lock background page scrolling only while a native modal is open; preserve the existing fixed Help header and inner scroll body.
+- At narrow widths, wrap the English title and version without shrinking the language/Help controls.
+- Preserve review data, annotations, exports, privacy shield and media behavior.
+
 ## v1.0.2 — Icon normalization
 
 - Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
@@ -10,7 +16,7 @@
 - **Name:** Video Review Notes
 - **Japanese name:** 動画レビュー付箋
 - **Repository:** `ttomohisa/htmlapps-video-review-notes`
-- **Current development version:** `v1.0.2`
+- **Current development version:** `v1.0.3`
 - **One-sentence purpose:** Open a local video, attach point or range reviews with captured frame annotations, autosave the review project locally, and export portable review deliverables without uploading or embedding the source video.
 - **Primary users:** People reviewing videos before publication or handoff, including editors, reviewers, internal teams, educators, and creators.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
