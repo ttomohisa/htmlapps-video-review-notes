@@ -164,7 +164,7 @@ test('saving an edit that no longer matches the type filter continues in Comment
   const f = fixture(); f.c.setReviewFilter('type', 'fix'); f.c.editingReviewId = 'first'; f.c.selectedReviewType = 'note'; f.c.reviewComment.value = 'Changed type'; f.c.updateReviewEditor(); f.c.saveReviewButton.focus(); await f.c.saveReviewButton.click();
   assert.equal(f.card(), undefined); assert.equal(f.c.reviews[0].type, 'note'); assert.equal(f.c.reviewTypeFilter, 'fix'); assert.equal(f.document.activeElement, f.c.reviewComment);
 });
-test('the bilingual Help includes keyboard continuation guidance', () => {
-  assert.match(source, /<li data-i18n="helpReviewFocus">/);
-  for (const language of ['ja', 'en']) { const { c } = fixture([], language); assert.notEqual(c.t('helpReviewFocus'), 'helpReviewFocus'); assert.ok(c.t('helpReviewFocus').length > 30); }
+test('bilingual Help omits implementation-specific focus commentary', () => {
+  assert.doesNotMatch(source, /<li data-i18n="helpReviewFocus">/);
+  for (const language of ['ja', 'en']) { const { c } = fixture([], language); assert.equal(c.t('helpReviewFocus'), 'helpReviewFocus'); }
 });
