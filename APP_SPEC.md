@@ -276,3 +276,10 @@ The help dialog must explain the actual stable release, not future features as i
 - autosave failure fallback behavior;
 - how to set an output filename and export Standalone Review HTML / Markdown / CSV / JSON or copy reviews;
 - that the Standalone Review HTML contains review thumbnails/annotations but not the source video.
+
+## Phone footer and Help build information
+
+- Hide only the informational page footer at the existing 620px phone layout breakpoint; preserve media controls, mobile navigation, and their spacing.
+- Keep existing canonical local-processing labels and the header version unchanged.
+- Move existing build details, with their IDs, populated values, and collapsed/expanded interaction, to the final quiet section of Help. Preserve phone availability and keyboard activation without dismissing Help.
+- Generated reports/forms and their footers are unchanged.
