@@ -1,0 +1,6 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const html=fs.readFileSync(process.env.REVIEW_APP_SOURCE||process.env.FORM_BUILDER_HTML||process.env.APP_HTML||path.join(__dirname,'../src/index.template.html'),'utf8');
+test('hide only the informational page footer at the existing phone breakpoint',()=>{assert.ok(html.includes('@media (max-width: 620px) { body > footer { display: none; } }'));assert.match(html,/localBadge\s*:\s*'Fully local processing'/);});
+test('build metadata stays unique, populated, and last in Help',()=>{const h=html.match(/<dialog id="helpDialog"[^]*?<\/dialog>/)[0];assert.match(h,/<details class="[^"]*help-build[^"]*">[^]*?<\/details>\s*<\/div>\s*<\/dialog>$/);for(const id of ['buildVersion','builtAt','dependencyCount']){assert.equal((html.match(new RegExp('id="'+id+'"','g'))||[]).length,1);assert.ok(h.includes('id="'+id+'"'));assert.match(html,new RegExp("\\$\\('#"+id+"'\\)\\.textContent\\s*="));}assert.ok(html.includes('#helpDialog .help-build'));});
+test('keyboard activation inside Help is not mistaken for backdrop click',()=>{assert.match(html,/helpDialog\.addEventListener\('click',\s*event\s*=>\s*\{\s*if\s*\(event\.target\s*!==\s*helpDialog\)\s*return;/);});

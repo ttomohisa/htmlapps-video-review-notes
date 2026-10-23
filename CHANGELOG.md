@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Hide the phone informational footer and place existing build details at the end of Help, preserving keyboard access and functional controls.
+
 ## 1.0.3 - 2026-10-10
 
 - Keep the page behind native dialogs stationary while retaining Help body scrolling.

@@ -512,6 +512,10 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
+    @media (max-width: 620px) { body > footer { display: none; } }
+    #helpDialog .help-build { margin-top: 18px; color: var(--muted); font-size: 11px; box-shadow: none; }
+    #helpDialog .help-build summary { padding: 10px 12px; font: inherit; }
+    #helpDialog .help-build .build-item strong { font-size: 11px; font-weight: 400; }
   </style>
 </head>
 <body>
@@ -862,16 +866,7 @@
       </section>
     </div>
 
-    <section class="build-section">
-      <details class="build-details">
-        <summary data-i18n="buildInfo">ビルド情報</summary>
-        <div class="build-grid">
-          <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
-          <div class="build-item"><span data-i18n="builtAt">生成日時</span><strong id="builtAt">—</strong></div>
-          <div class="build-item"><span data-i18n="dependencies">内包依存数</span><strong id="dependencyCount">0</strong></div>
-        </div>
-      </details>
-    </section>
+
   </main>
 
   <footer><span id="footerName">Video Review Notes</span> · MIT License · <span data-i18n="footer">動画は端末内で処理されます</span></footer>
@@ -931,6 +926,14 @@
         <li data-i18n="helpNoteMilestone">「表示中のレビューをコピー」は種類・状態のフィルターに一致するレビューだけを時刻順でコピーします。全件をコピーするにはフィルターを解除してください。HTML・Markdown・CSV・レビューJSONの保存とバックアップは常に全件が対象です。共有用HTMLに元動画は含まれません。</li>
       </ul>
       <!-- APP:HELP:END -->
+      <details class="build-details help-build">
+        <summary data-i18n="buildInfo">ビルド情報</summary>
+        <div class="build-grid">
+          <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
+          <div class="build-item"><span data-i18n="builtAt">生成日時</span><strong id="builtAt">—</strong></div>
+          <div class="build-item"><span data-i18n="dependencies">内包依存数</span><strong id="dependencyCount">0</strong></div>
+        </div>
+      </details>
     </div>
   </dialog>
 
@@ -939,7 +942,7 @@
       'use strict';
 
       const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Video Review Notes","nameJa":"動画レビュー付箋","slug":"video-review-notes","version":"1.0.3","description":"Review local videos with point/range notes, colored frame annotations, browser autosave, JSON backup, and portable standalone HTML/Markdown/CSV exports without uploading the source video.","descriptionJa":"動画をアップロードせず、点・区間レビューと色付きフレーム注釈を残し、自動保存・JSONバックアップ・単一HTML/Markdown/CSV出力までブラウザー内で行うアプリです。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-video-review-notes"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-11T22:25:24.3647770Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.3"},"dependencies":[]};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-23T11:04:01.2282447Z","app":{"name":"Video Review Notes","slug":"video-review-notes","version":"1.0.3"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -2471,6 +2474,7 @@
       $('#helpButton').addEventListener('click', () => helpDialog.showModal());
       $('#closeHelpButton').addEventListener('click', () => helpDialog.close());
       helpDialog.addEventListener('click', event => {
+        if (event.target !== helpDialog) return;
         const rect = helpDialog.getBoundingClientRect();
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close();
       });

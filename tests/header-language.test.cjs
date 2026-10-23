@@ -23,7 +23,7 @@ class Element {
   append(...children) { this.children.push(...children); }
   replaceChildren(...children) { this.children = children; }
   addEventListener(type, callback) { this.listeners[type] = callback; }
-  click(event = {}) { this.listeners.click?.(event); }
+  click(event = {}) { this.listeners.click?.({ target: this, ...event }); }
   showModal() { this.open = true; }
   close() { this.open = false; }
   getBoundingClientRect() { return { left: 10, top: 10, right: 100, bottom: 100 }; }
@@ -88,6 +88,7 @@ for (const language of ['ja', 'en']) {
     assert.equal($('#versionBadge').textContent, `v${config.version}`); assert.equal($('#buildVersion').textContent, config.version);
     $('#helpButton').click(); assert.equal($('#helpDialog').open, true);
     $('#helpDialog').click({ clientX: 20, clientY: 20 }); assert.equal($('#helpDialog').open, true);
+    $('#helpDialog').click({ target: $('#buildSummary'), clientX: 0, clientY: 0 }); assert.equal($('#helpDialog').open, true, 'keyboard activation within Help is not a backdrop click');
     $('#closeHelpButton').click(); assert.equal($('#helpDialog').open, false);
     $('#helpButton').click(); $('#helpDialog').click({ clientX: 0, clientY: 0 }); assert.equal($('#helpDialog').open, false);
   });
