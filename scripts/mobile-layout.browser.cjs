@@ -6,7 +6,7 @@ const cfg={"slug": "video-review-notes", "bp": 620, "nav": null};
 const evidence=path.resolve('test-results/mobile-layout');
 async function bounds(locator,width,height,label,vertical=true){const r=await locator.boundingBox();assert.ok(r&&r.x>=-1&&r.x+r.width<=width+1&&(!vertical||(r.y>=-1&&r.y+r.height<=height+1)),label+': bounds '+JSON.stringify(r));}
 async function main(){fs.mkdirSync(evidence,{recursive:true});const browser=await chromium.launch();
-try{const cases=[];for(const language of ['ja','en'])for(const [width,height]of [[1360,900],[cfg.bp+1,568],[cfg.bp,568],[320,568],[393,252]])cases.push({file:'dist/index.html',language,width,height});cases.push({file:'dist/index.self-extract.html',language:'en',width:360,height:640},{file:cfg.slug+'.html',language:'ja',width:1360,height:900});
+try{const cases=[];for(const language of ['ja','en'])for(const [width,height]of [[1360,900],[cfg.bp+1,568],[cfg.bp,568],[320,568], [360,640], [390,844],[393,252]])cases.push({file:'dist/index.html',language,width,height});cases.push({file:'dist/index.self-extract.html',language:'en',width:360,height:640},{file:cfg.slug+'.html',language:'ja',width:1360,height:900});
 for(const {file,language,width,height}of cases){const context=await browser.newContext({viewport:{width,height},locale:language,reducedMotion:'reduce'}),page=await context.newPage(),errors=[],requests=[],label=`${file} ${language} ${width}x${height}`;
 page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
 try{await page.goto(pathToFileURL(path.resolve(file)).href);await page.locator('#helpButton').waitFor();
@@ -30,7 +30,11 @@ if(cfg.nav){assert.equal(await page.locator(cfg.nav).isVisible(),width<=cfg.bp,l
 for(const w of [cfg.bp+1,cfg.bp,width]){await page.setViewportSize({width:w,height});assert.equal(await page.locator('body > footer').isVisible(),w>cfg.bp,label+': footer resize');}
 await page.evaluate(()=>scrollTo({left:0,top:0,behavior:'instant'}));await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),label+': page width');if(cfg.nav&&width<=cfg.bp)await bounds(page.locator(cfg.nav),width,height,label);
-await page.locator('#helpButton').click();const body=page.locator('#helpDialog .dialog-body'),details=page.locator('#helpDialog details.help-build');
+await page.locator('#helpButton').click();
+        const visibleHelpText = await page.locator('#helpDialog').innerText();
+        assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
+        assert.match(visibleHelpText, language === 'ja' ? /動画、レビュー、フィルター、入力中の下書き/ : /video, reviews, filters, and current draft/i, label + ': useful adjacent Help guidance retained');
+const body=page.locator('#helpDialog .dialog-body'),details=page.locator('#helpDialog details.help-build');
 assert.equal(await page.locator('main #buildVersion').count(),0);assert.ok(await body.evaluate(e=>e.lastElementChild.matches('details.help-build')));
 for(const id of ['buildVersion','builtAt','dependencyCount'])assert.equal(await page.locator('#'+id).count(),1);
 assert.match(await page.locator('#builtAt').textContent(),/^\d{4}-\d\d-\d\dT/);assert.match(await page.locator('#dependencyCount').textContent(),/^\d+$/);

@@ -17,7 +17,7 @@
 - **Name:** Video Review Notes
 - **Japanese name:** 動画レビュー付箋
 - **Repository:** `ttomohisa/htmlapps-video-review-notes`
-- **Current development version:** `v1.0.3`
+- **Current development version:** `v1.0.4`
 - **One-sentence purpose:** Open a local video, attach point or range reviews with captured frame annotations, autosave the review project locally, and export portable review deliverables without uploading or embedding the source video.
 - **Primary users:** People reviewing videos before publication or handoff, including editors, reviewers, internal teams, educators, and creators.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
