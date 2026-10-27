@@ -60,6 +60,7 @@ for(const w of [cfg.bp+1,cfg.bp,width]){await page.setViewportSize({width:w,heig
 await page.evaluate(()=>scrollTo({left:0,top:0,behavior:'instant'}));await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),label+': page width');if(cfg.nav&&width<=cfg.bp)await bounds(page.locator(cfg.nav),width,height,label);
 await auditHeader(page, label);
+        if (file === 'dist/index.html' && [320,360,390,1360].includes(width)) await page.screenshot({path:path.join(evidence, `${language}-${width}-main.png`)});
         await page.locator('#helpButton').click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
