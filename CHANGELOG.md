@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.5 - 2026-11-13
 
 - Add file selection for loading, changing, and resuming videos.
 - Keep autosave pending after invalid file selection and preserve media when entering the back-forward cache.

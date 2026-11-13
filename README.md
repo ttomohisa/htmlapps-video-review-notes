@@ -53,7 +53,7 @@ The current app has no third-party runtime dependency, so no application library
 
 ## Usage
 
-1. Add one local video with **Choose video**, **Choose from files**, or drag and drop.
+1. Add one local video with **Choose video** or drag and drop. On a phone, use **Choose from files** if you cannot find it.
 2. Play the video and click the preview to pause at the moment you want to review. The main play button changes to a pause icon while playback is active.
 3. In **Review position**, choose **This moment** or **Range**. For a range, set **Start here**, move through the video, then set **End here**.
 4. Choose Fix / Question / Check / Good / Note and enter the required comment. The app clearly shows when the comment is still required before **Add review** becomes available.
