@@ -41,7 +41,7 @@ page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()
 try{await page.goto(pathToFileURL(path.resolve(file)).href);await page.locator('#helpButton').waitFor();
 await page.waitForFunction(()=>/^\d+\.\d+\.\d+$/.test(document.querySelector('#buildVersion').textContent));
 if(await page.locator('html').getAttribute('lang')!==language)await page.locator('#languageButton').click();
-assert.equal((await page.locator('[data-i18n="localBadge"]').textContent()).trim(),language==='ja'?'完全ローカル処理':'Fully local processing');await bounds(page.locator('.local-badge'),width,height,label,false);
+assert.equal((await page.locator('[data-i18n="localBadge"]').textContent()).trim(),language==='ja'?'完全ローカル処理':'Fully local processing');assert.equal(await page.locator('.local-badge').isVisible(),width>cfg.bp,label+': local badge visibility');if(width>cfg.bp)await bounds(page.locator('.local-badge'),width,height,label,false);
 assert.equal(await page.locator('body > footer').isVisible(),width>cfg.bp,label+': informational footer');
 if(cfg.slug==='video-review-notes'){
  // 659-byte, 96x64, one-second solid-green WebM generated with FFmpeg, no audio.

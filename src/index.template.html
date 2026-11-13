@@ -431,7 +431,7 @@
     @media (max-width: 620px) {
       .main { padding-top: 18px; padding-bottom: 38px; }
       .page-intro { display: block; }
-      .local-badge { margin-top: 11px; }
+      .local-badge { display: none; }
       .drop-zone { min-height: 330px; padding: 30px 18px; }
       .player-column { padding: 12px; }
       .player-topbar { align-items: flex-start; }
@@ -540,8 +540,8 @@
   <main class="main">
     <section class="page-intro" aria-labelledby="heroTitle">
       <div>
-        <h1 id="heroTitle" data-i18n="introTitle">動画の気になる場面に、時刻付きでレビューを残す。</h1>
-        <p data-i18n="lead">動画を再生しながら、気になる時点に「修正・質問・要確認・良い・メモ」のレビューを残せます。動画とレビュー内容は外部へ送信しません。</p>
+        <h1 id="heroTitle" data-i18n="introTitle">動画にレビューを書き込む</h1>
+        <p data-i18n="lead">動画の時刻や区間を指定して、コメントや画像への書き込みを残せます。動画とレビューは端末内で処理されます。</p>
       </div>
       <div class="local-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
@@ -1014,8 +1014,8 @@
       const translations = {
         ja: {
           brandMeta: '時刻付きレビュー · 区間レビュー · 描画注釈', helpTitle: '使い方と注意事項', languageSwitch: '英語に切り替え', close: '閉じる',
-          introTitle: '動画の気になる場面に、時刻付きでレビューを残す。',
-          lead: '動画を再生しながら、気になる時点に「修正・質問・要確認・良い・メモ」のレビューを残せます。動画とレビュー内容は外部へ送信しません。',
+          introTitle: '動画にレビューを書き込む',
+          lead: '動画の時刻や区間を指定して、コメントや画像への書き込みを残せます。動画とレビューは端末内で処理されます。',
           localBadge: '完全ローカル処理', dropTitle: '動画を追加', dropBody: '動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。',
           chooseVideo: '動画を選択', dropPrivacy: '選択した動画は外部サーバーへ送信されません。', loadErrorTitle: '動画を読み込めませんでした',
           loadingVideo: '動画を準備しています…', readyVideo: 'レビューできます', replaceVideo: '動画を変更', removeVideo: '外す',
@@ -1045,8 +1045,8 @@
         },
         en: {
           brandMeta: 'Time-based notes · Range reviews · Annotations', helpTitle: 'How to use & notes', languageSwitch: 'Switch to Japanese', close: 'Close',
-          introTitle: 'Leave time-based review notes on the moments that matter.',
-          lead: 'Play a local video and attach Fix, Question, Check, Good, or Note reviews to specific moments. The video and review text stay on this device.',
+          introTitle: 'Add review notes to a video',
+          lead: 'Add comments and frame annotations to a point or range in your video. Your video and reviews stay on this device.',
           localBadge: 'Fully local processing', dropTitle: 'Add a video', dropBody: 'Drop a video here or choose a file. The app opens videos that your browser can play.',
           chooseVideo: 'Choose video', dropPrivacy: 'The selected video is not uploaded to an external server.', loadErrorTitle: 'Could not load this video',
           loadingVideo: 'Preparing video…', readyVideo: 'Ready to review', replaceVideo: 'Change video', removeVideo: 'Remove',

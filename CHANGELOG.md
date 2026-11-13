@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Simplify the Japanese and English introduction and hide the local-processing badge on phones.
+
 - Fix portrait video clipping and annotation alignment in the editor and reports.
 - Warn before leaving while review changes are awaiting autosave.
 
