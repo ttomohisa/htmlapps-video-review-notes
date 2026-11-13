@@ -12,6 +12,11 @@
 - Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
 - Preserve artwork, padding, app behavior, and synchronized header/favicon/download/loader representations.
 
+## Unreleased fixes
+
+- Fit portrait and landscape video and annotation overlays to their actual display bounds.
+- Warn before navigation while review changes are awaiting browser storage; retain the warning if autosave fails.
+
 ## 1. Product identity
 
 - **Name:** Video Review Notes

@@ -118,3 +118,11 @@ test('replacement autosave is not lost while removal deletion settles', async ()
   assert.equal(c.currentFile.name,'Other.mp4');
   assert.equal(put.length,1,'new workspace review must eventually reach autosave');
 });
+test('pending review save is protected until the latest storage write finishes', async () => {
+  const {c}=fixture(notes); vm.runInContext([fn('scheduleAutoSave'),fn('persistProjectNow')].join('\n'),c);
+  c.window.setTimeout=()=>1; let done; c.projectDbPut=()=>new Promise(resolve=>{done=resolve});
+  c.scheduleAutoSave(); assert.equal(c.window.autosavePending,true);
+  const first=c.persistProjectNow(); await Promise.resolve(); c.scheduleAutoSave(); done(); await first;
+  assert.equal(c.window.autosavePending,true,'older save cannot clear newer pending changes');
+  c.projectDbPut=async()=>{}; await c.persistProjectNow(); assert.equal(c.window.autosavePending,false);
+});

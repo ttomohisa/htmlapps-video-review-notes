@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Fix portrait video clipping and annotation alignment in the editor and reports.
+- Warn before leaving while review changes are awaiting autosave.
+
 ## 1.0.4 - 2026-10-27
 
 - Remove redundant language-switching instructions from Japanese and English Help. Preserve the adjacent state-retention, accessibility, and dialog guidance where present.
