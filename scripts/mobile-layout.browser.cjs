@@ -64,7 +64,7 @@ await auditHeader(page, label);
         await page.locator('#helpButton').click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
-        assert.match(visibleHelpText, language === 'ja' ? /動画、レビュー、フィルター、入力中の下書き/ : /video, reviews, filters, and current draft/i, label + ': useful adjacent Help guidance retained');
+        assert.doesNotMatch(visibleHelpText, /表示言語を変更しても|Changing the interface language preserves/i, label + ': redundant language guidance removed');
 const body=page.locator('#helpDialog .dialog-body'),details=page.locator('#helpDialog details.help-build');
 assert.equal(await page.locator('main #buildVersion').count(),0);assert.ok(await body.evaluate(e=>e.lastElementChild.matches('details.help-build')));
 for(const id of ['buildVersion','builtAt','dependencyCount'])assert.equal(await page.locator('#'+id).count(),1);
