@@ -160,6 +160,7 @@
     .drop-icon svg { width: 34px; height: 34px; }
     .drop-zone h2 { margin: 0; font-size: 21px; letter-spacing: -.02em; }
     .drop-zone p { margin: 8px auto 0; max-width: 440px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .file-picker-alternative { display: none; }
     .drop-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
     .button { min-height: 42px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--text); font-weight: 760; cursor: pointer; transition: border-color .16s ease, background .16s ease, transform .16s ease; }
     .button:hover { border-color: var(--line-strong); background: var(--surface-hover); }
@@ -187,7 +188,7 @@
     .file-heading { min-width: 0; }
     .file-name { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 800; }
     .player-state { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
-    .top-actions { display: flex; flex: 0 0 auto; gap: 7px; }
+    .top-actions { display: flex; flex: 0 1 auto; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
     .small-button { min-height: 36px; padding: 7px 10px; font-size: 12px; }
     .project-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: -2px 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-muted); }
     .project-status { min-width: 0; color: var(--muted); font-size: 10px; line-height: 1.45; overflow-wrap: anywhere; }
@@ -213,7 +214,7 @@
     .export-actions .button:disabled { opacity: .48; cursor: default; transform: none; }
     .export-primary { min-width: 170px; }
     .video-frame { position: relative; aspect-ratio: 16 / 9; min-height: 210px; display: grid; place-items: center; overflow: hidden; border-radius: 13px; background: #0d0f0e; cursor: pointer; user-select: none; }
-    .video-frame video { width: 100%; height: 100%; display: block; object-fit: contain; background: #0d0f0e; }
+    .video-frame video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: contain; background: #0d0f0e; }
     .loading-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(13,15,14,.62); color: #fff; text-align: center; pointer-events: none; }
     .loading-panel { display: grid; justify-items: center; gap: 10px; font-size: 12px; font-weight: 700; }
     .spinner { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .75s linear infinite; }
@@ -308,7 +309,7 @@
     .annotation-editor-meta { color: var(--muted); font-size: 9px; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .annotation-stage { position: relative; min-height: 150px; display: grid; place-items: center; overflow: hidden; background: #171a18; touch-action: none; }
     .annotation-stage.is-empty { background: var(--surface-muted); }
-    .annotation-canvas { display: block; width: 100%; max-height: 380px; object-fit: contain; cursor: crosshair; touch-action: none; }
+    .annotation-canvas { display: block; width: auto; height: auto; max-width: 100%; max-height: 380px; object-fit: contain; cursor: crosshair; touch-action: none; }
     .annotation-empty { max-width: 360px; padding: 26px 18px; color: var(--muted); text-align: center; font-size: 11px; line-height: 1.6; }
     .annotation-color-row { display: flex; align-items: center; gap: 8px; padding: 8px 9px; border-top: 1px solid var(--line); }
     .annotation-color-label { color: var(--muted); font-size: 10px; font-weight: 760; }
@@ -324,8 +325,8 @@
     .annotation-tool:disabled { opacity: .42; cursor: default; }
     .annotation-tool svg { width: 15px; height: 15px; display: block; }
     .annotation-toolbar-spacer { flex: 1 1 auto; }
-    .review-card-thumb { position: relative; margin-top: 8px; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #171a18; }
-    .review-card-thumb img { display: block; width: 100%; max-height: 148px; object-fit: contain; }
+    .review-card-thumb { position: relative; width: fit-content; max-width: 100%; margin-left: auto; margin-right: auto; margin-top: 8px; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #171a18; }
+    .review-card-thumb img { display: block; width: auto; height: auto; max-width: 100%; max-height: 148px; object-fit: contain; }
     .review-card-thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
     .review-card-thumb .annotation-stroke { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1.2px rgba(255,255,255,.95)); }
     .review-card-annotation-count { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: var(--muted); font-size: 9px; font-weight: 720; }
@@ -429,9 +430,11 @@
       .review-list { max-height: 430px; }
     }
     @media (max-width: 620px) {
+      .file-picker-alternative { display: inline-flex; }
+      .drop-actions .file-picker-alternative { flex-basis: 100%; justify-content: center; }
       .main { padding-top: 18px; padding-bottom: 38px; }
       .page-intro { display: block; }
-      .local-badge { margin-top: 11px; }
+      .local-badge { display: none; }
       .drop-zone { min-height: 330px; padding: 30px 18px; }
       .player-column { padding: 12px; }
       .player-topbar { align-items: flex-start; }
@@ -493,7 +496,7 @@
       .header-actions { flex-shrink: 0; }
     }
     @media (max-width: 390px) {
-      .file-name { max-width: 178px; }
+      .file-name { max-width: 120px; }
       .small-button .wide-label { display: none; }
       .project-toolbar { align-items: stretch; flex-direction: column; }
       .project-actions { width: 100%; justify-content: stretch; }
@@ -524,7 +527,7 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.4</span></p>
+          <p class="brand-name"><span id="brandName">Video Review Notes</span><span class="version-badge" id="versionBadge">v1.0.5</span></p>
           <p class="brand-meta" data-i18n="brandMeta">時刻付きレビュー · 区間レビュー · 描画注釈</p>
         </div>
       </div>
@@ -540,8 +543,8 @@
   <main class="main">
     <section class="page-intro" aria-labelledby="heroTitle">
       <div>
-        <h1 id="heroTitle" data-i18n="introTitle">動画の気になる場面に、時刻付きでレビューを残す。</h1>
-        <p data-i18n="lead">動画を再生しながら、気になる時点に「修正・質問・要確認・良い・メモ」のレビューを残せます。動画とレビュー内容は外部へ送信しません。</p>
+        <h1 id="heroTitle" data-i18n="introTitle">動画にレビューを書き込む</h1>
+        <p data-i18n="lead">動画の時刻や区間を指定して、コメントや画像への書き込みを残せます。</p>
       </div>
       <div class="local-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
@@ -557,13 +560,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h16v11H4z"/><path d="m10 9 5 3-5 3z"/><path d="M8 20h8"/></svg>
           </div>
           <h2 data-i18n="dropTitle">動画を追加</h2>
-          <p data-i18n="dropBody">動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。</p>
+          <p data-i18n="dropBody">動画ファイルをここにドロップするか、ファイルを選択してください。</p>
           <div class="drop-actions">
             <button class="button primary" id="chooseVideoButton" type="button" data-i18n="chooseVideo">動画を選択</button>
-          </div>
-          <div class="privacy-note">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
-            <span data-i18n="dropPrivacy">選択した動画は外部サーバーへ送信されません。</span>
+            <button class="text-button file-picker-alternative" id="chooseVideoFileButton" type="button" data-i18n="chooseVideoFile">ファイルから選択</button>
           </div>
           <div class="saved-project-card" id="savedProjectCard" hidden>
             <strong class="saved-project-title" data-i18n="savedProjectTitle">前回のレビューがあります</strong>
@@ -571,6 +571,7 @@
             <span class="saved-project-detail" id="savedProjectDetail">—</span>
             <div class="saved-project-actions">
               <button class="button primary" id="resumeProjectButton" type="button" data-i18n="resumeProject">動画を選択して再開</button>
+              <button class="text-button file-picker-alternative" id="resumeProjectFileButton" type="button" data-i18n="resumeProjectFile">ファイルから選んで再開</button>
               <button class="button" id="saveDetachedProjectButton" type="button" data-i18n="saveProjectJson">レビューJSONを保存</button>
               <button class="button danger" id="discardSavedProjectButton" type="button" data-i18n="discardSavedProject">保存済み作業を削除</button>
             </div>
@@ -593,7 +594,8 @@
               <span class="player-state" id="playerState" data-i18n="loadingVideo">動画を準備しています…</span>
             </div>
             <div class="top-actions">
-              <button class="button small-button" id="replaceVideoButton" type="button"><span data-i18n="replaceVideo" class="wide-label">動画を変更</span><span aria-hidden="true" class="sr-only">↻</span></button>
+              <button class="button small-button" id="replaceVideoButton" type="button" data-i18n="replaceVideo">動画を変更</button>
+              <button class="button small-button file-picker-alternative" id="replaceVideoFileButton" type="button" data-i18n="replaceVideoFile">ファイルから変更</button>
               <button class="button small-button danger" id="removeVideoButton" type="button" data-i18n="removeVideo">外す</button>
             </div>
           </div>
@@ -848,6 +850,7 @@
     </section>
 
     <input id="videoInput" type="file" accept="video/*,.mp4,.webm,.mov,.m4v" hidden>
+    <input id="videoFileInput" type="file" hidden>
     <input id="projectInput" type="file" accept="application/json,.json,.video-review.json" hidden>
     <div class="status-live" id="statusLive" role="status" aria-live="polite" aria-atomic="true"></div>
     <!-- APP:END -->
@@ -869,7 +872,7 @@
 
   </main>
 
-  <footer><span id="footerName">Video Review Notes</span> · MIT License · <span data-i18n="footer">動画は端末内で処理されます</span></footer>
+  <footer><span id="footerName">Video Review Notes</span> · MIT License</footer>
 
   <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default">
     <span class="app-toast-message" id="appToastMessage"></span>
@@ -901,10 +904,9 @@
     </div>
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
-      <p data-i18n="helpLanguage">表示言語を変更しても、動画、レビュー、フィルター、入力中の下書きは保持されます。</p>
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol>
-        <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。</li>
+        <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。スマートフォンで動画が見つからない場合は、ファイルから選択できます。</li>
         <li data-i18n="helpStep2">プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。</li>
         <li data-i18n="helpStep3">種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。</li>
         <li data-i18n="helpDuplicate">「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。</li>
@@ -1014,10 +1016,10 @@
       const translations = {
         ja: {
           brandMeta: '時刻付きレビュー · 区間レビュー · 描画注釈', helpTitle: '使い方と注意事項', languageSwitch: '英語に切り替え', close: '閉じる',
-          introTitle: '動画の気になる場面に、時刻付きでレビューを残す。',
-          lead: '動画を再生しながら、気になる時点に「修正・質問・要確認・良い・メモ」のレビューを残せます。動画とレビュー内容は外部へ送信しません。',
-          localBadge: '完全ローカル処理', dropTitle: '動画を追加', dropBody: '動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。',
-          chooseVideo: '動画を選択', dropPrivacy: '選択した動画は外部サーバーへ送信されません。', loadErrorTitle: '動画を読み込めませんでした',
+          introTitle: '動画にレビューを書き込む',
+          lead: '動画の時刻や区間を指定して、コメントや画像への書き込みを残せます。',
+          localBadge: '完全ローカル処理', dropTitle: '動画を追加', dropBody: '動画ファイルをここにドロップするか、ファイルを選択してください。',
+          chooseVideo: '動画を選択', chooseVideoFile: 'ファイルから選択', resumeProjectFile: 'ファイルから選んで再開', replaceVideoFile: 'ファイルから変更', loadErrorTitle: '動画を読み込めませんでした',
           loadingVideo: '動画を準備しています…', readyVideo: 'レビューできます', replaceVideo: '動画を変更', removeVideo: '外す',
           seekLabel: '再生位置', videoClickToggle: 'クリックで再生 / 一時停止', back5: '5秒戻る', forward5: '5秒進む', play: '再生', pause: '一時停止', mute: 'ミュート', unmute: 'ミュート解除',
           volumeLabel: '音量', speedLabel: '再生速度', fullscreen: '全画面', videoInfoTitle: '動画情報', metaFile: 'ファイル', metaSize: 'サイズ', metaDuration: '長さ', metaResolution: '解像度', metaType: '形式',
@@ -1032,8 +1034,7 @@
           reviewTimeSet: 'レビュー時刻を現在位置に変更しました', reviewFocusHint: 'コメント入力を開始すると動画を一時停止します。', timelineTitle: 'レビュータイムライン', timelineAriaLabel: 'レビュー位置', timelineShown: '{count}件表示', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start}から{end} {status}', filterTypeLabel: '種類', filterStatusLabel: '状態', filterAll: 'すべて',
           shortcutTitle: 'キーボード操作', shortcutBody: 'プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。', shortcutPlay: '再生 / 一時停止', shortcut5: '5秒移動', shortcut10: '10秒移動', shortcutFullscreen: '全画面', shortcutReview: 'レビュー入力',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '動画とレビューは端末内で処理されます',
-          helpLanguage: '表示言語を変更しても、動画、レビュー、フィルター、入力中の下書きは保持されます。',
-          helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
+          helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。スマートフォンで動画が見つからない場合は、ファイルから選択できます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
           helpDuplicate: '「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。', helpFrameOwnership: 'レビューの開始時刻を変えるとフレームを取り直し、以前の画像への注釈を消します。取得できない場合もコメントは保存できます。「元に戻す」は同じ作業内でのみ使えます。',
            helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
           helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。レビュー・縮小サムネイル・注釈は自動保存のためブラウザー内のIndexedDBへ保存されますが、元動画そのものは保存しません。',
@@ -1045,10 +1046,10 @@
         },
         en: {
           brandMeta: 'Time-based notes · Range reviews · Annotations', helpTitle: 'How to use & notes', languageSwitch: 'Switch to Japanese', close: 'Close',
-          introTitle: 'Leave time-based review notes on the moments that matter.',
-          lead: 'Play a local video and attach Fix, Question, Check, Good, or Note reviews to specific moments. The video and review text stay on this device.',
-          localBadge: 'Fully local processing', dropTitle: 'Add a video', dropBody: 'Drop a video here or choose a file. The app opens videos that your browser can play.',
-          chooseVideo: 'Choose video', dropPrivacy: 'The selected video is not uploaded to an external server.', loadErrorTitle: 'Could not load this video',
+          introTitle: 'Add review notes to a video',
+          lead: 'Add comments and frame annotations to a point or range in your video.',
+          localBadge: 'Fully local processing', dropTitle: 'Add a video', dropBody: 'Drop a video here or choose a file.',
+          chooseVideo: 'Choose video', chooseVideoFile: 'Choose from files', resumeProjectFile: 'Resume from files', replaceVideoFile: 'Change from files', loadErrorTitle: 'Could not load this video',
           loadingVideo: 'Preparing video…', readyVideo: 'Ready to review', replaceVideo: 'Change video', removeVideo: 'Remove',
           seekLabel: 'Playback position', videoClickToggle: 'Click to play / pause', back5: 'Back 5 seconds', forward5: 'Forward 5 seconds', play: 'Play', pause: 'Pause', mute: 'Mute', unmute: 'Unmute',
           volumeLabel: 'Volume', speedLabel: 'Playback speed', fullscreen: 'Fullscreen', videoInfoTitle: 'Video information', metaFile: 'File', metaSize: 'Size', metaDuration: 'Duration', metaResolution: 'Resolution', metaType: 'Type',
@@ -1063,8 +1064,7 @@
           reviewTimeSet: 'Review time updated to the current position', reviewFocusHint: 'Starting a comment pauses playback.', timelineTitle: 'Review timeline', timelineAriaLabel: 'Review positions', timelineShown: '{count} shown', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start} to {end} {status}', filterTypeLabel: 'Type', filterStatusLabel: 'Status', filterAll: 'All',
           shortcutTitle: 'Keyboard controls', shortcutBody: 'Use the keyboard to move through the video while reviewing.', shortcutPlay: 'Play / pause', shortcut5: 'Move 5 sec', shortcut10: 'Move 10 sec', shortcutFullscreen: 'Fullscreen', shortcutReview: 'Start review',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Video and reviews are processed on this device',
-          helpLanguage: 'Changing the interface language preserves your video, reviews, filters, and current draft.',
-          helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
+          helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop. On a phone, you can also choose from files if you cannot find the video.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
           helpDuplicate: 'Duplicate review creates an independent note at the same moment or range, keeping its status, comment, image, and annotations. Your current draft is preserved. Undo removes only the new duplicate.', helpFrameOwnership: 'Changing the review start refreshes its frame and clears annotations from the old image. If capture fails, you can still save the comment. Undo is available only within the same workspace.',
            helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
           helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'The selected video is played from a local File / Blob URL and is not uploaded. Reviews, resized thumbnails, and annotations are stored in this browser’s IndexedDB for autosave, but the source video itself is never stored.',
@@ -1119,6 +1119,7 @@
       let suppressAutosave = false;
       const video = $('#video');
       const videoInput = $('#videoInput');
+      const videoFileInput = $('#videoFileInput');
       const projectInput = $('#projectInput');
       const outputFilename = $('#outputFilename');
       const dropZone = $('#dropZone');
@@ -1362,7 +1363,7 @@
         const payload = safeJsonForScript(data);
         const labelPayload = safeJsonForScript(labels);
         return `<!doctype html>\n<html lang="${language}">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<meta http-equiv="Content-Security-Policy" content="${csp}">\n<meta name="color-scheme" content="light">\n<title>${language === 'ja' ? '動画レビュー' : 'Video Review'} — ${String(project.video.name || '').replace(/[&<>"']/g, '')}</title>\n<style>
-:root{--bg:#f5f5f2;--surface:#fff;--muted:#666963;--text:#20211f;--line:#dadbd6;--accent:#16624f;--soft:#e1f0ea;--danger:#b3261e}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(980px,100%);margin:auto;padding:24px 16px 60px}header{padding-bottom:18px;border-bottom:1px solid var(--line)}h1{margin:0;font-size:24px}.meta{margin:6px 0 0;color:var(--muted);overflow-wrap:anywhere}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.stat{padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}.stat strong{display:block;font-size:18px}.stat span{font-size:11px;color:var(--muted)}.filters{display:grid;gap:9px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);position:sticky;top:8px;z-index:5}.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.filter-label{width:48px;color:var(--muted);font-size:11px;font-weight:700}.chip{border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:#fff;color:var(--muted);cursor:pointer;font:inherit;font-size:11px;font-weight:700}.chip[aria-pressed=true]{border-color:var(--accent);background:var(--soft);color:var(--accent)}#list{margin-top:12px}.card{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);scroll-margin-top:120px}.card+.card{margin-top:9px}.card.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 12%,transparent)}.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--accent);font-size:11px;font-weight:800}.status{color:var(--muted);font-size:11px;font-weight:700}.time{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px}.comment{margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.thumb{position:relative;margin-top:11px;overflow:hidden;border:1px solid var(--line);border-radius:9px;background:#171a18;cursor:zoom-in}.thumb img{display:block;width:100%;max-height:420px;object-fit:contain}.thumb svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.stroke{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1.2px #fff)}.annotation-count{margin-top:6px;color:var(--muted);font-size:10px}.empty{padding:36px 10px;text-align:center;color:var(--muted)}.nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px}.nav button{min-height:40px;padding:7px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font:inherit;font-weight:700}footer{margin-top:24px;color:var(--muted);font-size:11px}dialog{width:min(1100px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:0;border-radius:12px;background:#111}dialog::backdrop{background:#000a}.viewer{position:relative;display:grid;place-items:center;min-height:200px}.viewer img{display:block;max-width:100%;max-height:calc(100dvh - 70px);object-fit:contain}.viewer svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.close{position:absolute;z-index:2;right:8px;top:8px;width:40px;height:40px;border:1px solid #ffffff55;border-radius:9px;background:#0009;color:#fff;font-size:20px;cursor:pointer}@media(max-width:560px){.wrap{padding:16px 10px 40px}.summary{grid-template-columns:1fr}.filters{top:4px}.filter-label{width:100%}.time{flex:1 0 100%;margin-left:0}.card{padding:11px}}
+:root{--bg:#f5f5f2;--surface:#fff;--muted:#666963;--text:#20211f;--line:#dadbd6;--accent:#16624f;--soft:#e1f0ea;--danger:#b3261e}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(980px,100%);margin:auto;padding:24px 16px 60px}header{padding-bottom:18px;border-bottom:1px solid var(--line)}h1{margin:0;font-size:24px}.meta{margin:6px 0 0;color:var(--muted);overflow-wrap:anywhere}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.stat{padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}.stat strong{display:block;font-size:18px}.stat span{font-size:11px;color:var(--muted)}.filters{display:grid;gap:9px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);position:sticky;top:8px;z-index:5}.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.filter-label{width:48px;color:var(--muted);font-size:11px;font-weight:700}.chip{border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:#fff;color:var(--muted);cursor:pointer;font:inherit;font-size:11px;font-weight:700}.chip[aria-pressed=true]{border-color:var(--accent);background:var(--soft);color:var(--accent)}#list{margin-top:12px}.card{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);scroll-margin-top:120px}.card+.card{margin-top:9px}.card.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 12%,transparent)}.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--accent);font-size:11px;font-weight:800}.status{color:var(--muted);font-size:11px;font-weight:700}.time{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px}.comment{margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.thumb{position:relative;width:fit-content;max-width:100%;margin:11px auto 0;overflow:hidden;border:1px solid var(--line);border-radius:9px;background:#171a18;cursor:zoom-in}.thumb img{display:block;width:auto;height:auto;max-width:100%;max-height:420px;object-fit:contain}.thumb svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.stroke{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1.2px #fff)}.annotation-count{margin-top:6px;color:var(--muted);font-size:10px}.empty{padding:36px 10px;text-align:center;color:var(--muted)}.nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px}.nav button{min-height:40px;padding:7px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font:inherit;font-weight:700}footer{margin-top:24px;color:var(--muted);font-size:11px}dialog{width:min(1100px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:0;border-radius:12px;background:#111}dialog::backdrop{background:#000a}.viewer{position:relative;display:grid;place-items:center;width:fit-content;max-width:100%;margin:auto}.viewer img{display:block;max-width:100%;max-height:calc(100dvh - 70px);object-fit:contain}.viewer svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.close{position:absolute;z-index:2;right:8px;top:8px;width:40px;height:40px;border:1px solid #ffffff55;border-radius:9px;background:#0009;color:#fff;font-size:20px;cursor:pointer}@media(max-width:560px){.wrap{padding:16px 10px 40px}.summary{grid-template-columns:1fr}.filters{top:4px}.filter-label{width:100%}.time{flex:1 0 100%;margin-left:0}.card{padding:11px}}
 </style>\n</head>\n<body>\n<div class="wrap"><header><h1 id="title"></h1><p class="meta" id="videoMeta"></p><p class="meta" id="sourceNote"></p></header><div class="summary" id="summary"></div><div class="filters"><div class="filter-row"><span class="filter-label" id="typeLabel"></span><div id="typeFilters"></div></div><div class="filter-row"><span class="filter-label" id="statusLabel"></span><div id="statusFilters"></div></div></div><div id="list"></div><div class="nav"><button id="prev"></button><button id="next"></button></div><footer id="footer"></footer></div><dialog id="viewerDialog"><div class="viewer"><button class="close" id="viewerClose" aria-label="Close">×</button><img id="viewerImage" alt=""><svg id="viewerOverlay" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg></div></dialog><script id="review-data" type="application/json">${payload}<\/script><script id="labels" type="application/json">${labelPayload}<\/script><script>
 (()=>{'use strict';const data=JSON.parse(document.getElementById('review-data').textContent);const L=JSON.parse(document.getElementById('labels').textContent);let type='all',status='all',active=-1,svgSeq=0;const types=['all','fix','question','check','good','note'];const statuses=['all','open','resolved'];const labels={fix:L.fix,question:L.question,check:L.check,good:L.good,note:L.note};const fmt=s=>{s=Math.max(0,Number(s)||0);const ms=Math.floor(s*1000+.0001),sec=Math.floor(ms/1000)%60,min=Math.floor(ms/60000)%60,h=Math.floor(ms/3600000);return String(h).padStart(2,'0')+':'+String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0')+'.'+String(ms%1000).padStart(3,'0')};const time=r=>r.mode==='range'&&Number(r.endTime)>Number(r.startTime)?fmt(r.startTime)+' – '+fmt(r.endTime):fmt(r.startTime);const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n};function annotationSvg(review,root){root.replaceChildren();for(const a of review.annotations||[]){const color=/^#[0-9a-f]{6}$/i.test(a.color||'')?a.color:'#16624f';let n;if(a.type==='rect'){n=document.createElementNS('http://www.w3.org/2000/svg','rect');n.setAttribute('x',a.x*1000);n.setAttribute('y',a.y*1000);n.setAttribute('width',a.width*1000);n.setAttribute('height',a.height*1000)}else if(a.type==='arrow'){const x1=a.x1*1000,y1=a.y1*1000,x2=a.x2*1000,y2=a.y2*1000,angle=Math.atan2(y2-y1,x2-x1),head=42;n=document.createElementNS('http://www.w3.org/2000/svg','path');n.setAttribute('d','M '+x1+' '+y1+' L '+x2+' '+y2+' M '+x2+' '+y2+' L '+(x2-head*Math.cos(angle-Math.PI/6))+' '+(y2-head*Math.sin(angle-Math.PI/6))+' M '+x2+' '+y2+' L '+(x2-head*Math.cos(angle+Math.PI/6))+' '+(y2-head*Math.sin(angle+Math.PI/6)))}else if(a.type==='freehand'){n=document.createElementNS('http://www.w3.org/2000/svg','polyline');n.setAttribute('points',(a.points||[]).map(p=>p.x*1000+','+p.y*1000).join(' '))}if(n){n.setAttribute('class','stroke');n.setAttribute('stroke',color);if(color==='#ffffff'||color==='#f0b429')n.style.filter='drop-shadow(0 0 1.2px #000)';root.append(n)}}}function chips(root,items,kind){root.replaceChildren();for(const item of items){const b=el('button','chip',item==='all'?L.all:(kind==='type'?labels[item]:(item==='open'?L.open:L.resolved)));b.type='button';b.setAttribute('aria-pressed',String((kind==='type'?type:status)===item));b.onclick=()=>{if(kind==='type')type=item;else status=item;render()};root.append(b)}}function filtered(){return data.reviews.filter(r=>(type==='all'||r.type===type)&&(status==='all'||r.status===status))}function showViewer(review){if(!review.thumbnail)return;document.getElementById('viewerImage').src=review.thumbnail;annotationSvg(review,document.getElementById('viewerOverlay'));document.getElementById('viewerDialog').showModal()}function render(){chips(document.getElementById('typeFilters'),types,'type');chips(document.getElementById('statusFilters'),statuses,'status');const items=filtered();const list=document.getElementById('list');list.replaceChildren();if(!items.length){list.append(el('div','empty',L.noItems));active=-1;document.getElementById('prev').disabled=true;document.getElementById('next').disabled=true;return}if(active<0||active>=items.length)active=0;items.forEach((review,index)=>{const card=el('article','card'+(index===active?' active':''));card.tabIndex=0;card.dataset.index=String(index);const top=el('div','top');top.append(el('span','badge',labels[review.type]||review.type),el('span','status',review.status==='resolved'?L.resolved:L.open),el('span','time',time(review)));card.append(top,el('p','comment',review.comment));if(review.thumbnail){const thumb=el('div','thumb');const img=el('img');img.src=review.thumbnail;img.alt='';const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 1000 1000');svg.setAttribute('preserveAspectRatio','none');annotationSvg(review,svg);thumb.append(img,svg);thumb.onclick=()=>showViewer(review);card.append(thumb);if((review.annotations||[]).length)card.append(el('div','annotation-count',(review.annotations||[]).length+' '+L.annotations))}card.onclick=e=>{if(e.target.closest('.thumb'))return;active=index;render();document.querySelector('.card.active')?.scrollIntoView({block:'nearest'})};list.append(card)});document.getElementById('prev').disabled=active<=0;document.getElementById('next').disabled=active>=items.length-1}function move(delta){const items=filtered();if(!items.length)return;active=Math.max(0,Math.min(items.length-1,active+delta));render();document.querySelector('.card.active')?.scrollIntoView({behavior:'smooth',block:'center'})}const open=data.reviews.filter(r=>r.status!=='resolved').length,resolved=data.reviews.length-open;document.getElementById('title').textContent=L.title;document.getElementById('videoMeta').textContent=(data.video.name||'—')+' · '+L.reviews+': '+data.reviews.length;document.getElementById('sourceNote').textContent=L.sourceNote;const summary=document.getElementById('summary');[[data.reviews.length,L.reviews],[open,L.open],[resolved,L.resolved]].forEach(([v,k])=>{const box=el('div','stat');box.append(el('strong','',String(v)),el('span','',k));summary.append(box)});document.getElementById('typeLabel').textContent=L.type;document.getElementById('statusLabel').textContent=L.status;document.getElementById('prev').textContent=L.prev;document.getElementById('next').textContent=L.next;document.getElementById('prev').onclick=()=>move(-1);document.getElementById('next').onclick=()=>move(1);document.getElementById('footer').textContent=L.generated+': '+new Date(data.generatedAt).toLocaleString()+' · Video Review Notes';const dialog=document.getElementById('viewerDialog');document.getElementById('viewerClose').setAttribute('aria-label',L.close);document.getElementById('viewerClose').onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog)dialog.close()};document.addEventListener('keydown',e=>{if(dialog.open){if(e.key==='Escape')dialog.close();return}if(e.target.closest('button'))return;if(e.key==='ArrowLeft'){e.preventDefault();move(-1)}else if(e.key==='ArrowRight'){e.preventDefault();move(1)}});render()})();
 <\/script>\n</body>\n</html>`;
@@ -1400,18 +1401,23 @@
         clearTimeout(autosaveTimer); autosaveTimer = 0;
         if (suppressAutosave) return;
         if (!currentFile || !reviews.length) {
-          if (!detachedProject) { try { await projectDbDelete(); } catch { /* Optional until a review exists. */ } }
+          const revision = window.autosaveRevision || 0;
+          if (!detachedProject) {
+            try { await projectDbDelete(); if ((window.autosaveRevision || 0) === revision) window.autosavePending = false; }
+            catch { if (window.autosavePending) { autosaveFailed = true; projectStatus('autoSaveFailed', true); return; } }
+          }
           projectStatus('autoSaveWaiting');
           return;
         }
         const project = buildProjectSnapshot();
         if (!project) return;
+        const revision = window.autosaveRevision || 0;
         projectStatus('autoSaveSaving');
         try {
           await projectDbPut(project);
           autosaveFailed = false;
+          if ((window.autosaveRevision || 0) === revision) { window.autosavePending = false; projectStatus('autoSaveSaved'); }
           detachedProject = null;
-          projectStatus('autoSaveSaved');
         } catch (error) {
           autosaveFailed = true;
           projectStatus('autoSaveFailed', true);
@@ -1419,6 +1425,7 @@
       }
       function scheduleAutoSave(delay = 260) {
         if (suppressAutosave) return;
+        if (currentFile && (reviews.length || window.autosavePending)) { window.autosaveRevision = (window.autosaveRevision || 0) + 1; window.autosavePending = true; }
         clearTimeout(autosaveTimer);
         autosaveTimer = window.setTimeout(() => { persistProjectNow(); }, delay);
       }
@@ -2031,7 +2038,7 @@
         if (!ok || generation !== workspaceGeneration) return;
         const index = reviews.indexOf(review); if (index < 0) return;
         const [removed] = reviews.splice(index, 1); if (editingReviewId === id) resetReviewEditor(); if (activeReviewId === id) activeReviewId = '';
-        renderReviews(); scheduleAutoSave(); announce(t('reviewDeleted'));
+        window.autosavePending = true; renderReviews(); scheduleAutoSave(); announce(t('reviewDeleted'));
         let undone = false;
         AppToast.show({ message: t('reviewDeleted'), actionLabel: t('undo'), duration: 5000, onAction: () => {
           if (undone || generation !== workspaceGeneration || reviews.some(item => item.id === id)) return;
@@ -2104,7 +2111,6 @@
       }
 
       function loadFile(file, resume = null) {
-        clearTimeout(autosaveTimer); autosaveTimer = 0;
         if (!isVideoLike(file)) {
           if (currentFile && phase === 'ready') {
             AppToast.show({ message: t('invalidFile'), tone: 'warning' });
@@ -2114,6 +2120,7 @@
           }
           return;
         }
+        clearTimeout(autosaveTimer); autosaveTimer = 0;
         sourceGeneration += 1;
         const generation = sourceGeneration;
         revokeCurrentObjectUrl();
@@ -2310,6 +2317,11 @@
         videoInput.click();
       }
 
+      function chooseVideoFile() { videoFileInput.value = ''; videoFileInput.click(); }
+      $('#chooseVideoFileButton').addEventListener('click', chooseVideoFile);
+      $('#replaceVideoFileButton').addEventListener('click', chooseVideoFile);
+      $('#resumeProjectFileButton').addEventListener('click', chooseVideoFile);
+      videoFileInput.addEventListener('change', () => { const file = videoFileInput.files?.[0]; if (file) requestLoadFile(file); });
       $('#chooseVideoButton').addEventListener('click', chooseVideo);
       $('#replaceVideoButton').addEventListener('click', chooseVideo);
       videoInput.addEventListener('change', () => {
@@ -2479,7 +2491,8 @@
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close();
       });
 
-      window.addEventListener('pagehide', () => {
+      window.addEventListener('pagehide', event => {
+        if (event.persisted) return;
         invalidateWorkspace();
         sourceGeneration += 1;
         sourceEventController?.abort();
@@ -2487,6 +2500,12 @@
         revokeCurrentObjectUrl();
         blobUrls.forEach(url => URL.revokeObjectURL(url));
         blobUrls.clear();
+      });
+
+      window.addEventListener('beforeunload', event => {
+        if (!window.autosavePending) return;
+        event.preventDefault();
+        event.returnValue = '';
       });
 
       $('#versionBadge').textContent = `v${APP_CONFIG.version}`;

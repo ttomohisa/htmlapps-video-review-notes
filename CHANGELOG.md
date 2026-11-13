@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 - 2026-11-13
+
+- Add file selection for loading, changing, and resuming videos.
+- Keep autosave pending after invalid file selection and preserve media when entering the back-forward cache.
+
+- Simplify the Japanese and English introduction and hide the local-processing badge on phones.
+
+- Fix portrait video clipping and annotation alignment in the editor and reports.
+- Warn before leaving while review changes are awaiting autosave.
+
 ## 1.0.4 - 2026-10-27
 
 - Remove redundant language-switching instructions from Japanese and English Help. Preserve the adjacent state-retention, accessibility, and dialog guidance where present.

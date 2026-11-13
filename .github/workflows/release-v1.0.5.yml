@@ -1,0 +1,82 @@
+name: Release Video Review Notes v1.0.5
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.number == 10 && github.event.pull_request.base.repo.full_name == github.repository
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out merged commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Build and verify release
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ((Get-Content app.config.json -Raw | ConvertFrom-Json).version -ne '1.0.5') { throw 'Unexpected release version' }
+          ./scripts/check-powershell-syntax.ps1
+          ./scripts/check-repository.ps1
+          node tests/check-artifacts.cjs
+          if ($LASTEXITCODE -ne 0) { throw 'Artifact verification failed' }
+      - name: Package release
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $prefix = 'htmlapps-video-review-notes-v1.0.5'
+          New-Item -ItemType Directory -Force -Path release-package | Out-Null
+          Copy-Item dist/index.html "release-package/$prefix.html"
+          Copy-Item dist/index.self-extract.html "release-package/$prefix.self-extract.html"
+          Compress-Archive -Path dist,README.md,README.ja.md,LICENSE,THIRD_PARTY_NOTICES.md -DestinationPath "release-package/$prefix.zip"
+          $files = Get-ChildItem release-package -File | Sort-Object Name
+          $lines = foreach ($file in $files) { "$( (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant() )  $($file.Name)" }
+          [IO.File]::WriteAllLines((Join-Path $PWD 'release-package/SHA256SUMS.txt'), [string[]]$lines, [Text.UTF8Encoding]::new($false))
+      - name: Create tag and release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $repo = $env:GITHUB_REPOSITORY
+          $tag = 'v1.0.5'
+          if ((git rev-parse HEAD) -ne $env:MERGE_SHA) { throw 'Checkout does not match the merged commit' }
+          $existing = git ls-remote --tags origin "refs/tags/$tag"
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to inspect remote tag' }
+          if ($existing) {
+            $existingSha = ($existing -split '\s+')[0]
+            if ($existingSha -ne $env:MERGE_SHA) { throw "Tag $tag already points to another commit" }
+          } else {
+            git tag $tag $env:MERGE_SHA
+            git push origin "refs/tags/$tag"
+            if ($LASTEXITCODE -ne 0) { throw 'Tag creation failed' }
+          }
+          gh release view $tag --repo $repo --json tagName 2>$null | Out-Null
+          if ($LASTEXITCODE -eq 0) { throw "Release $tag already exists; refusing to overwrite" }
+          $notes = @'
+          ## Changes / 変更内容
+
+          - Fix portrait video display and annotation alignment.
+          - Protect pending autosaves and preserve the active video on back/forward navigation.
+          - Add an alternative file picker on phones and simplify the introduction.
+          - 縦動画・注釈の表示と自動保存を修正し、スマートフォン向けのファイル選択を追加しました。
+
+          The downloads include standalone HTML, a self-extracting HTML, a distribution ZIP, and SHA-256 checksums.
+          '@
+          [IO.File]::WriteAllText((Join-Path $PWD 'release-notes.md'), $notes, [Text.UTF8Encoding]::new($false))
+          $assets = @(Get-ChildItem release-package -File | ForEach-Object { $_.FullName })
+          gh release create $tag @assets --repo $repo --verify-tag --title "Video Review Notes $tag" --notes-file release-notes.md
+          if ($LASTEXITCODE -ne 0) { throw 'Release creation failed' }

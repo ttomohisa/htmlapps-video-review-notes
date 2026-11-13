@@ -41,13 +41,15 @@ page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()
 try{await page.goto(pathToFileURL(path.resolve(file)).href);await page.locator('#helpButton').waitFor();
 await page.waitForFunction(()=>/^\d+\.\d+\.\d+$/.test(document.querySelector('#buildVersion').textContent));
 if(await page.locator('html').getAttribute('lang')!==language)await page.locator('#languageButton').click();
-assert.equal((await page.locator('[data-i18n="localBadge"]').textContent()).trim(),language==='ja'?'完全ローカル処理':'Fully local processing');await bounds(page.locator('.local-badge'),width,height,label,false);
+assert.equal((await page.locator('[data-i18n="localBadge"]').textContent()).trim(),language==='ja'?'完全ローカル処理':'Fully local processing');assert.equal(await page.locator('.local-badge').isVisible(),width>cfg.bp,label+': local badge visibility');if(width>cfg.bp)await bounds(page.locator('.local-badge'),width,height,label,false);
 assert.equal(await page.locator('body > footer').isVisible(),width>cfg.bp,label+': informational footer');
 if(cfg.slug==='video-review-notes'){
+ assert.equal(await page.locator('#chooseVideoFileButton').isVisible(),width<=cfg.bp,label+': file alternative visibility');
  // 659-byte, 96x64, one-second solid-green WebM generated with FFmpeg, no audio.
- await page.locator('#videoInput').setInputFiles({name:'synthetic-green.webm',mimeType:'video/webm',buffer:Buffer.from('GkXfo59ChoEBQveBAULygQRC84EIQoKEd2VibUKHgQJChYECGFOAZwEAAAAAAAJjEU2bdLpNu4tTq4QVSalmU6yBoU27i1OrhBZUrmtTrIHWTbuMU6uEElTDZ1OsggEjTbuMU6uEHFO7a1OsggJN7AEAAAAAAABZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVSalmsCrXsYMPQkBNgIxMYXZmNjEuNy4xMDNXQYxMYXZmNjEuNy4xMDNEiYhAj0AAAAAAABZUrmvIrgEAAAAAAAA/14EBc8WIaUCG/cLBFd+cgQAitZyDdW5kiIEAhoVWX1ZQOIOBASPjg4QL68IA4JCwgWC6gUCagQJVsIRVuYEBElTDZ/tzc59jwIBnyJlFo4dFTkNPREVSRIeMTGF2ZjYxLjcuMTAzc3PWY8CLY8WIaUCG/cLBFd9nyKFFo4dFTkNPREVSRIeUTGF2YzYxLjE5LjEwMSBsaWJ2cHhnyKFFo4hEVVJBVElPTkSHkzAwOjAwOjAxLjAwMDAwMDAwMAAfQ7Z1QKTngQCjv4EAAICQAwCdASpgAEAAAEcIhYWIhYSIAgICdPJOQRddHsWdOnTp06b4AP79nahN2Hf/774f/33w//vvh/koAKOWgQDIANEBAAEQEAAYABhYL/QACIUoAKOWgQGQANEBAAEQEAAYABhYL/QACIUoAKOWgQJYANEBAAEQEAAYABhYL/QACIUoAKOWgQMgANEBAAEQEAAYABhYL/QACIUoABxTu2uRu4+zgQC3iveBAfGCAaPwgQM=','base64')});
+ await page.locator(width<=cfg.bp ? '#videoFileInput' : '#videoInput').setInputFiles({name:'synthetic-green.webm',mimeType:'video/webm',buffer:Buffer.from('GkXfo59ChoEBQveBAULygQRC84EIQoKEd2VibUKHgQJChYECGFOAZwEAAAAAAAJjEU2bdLpNu4tTq4QVSalmU6yBoU27i1OrhBZUrmtTrIHWTbuMU6uEElTDZ1OsggEjTbuMU6uEHFO7a1OsggJN7AEAAAAAAABZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVSalmsCrXsYMPQkBNgIxMYXZmNjEuNy4xMDNXQYxMYXZmNjEuNy4xMDNEiYhAj0AAAAAAABZUrmvIrgEAAAAAAAA/14EBc8WIaUCG/cLBFd+cgQAitZyDdW5kiIEAhoVWX1ZQOIOBASPjg4QL68IA4JCwgWC6gUCagQJVsIRVuYEBElTDZ/tzc59jwIBnyJlFo4dFTkNPREVSRIeMTGF2ZjYxLjcuMTAzc3PWY8CLY8WIaUCG/cLBFd9nyKFFo4dFTkNPREVSRIeUTGF2YzYxLjE5LjEwMSBsaWJ2cHhnyKFFo4hEVVJBVElPTkSHkzAwOjAwOjAxLjAwMDAwMDAwMAAfQ7Z1QKTngQCjv4EAAICQAwCdASpgAEAAAEcIhYWIhYSIAgICdPJOQRddHsWdOnTp06b4AP79nahN2Hf/774f/33w//vvh/koAKOWgQDIANEBAAEQEAAYABhYL/QACIUoAKOWgQGQANEBAAEQEAAYABhYL/QACIUoAKOWgQJYANEBAAEQEAAYABhYL/QACIUoAKOWgQMgANEBAAEQEAAYABhYL/QACIUoABxTu2uRu4+zgQC3iveBAfGCAaPwgQM=','base64')});
  await page.waitForFunction(()=>{const v=document.querySelector('#video');return v.readyState>=2&&v.videoWidth===96&&!document.querySelector('#playButton').disabled;});
  assert.equal(await page.locator('#fileName').textContent(),'synthetic-green.webm');await bounds(page.locator('.transport'),width,height,label,false);
+ for(const id of ['replaceVideoButton','replaceVideoFileButton','removeVideoButton']) {const el=page.locator('#'+id),expected=id!=='replaceVideoFileButton'||width<=cfg.bp;assert.equal(await el.isVisible(),expected,label+': '+id+' visibility');if(expected)await bounds(el,width,height,label,false);}
 }else if(cfg.slug==='local-form-builder'){
  await page.locator('#addFirstFieldButton').click();await page.locator('[data-quick-add-type="text"]').click();await page.waitForFunction(()=>document.querySelector('#fieldCount').textContent==='1');
  assert.equal(await page.locator('#quickAddPanel').isVisible(),false);
@@ -64,7 +66,7 @@ await auditHeader(page, label);
         await page.locator('#helpButton').click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
-        assert.match(visibleHelpText, language === 'ja' ? /動画、レビュー、フィルター、入力中の下書き/ : /video, reviews, filters, and current draft/i, label + ': useful adjacent Help guidance retained');
+        assert.doesNotMatch(visibleHelpText, /表示言語を変更しても|Changing the interface language preserves/i, label + ': redundant language guidance removed');
 const body=page.locator('#helpDialog .dialog-body'),details=page.locator('#helpDialog details.help-build');
 assert.equal(await page.locator('main #buildVersion').count(),0);assert.ok(await body.evaluate(e=>e.lastElementChild.matches('details.help-build')));
 for(const id of ['buildVersion','builtAt','dependencyCount'])assert.equal(await page.locator('#'+id).count(),1);
