@@ -187,7 +187,7 @@
     .file-heading { min-width: 0; }
     .file-name { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 800; }
     .player-state { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
-    .top-actions { display: flex; flex: 0 0 auto; gap: 7px; }
+    .top-actions { display: flex; flex: 0 1 auto; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
     .small-button { min-height: 36px; padding: 7px 10px; font-size: 12px; }
     .project-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: -2px 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-muted); }
     .project-status { min-width: 0; color: var(--muted); font-size: 10px; line-height: 1.45; overflow-wrap: anywhere; }
@@ -493,7 +493,7 @@
       .header-actions { flex-shrink: 0; }
     }
     @media (max-width: 390px) {
-      .file-name { max-width: 178px; }
+      .file-name { max-width: 120px; }
       .small-button .wide-label { display: none; }
       .project-toolbar { align-items: stretch; flex-direction: column; }
       .project-actions { width: 100%; justify-content: stretch; }
@@ -560,6 +560,7 @@
           <p data-i18n="dropBody">動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。</p>
           <div class="drop-actions">
             <button class="button primary" id="chooseVideoButton" type="button" data-i18n="chooseVideo">動画を選択</button>
+            <button class="button" id="chooseVideoFileButton" type="button" data-i18n="chooseVideoFile">ファイルから選択</button>
           </div>
           <div class="privacy-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
@@ -571,6 +572,7 @@
             <span class="saved-project-detail" id="savedProjectDetail">—</span>
             <div class="saved-project-actions">
               <button class="button primary" id="resumeProjectButton" type="button" data-i18n="resumeProject">動画を選択して再開</button>
+              <button class="button" id="resumeProjectFileButton" type="button" data-i18n="resumeProjectFile">ファイルから選んで再開</button>
               <button class="button" id="saveDetachedProjectButton" type="button" data-i18n="saveProjectJson">レビューJSONを保存</button>
               <button class="button danger" id="discardSavedProjectButton" type="button" data-i18n="discardSavedProject">保存済み作業を削除</button>
             </div>
@@ -593,7 +595,8 @@
               <span class="player-state" id="playerState" data-i18n="loadingVideo">動画を準備しています…</span>
             </div>
             <div class="top-actions">
-              <button class="button small-button" id="replaceVideoButton" type="button"><span data-i18n="replaceVideo" class="wide-label">動画を変更</span><span aria-hidden="true" class="sr-only">↻</span></button>
+              <button class="button small-button" id="replaceVideoButton" type="button" data-i18n="replaceVideo">動画を変更</button>
+              <button class="button small-button" id="replaceVideoFileButton" type="button" data-i18n="replaceVideoFile">ファイルから変更</button>
               <button class="button small-button danger" id="removeVideoButton" type="button" data-i18n="removeVideo">外す</button>
             </div>
           </div>
@@ -848,6 +851,7 @@
     </section>
 
     <input id="videoInput" type="file" accept="video/*,.mp4,.webm,.mov,.m4v" hidden>
+    <input id="videoFileInput" type="file" hidden>
     <input id="projectInput" type="file" accept="application/json,.json,.video-review.json" hidden>
     <div class="status-live" id="statusLive" role="status" aria-live="polite" aria-atomic="true"></div>
     <!-- APP:END -->
@@ -903,7 +907,7 @@
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol>
-        <li data-i18n="helpStep1">「動画を選択」またはドラッグ＆ドロップで動画を開きます。</li>
+        <li data-i18n="helpStep1">「動画を選択」「ファイルから選択」またはドラッグ＆ドロップで動画を開きます。</li>
         <li data-i18n="helpStep2">プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。</li>
         <li data-i18n="helpStep3">種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。</li>
         <li data-i18n="helpDuplicate">「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。</li>
@@ -1016,7 +1020,7 @@
           introTitle: '動画にレビューを書き込む',
           lead: '動画の時刻や区間を指定して、コメントや画像への書き込みを残せます。',
           localBadge: '完全ローカル処理', dropTitle: '動画を追加', dropBody: '動画ファイルをここにドロップするか、ファイルを選択してください。ブラウザーで再生できる動画をそのまま開きます。',
-          chooseVideo: '動画を選択', dropPrivacy: '選択した動画は外部サーバーへ送信されません。', loadErrorTitle: '動画を読み込めませんでした',
+          chooseVideo: '動画を選択', chooseVideoFile: 'ファイルから選択', resumeProjectFile: 'ファイルから選んで再開', replaceVideoFile: 'ファイルから変更', dropPrivacy: '選択した動画は外部サーバーへ送信されません。', loadErrorTitle: '動画を読み込めませんでした',
           loadingVideo: '動画を準備しています…', readyVideo: 'レビューできます', replaceVideo: '動画を変更', removeVideo: '外す',
           seekLabel: '再生位置', videoClickToggle: 'クリックで再生 / 一時停止', back5: '5秒戻る', forward5: '5秒進む', play: '再生', pause: '一時停止', mute: 'ミュート', unmute: 'ミュート解除',
           volumeLabel: '音量', speedLabel: '再生速度', fullscreen: '全画面', videoInfoTitle: '動画情報', metaFile: 'ファイル', metaSize: 'サイズ', metaDuration: '長さ', metaResolution: '解像度', metaType: '形式',
@@ -1031,7 +1035,7 @@
           reviewTimeSet: 'レビュー時刻を現在位置に変更しました', reviewFocusHint: 'コメント入力を開始すると動画を一時停止します。', timelineTitle: 'レビュータイムライン', timelineAriaLabel: 'レビュー位置', timelineShown: '{count}件表示', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start}から{end} {status}', filterTypeLabel: '種類', filterStatusLabel: '状態', filterAll: 'すべて',
           shortcutTitle: 'キーボード操作', shortcutBody: 'プレイヤー操作中は、キーボードでも再生位置を細かく移動できます。', shortcutPlay: '再生 / 一時停止', shortcut5: '5秒移動', shortcut10: '10秒移動', shortcutFullscreen: '全画面', shortcutReview: 'レビュー入力',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '動画とレビューは端末内で処理されます',
-          helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
+          helpBasicsTitle: '基本操作', helpStep1: '「動画を選択」「ファイルから選択」またはドラッグ＆ドロップで動画を開きます。', helpStep2: 'プレビューをクリックして再生 / 一時停止できます。止めた位置がレビュー位置になります。「この時点」または「区間」を選び、区間では「ここから」→動画を進める→「ここまで」で範囲を指定します。', helpStep3: '種類を選び、必須のコメントを入力します。必要なら色を選び、フレーム上へ矩形・矢印・フリーハンドで注釈してレビューを追加します。タイムラインのピン・帯またはレビュー一覧から該当位置へ移動できます。',
           helpDuplicate: '「レビューを複製」で同じ時刻・区間のレビューを独立した1件として追加できます。状態・コメント・画像・注釈も引き継ぎ、入力中の下書きは保持します。直後なら「元に戻す」で複製だけを取り消せます。', helpFrameOwnership: 'レビューの開始時刻を変えるとフレームを取り直し、以前の画像への注釈を消します。取得できない場合もコメントは保存できます。「元に戻す」は同じ作業内でのみ使えます。',
            helpShortcutsTitle: 'キーボード操作', helpShortcut1: 'Space: 再生 / 一時停止', helpShortcut2: '← / →: 5秒戻る / 進む。Shiftを押しながらで10秒移動します。', helpShortcut3: 'F: 全画面表示（対応ブラウザーのみ）。M: 現在位置でレビュー入力を開始します。',
           helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択した動画はFile / Blob URLとしてこのブラウザー内で再生され、外部サーバーへアップロードされません。レビュー・縮小サムネイル・注釈は自動保存のためブラウザー内のIndexedDBへ保存されますが、元動画そのものは保存しません。',
@@ -1046,7 +1050,7 @@
           introTitle: 'Add review notes to a video',
           lead: 'Add comments and frame annotations to a point or range in your video.',
           localBadge: 'Fully local processing', dropTitle: 'Add a video', dropBody: 'Drop a video here or choose a file. The app opens videos that your browser can play.',
-          chooseVideo: 'Choose video', dropPrivacy: 'The selected video is not uploaded to an external server.', loadErrorTitle: 'Could not load this video',
+          chooseVideo: 'Choose video', chooseVideoFile: 'Choose from files', resumeProjectFile: 'Resume from files', replaceVideoFile: 'Change from files', dropPrivacy: 'The selected video is not uploaded to an external server.', loadErrorTitle: 'Could not load this video',
           loadingVideo: 'Preparing video…', readyVideo: 'Ready to review', replaceVideo: 'Change video', removeVideo: 'Remove',
           seekLabel: 'Playback position', videoClickToggle: 'Click to play / pause', back5: 'Back 5 seconds', forward5: 'Forward 5 seconds', play: 'Play', pause: 'Pause', mute: 'Mute', unmute: 'Unmute',
           volumeLabel: 'Volume', speedLabel: 'Playback speed', fullscreen: 'Fullscreen', videoInfoTitle: 'Video information', metaFile: 'File', metaSize: 'Size', metaDuration: 'Duration', metaResolution: 'Resolution', metaType: 'Type',
@@ -1061,7 +1065,7 @@
           reviewTimeSet: 'Review time updated to the current position', reviewFocusHint: 'Starting a comment pauses playback.', timelineTitle: 'Review timeline', timelineAriaLabel: 'Review positions', timelineShown: '{count} shown', timelineMarkerLabel: '{type} {time} {status}', timelineRangeLabel: '{type} {start} to {end} {status}', filterTypeLabel: 'Type', filterStatusLabel: 'Status', filterAll: 'All',
           shortcutTitle: 'Keyboard controls', shortcutBody: 'Use the keyboard to move through the video while reviewing.', shortcutPlay: 'Play / pause', shortcut5: 'Move 5 sec', shortcut10: 'Move 10 sec', shortcutFullscreen: 'Fullscreen', shortcutReview: 'Start review',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Video and reviews are processed on this device',
-          helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
+          helpBasicsTitle: 'Basics', helpStep1: 'Open a video with Choose video, Choose from files, or drag and drop.', helpStep2: 'Click the preview to play or pause. The paused position becomes the review position. Choose This moment or Range; for a range, use Start here, move through the video, then use End here.', helpStep3: 'Choose a type and enter the required comment. If needed, choose an annotation color and draw a rectangle, arrow, or freehand mark on the captured frame. Select a timeline marker, range bar, or review card to jump back to it.',
           helpDuplicate: 'Duplicate review creates an independent note at the same moment or range, keeping its status, comment, image, and annotations. Your current draft is preserved. Undo removes only the new duplicate.', helpFrameOwnership: 'Changing the review start refreshes its frame and clears annotations from the old image. If capture fails, you can still save the comment. Undo is available only within the same workspace.',
            helpShortcutsTitle: 'Keyboard controls', helpShortcut1: 'Space: Play / pause.', helpShortcut2: 'Left / Right: Move 5 seconds. Hold Shift to move 10 seconds.', helpShortcut3: 'F: Fullscreen where supported. M: Start a review at the current time.',
           helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'The selected video is played from a local File / Blob URL and is not uploaded. Reviews, resized thumbnails, and annotations are stored in this browser’s IndexedDB for autosave, but the source video itself is never stored.',
@@ -1116,6 +1120,7 @@
       let suppressAutosave = false;
       const video = $('#video');
       const videoInput = $('#videoInput');
+      const videoFileInput = $('#videoFileInput');
       const projectInput = $('#projectInput');
       const outputFilename = $('#outputFilename');
       const dropZone = $('#dropZone');
@@ -2107,7 +2112,6 @@
       }
 
       function loadFile(file, resume = null) {
-        clearTimeout(autosaveTimer); autosaveTimer = 0;
         if (!isVideoLike(file)) {
           if (currentFile && phase === 'ready') {
             AppToast.show({ message: t('invalidFile'), tone: 'warning' });
@@ -2117,6 +2121,7 @@
           }
           return;
         }
+        clearTimeout(autosaveTimer); autosaveTimer = 0;
         sourceGeneration += 1;
         const generation = sourceGeneration;
         revokeCurrentObjectUrl();
@@ -2313,6 +2318,11 @@
         videoInput.click();
       }
 
+      function chooseVideoFile() { videoFileInput.value = ''; videoFileInput.click(); }
+      $('#chooseVideoFileButton').addEventListener('click', chooseVideoFile);
+      $('#replaceVideoFileButton').addEventListener('click', chooseVideoFile);
+      $('#resumeProjectFileButton').addEventListener('click', chooseVideoFile);
+      videoFileInput.addEventListener('change', () => { const file = videoFileInput.files?.[0]; if (file) requestLoadFile(file); });
       $('#chooseVideoButton').addEventListener('click', chooseVideo);
       $('#replaceVideoButton').addEventListener('click', chooseVideo);
       videoInput.addEventListener('change', () => {
@@ -2482,7 +2492,8 @@
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close();
       });
 
-      window.addEventListener('pagehide', () => {
+      window.addEventListener('pagehide', event => {
+        if (event.persisted) return;
         invalidateWorkspace();
         sourceGeneration += 1;
         sourceEventController?.abort();

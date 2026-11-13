@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add file selection for loading, changing, and resuming videos.
+- Keep autosave pending after invalid file selection and preserve media when entering the back-forward cache.
+
 - Simplify the Japanese and English introduction and hide the local-processing badge on phones.
 
 - Fix portrait video clipping and annotation alignment in the editor and reports.

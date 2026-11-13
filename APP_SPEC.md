@@ -14,6 +14,9 @@
 
 ## Unreleased fixes
 
+- Offer an unrestricted file picker for initial selection, replacement, and project resume alongside the existing video picker. Actual sources depend on the device and browser.
+- Keep the active source intact when the page enters the back-forward cache.
+
 - Fit portrait and landscape video and annotation overlays to their actual display bounds.
 - Warn before navigation while review changes are awaiting browser storage; retain the warning if autosave fails.
 
